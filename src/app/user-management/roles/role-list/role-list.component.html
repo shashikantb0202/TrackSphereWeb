@@ -1,0 +1,152 @@
+<div>
+    <h3>Role Management</h3>
+
+    <!-- Loader for List Data -->
+    <div *ngIf="isLoading" class="text-center my-3">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end my-3">
+        <button class="btn btn-success" (click)="openRoleModal()">Add Role</button>
+    </div>
+    <div *ngIf="!isLoading" class="table-responsive shadow-sm">
+        <table class="table caption-top">
+            <caption>List of Roles</caption>
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created By</th>
+                    <th>Created On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let role of roles ">
+                    <th scope="row">{{ role.id }}</th>
+                    
+                    <td *ngIf="editRoleId === role.id">
+                        <input type="text" class="form-control" [(ngModel)]="editableRole.name" />
+                    </td>
+                    <td *ngIf="editRoleId !== role.id">
+                        {{ role.name }}
+                    </td>
+
+                    <td *ngIf="editRoleId === role.id">
+                        <input type="text" class="form-control" [(ngModel)]="editableRole.description" />
+                    </td>
+                    <td *ngIf="editRoleId !== role.id">
+                        {{ role.description }}
+                    </td>
+
+                    <td>{{ role?.createdBy?.name }}</td>
+                    <td>{{ role.createdOn | date: 'dd/MM/yyyy' }}</td>
+
+                    <td *ngIf="editRoleId === role.id">
+                        <select class="form-select" [(ngModel)]="editableRole.status">
+                            <option value="Active">Active</option>
+                            <option value="InActive">Inactive</option>
+                        </select>
+                    </td>
+                    <td *ngIf="editRoleId !== role.id">
+                        <span class="badge" [class.bg-success]="role.status === 'Active'" [class.bg-danger]="role.status === 'InActive'">
+                            {{ role.status }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div *ngIf="editRoleId === role.id">
+                            <button class="btn btn-success btn-sm" (click)="saveRole()">Save</button>
+                            <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
+                        </div>
+                        <div *ngIf="editRoleId !== role.id">
+                            <button class="btn btn-primary btn-sm" (click)="editRole(role)">Edit</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+  
+
+    <!-- Popup Modal for Add Role -->
+   <!-- Add Role Modal -->
+<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="roleModalLabel">Add New Role</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          <form [formGroup]="roleForm" (ngSubmit)="saveNewRole()" novalidate>
+            
+            <!-- Name Field -->
+            <div class="input-group has-validation mb-3">
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Enter Role Name"
+                formControlName="name"
+                [class.is-valid]="isSubmitted && roleForm.get('name')?.valid"
+                [class.is-invalid]="isSubmitted && roleForm.get('name')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">
+                Role name is required (minimum 3 characters).
+              </div>
+            </div>
+  
+            <!-- Description Field -->
+            <div class="input-group has-validation mb-3">
+              <textarea 
+                class="form-control" 
+                placeholder="Enter Description"
+                formControlName="description"
+                [class.is-valid]="isSubmitted && roleForm.get('description')?.valid"
+                [class.is-invalid]="isSubmitted && roleForm.get('description')?.invalid"
+                required
+              ></textarea>
+              <div class="invalid-feedback">
+                Description is required.
+              </div>
+            </div>
+  
+            <!-- Status Field -->
+            <div class="input-group has-validation mb-3">
+              <select 
+                class="form-select"
+                formControlName="status"
+                placeholder="Select Status"
+                [class.is-valid]="isSubmitted && roleForm.get('status')?.valid"
+                [class.is-invalid]="isSubmitted && roleForm.get('status')?.invalid"
+                required
+              >
+                <option value="" disabled selected>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div class="invalid-feedback">
+                Status is required.
+              </div>
+            </div>
+  
+            <!-- Save Button with Loader -->
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-success" [disabled]="isSaving">
+                <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+                Save Role
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

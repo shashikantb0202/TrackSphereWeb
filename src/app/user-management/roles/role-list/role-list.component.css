@@ -1,0 +1,58 @@
+
+
+.table-responsive {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+input.form-control,
+select.form-select {
+    width: 100%; /* Ensures input fits within the table cell */
+}
+
+.badge {
+    padding: 5px 10px;
+}
+
+
+/* Modal Overlay Background */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly darker for better focus */
+}
+
+/* Modal Header */
+.modal-header {
+    background-color: #007bff;  /* Bootstrap primary color */
+    color: #fff;
+    border-bottom: none;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+    border-top: none;
+}
+
+/* Button Styling */
+.btn-success, .btn-secondary {
+    margin: 1px;
+}
+
+/* Loader Animation */
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Modal Form Inputs */
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+}

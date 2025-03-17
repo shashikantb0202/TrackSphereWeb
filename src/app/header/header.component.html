@@ -1,0 +1,17 @@
+<div class="header bg-primary text-white p-3 d-flex align-items-center justify-content-between">
+  
+  <div class="d-flex align-items-center">
+    <!-- Sidebar Toggle Button -->
+    <button class="btn btn-outline-light btn-sm me-2" (click)="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+    <h4 class="mb-0">Track Sphere</h4>
+  </div>
+
+  <!-- User Profile (Right Side) -->
+  <div class="user-profile d-flex align-items-center">
+    <img src="UserIcon.png" alt="User" class="user-icon me-2">
+    <span>{{ loggedInUser?.name }}</span>
+  </div>
+
+</div>

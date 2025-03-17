@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <div class="d-flex align-items-center mb-3">
+    <label class="me-2">Select Role:</label>
+    <select class="form-select w-25" [(ngModel)]="selectedRole" (change)="onRoleChange()">
+      <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+    </select>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Sub Module</th>
+        <th *ngFor="let perm of permissionHeaders">{{ perm }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let module of permissions">
+        <tr class="bg-light">
+          <td><b>{{ module.moduleTitle }}</b></td>
+          <td [attr.colspan]="permissionHeaders.length + 1"></td>
+        </tr>
+        <tr *ngFor="let subModule of module.subModules">
+          <td></td>
+          <td>{{ subModule.subModuleTitle }}</td>
+          <td *ngFor="let perm of permissionHeaders">
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="subModule.permissions[perm]"
+                [id]="'toggle_' + module.moduleId + '_' + subModule.subModuleId + '_' + perm"
+              />
+              <label class="form-check-label" 
+                     [for]="'toggle_' + module.moduleId + '_' + subModule.subModuleId + '_' + perm">
+                {{ subModule.permissions[perm] ? 'Yes' : 'No' }}
+              </label>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <button class="btn btn-primary" (click)="savePermissions()">Save</button>
+</div>
