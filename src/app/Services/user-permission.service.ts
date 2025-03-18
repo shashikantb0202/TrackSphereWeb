@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Module, SubModule, UserPermission } from '../Models/user-permission.model';
 import { environment } from '../../environment';
-import { STORAGE_KEYS } from '../shared/constants';
+import { BaseUrl, STORAGE_KEYS } from '../shared/constants';
 
 @Injectable({
     providedIn: 'root'
@@ -72,6 +72,14 @@ export class UserPermissionService {
       return throwError(() => new Error('An unexpected error occurred.'));
     }
   }
+
+   getUserPermissionsGroup(userId: number): Observable<any> {
+      return this.http.get(`${BaseUrl.UserPermissions.UserPermissiongroup}/${userId}`);
+    }
+  
+    bulkUpdatePermissions(updates: any[], roleId :number): Observable<any> {
+      return this.http.post(`${BaseUrl.UserPermissions.BulkUpdateUserPermissions}/`+roleId, updates);
+    }
 
     
 }

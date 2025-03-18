@@ -7,12 +7,20 @@ export const STORAGE_KEYS = {
 
   export const BaseUrl = {
     Role:{
-      Role: '/api/role',
+      Role: '/api/role'
+    },
+    User:{
+      User: '/api/user',
+      UserRole: '/api/user/Role'
     },
     RolePermissions:{
       RolePermissions: '/api/RolePermission/role',
       BulkUpdateRolePermissions: '/api/RolePermission/groupupdate'
-
+    },
+    UserPermissions:{
+      UserPermissions: '/api/UserPermission/user',
+      UserPermissiongroup: '/api/UserPermission/permissiongroup',
+      BulkUpdateUserPermissions: '/api/UserPermission/groupupdate'
     }
    
   };

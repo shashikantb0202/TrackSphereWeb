@@ -1,0 +1,12 @@
+.form-check-input {
+    cursor: pointer;
+    width: 30px;
+    height: 15px;
+    margin-top: 7px;
+}
+
+.form-check-label {
+    /* margin-left: 5px; */
+    font-weight: 500;
+    font-size: 12px;
+}
