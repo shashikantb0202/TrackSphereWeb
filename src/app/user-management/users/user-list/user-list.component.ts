@@ -18,16 +18,7 @@ import { Router } from '@angular/router';
 })
 export class UserListComponent implements OnInit {
   users: User[] = [];
-  columns = [
-    { name: 'ID', prop: 'id' },
-    { name: 'Username', prop: 'username' },
-    { name: 'Name', prop: 'name' },
-    { name: 'Email', prop: 'email' },
-    { name: 'Contact No', prop: 'contactNo' },
-    { name: 'Role', prop: 'role.name' },
-    { name: 'Created On', prop: 'createdOn' },
-    { name: 'Created By', prop: 'createdBy.name' }
-  ];
+
 
   searchTerm: string = '';
   pageSize: number = 10;
@@ -81,4 +72,8 @@ export class UserListComponent implements OnInit {
     this.sortDirection = sort.dir;
     this.loadUsers();
   }
+  editUser(user: User): void {
+    this.router.navigate(['main/user-management/edit-user', user.id]);
+  }
+  
 }

@@ -18,7 +18,6 @@
     <ngx-datatable
       class="bootstrap"
       [rows]="users"
-      [columns]="columns"
       [columnMode]="'force'"
       [headerHeight]="50"
       [footerHeight]="50"
@@ -30,12 +29,40 @@
       [externalSorting]="true"
       (sort)="onSort($event)"
       (page)="onPage($event)">
-   
+ 
       <!-- Created On Column -->
-   
+      <ngx-datatable-column name="ID" prop="id" width="70"  [sortable]="true"></ngx-datatable-column>
+      <ngx-datatable-column name="Username" prop="username"  [sortable]="true" ></ngx-datatable-column>
+      <ngx-datatable-column name="Name" prop="name"  [sortable]="true" ></ngx-datatable-column>
+      <!-- <ngx-datatable-column name="Email" prop="email" ></ngx-datatable-column>
+      <ngx-datatable-column name="Contact No" prop="contactNo" ></ngx-datatable-column> -->
+      <ngx-datatable-column name="Role" prop="role.name"  [sortable]="false"></ngx-datatable-column>
+      <ngx-datatable-column name="Created By" prop="createdBy.name"   [sortable]="false"></ngx-datatable-column>
+      <ngx-datatable-column 
+          name="createdOn" 
+          width="150" 
+          [sortable]="true"
+          [cellTemplate]="createdOnTemplate">
+     </ngx-datatable-column>
       <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
         {{ row.createdOn | date: 'dd/MM/yyyy' }}
       </ng-template>
+
+      <ngx-datatable-column 
+      name="Actions" 
+      width="150" 
+      [sortable]="false"
+      [cellTemplate]="actionTemplate">
+  </ngx-datatable-column>
+
+<ng-template #actionTemplate let-row="row">
+
+<div>
+  <button class="btn btn-primary btn-sm" style="font-size: 12px;" (click)="editUser(row)">Edit</button>
+</div>
+</ng-template>
+
+
     </ngx-datatable>
   </div>
   
