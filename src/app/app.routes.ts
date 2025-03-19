@@ -19,25 +19,25 @@ export const routes: Routes = [
             path: 'user-management/Role-List',
             component: RoleListComponent,
             canActivate: [AuthGuard],
-            data: { requiredPermission: { subModule: 'RoleList', permission: 'View' } }
+            data: { requiredPermission: {module:"UserManagement", subModule: 'RoleList', permission: 'View' } }
           },
           {
             path: 'user-management/user-list',
             component: UserListComponent,
             canActivate: [AuthGuard],
-            data: { requiredPermission: { subModule: 'UserList', permission: 'View' } }
+            data: { requiredPermission: {module:"UserManagement", subModule: 'UserList', permission: 'View' } }
           },
           {
             path: 'user-management/user-permission',
             component: UserPermissionComponent,
             canActivate: [AuthGuard],
-            data: { requiredPermission: { subModule: 'UserPermission', permission: 'View' } }
+            data: { requiredPermission: {module:"UserManagement", subModule: 'UserPermission', permission: 'View' } }
           },
           {
             path: 'user-management/role-permission',
             component: RolePermissionComponent,
             canActivate: [AuthGuard],
-            data: { requiredPermission: { subModule: 'RolePermission', permission: 'View' } }
+            data: { requiredPermission: {module:"UserManagement", subModule: 'RolePermission', permission: 'View' } }
           },
           {
             path: 'unauthorized',

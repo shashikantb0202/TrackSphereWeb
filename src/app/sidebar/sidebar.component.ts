@@ -23,7 +23,7 @@ export class SidebarComponent {
   loggedInUser: User | null = null; // Store logged-in user's name
   isCollapsed = false;
   activeItem: string = 'dashboard';
-  sidebarMenu: Module[] = [];
+  sidebarMenu: any = [];
   subMenuOpen: { [key: string]: boolean } = {};
  
   
@@ -44,58 +44,55 @@ export class SidebarComponent {
     this.loggedInUser = this.authService.getUserData(); // Get user name from AuthService
     let permission=this.userPermissionService.getPermissions();
     if(permission!=null && permission.length>0){
-      this.GetSideBarMenu(permission);
+      this.sidebarMenu=  this.mapPermissionsToMenuStructure(permission);
     }else{
-      this.userPermissionService.getUserPermissions(this.loggedInUser?.id!).subscribe(data => {
-        this.GetSideBarMenu(data);
-          // Initialize subMenuOpen for all modules
-          this.sidebarMenu.forEach(module => {
-            this.subMenuOpen[module.name] = false;
-        });
+      this.userPermissionService.getUserPermissionsGroup(this.loggedInUser?.id!).subscribe(data => {
+        this.sidebarMenu=  this.mapPermissionsToMenuStructure(data)
       });
     }
   }
 
-  private GetSideBarMenu(data: UserPermission[]) {
-    const groupedModules: { [key: string]: Module; } = {};
-console.log(data)
-    data.forEach(permission => {
-      const module = permission.module;
-      const subModule = permission.subModule;
-      const permissionData = permission.permission;
+  mapPermissionsToMenuStructure(permissions: any[]): any[] {
+    const groupedModules = permissions.reduce((acc: any, curr: any) => {
+      const moduleKey = curr.moduleName;
+      
+      // Check for module-level 'View' permission if no submodules
+      const hasModuleViewPermission = !curr.subModuleId && curr.permissions?.View;
 
-      // Initialize the module if it doesn't exist
-      if (!groupedModules[module.name]) {
-        groupedModules[module.name] = { ...module, subModules: [] };
+      if (!acc[moduleKey] && hasModuleViewPermission) {
+        acc[moduleKey] = {
+          moduleName: curr.moduleName,
+          moduleTitle: curr.moduleTitle,
+          icon: curr.moduleIcon,
+          url: curr.moduleUrl,
+          subModules: []
+        };
       }
-
-      // Check if the subModule already exists
-      const existingSubModule = groupedModules[module.name].subModules.find(
-        (s) => s.id === subModule.id
-      );
-
-      if (existingSubModule) {
-        // Add permission to the existing subModule if not already present
-        const isPermissionExists = existingSubModule.permissions?.some(
-          (p) => p.id === permissionData.id
-        );
-
-        if (!isPermissionExists) {
-          existingSubModule.permissions = [
-            ...(existingSubModule.permissions || []),
-            permissionData
-          ];
+      // Check for submodule-level 'View' permission
+      if (curr.subModuleId && curr.permissions?.View) {
+        if (!acc[moduleKey]) {
+          acc[moduleKey] = {
+            moduleName: curr.moduleName,
+            moduleTitle: curr.moduleTitle,
+            icon: curr.moduleIcon,
+            url: curr.moduleUrl,
+            subModules: []
+          };
         }
-      } else {
-        // Add new subModule with permissions
-        groupedModules[module.name].subModules.push({
-          ...subModule,
-          permissions: [permissionData]
+        acc[moduleKey].subModules.push({
+          subModuleName: curr.subModuleName,
+          subModuleTitle: curr.subModuleTitle,
+          url: curr.subModuleUrl,
+          icon: curr.subModuleIcon
         });
       }
-    });
-    this.sidebarMenu = Object.values(groupedModules);
-  }
+
+      return acc;
+    }, {});
+    return Object.values(groupedModules);
+}
+
+
 
   setActiveItem(item: string) {
     this.activeItem = item;

@@ -16,9 +16,9 @@ export class AuthGuard implements CanActivate {
         return false;
     }
     else if (requiredPermission) {
-      const { subModule, permission } = requiredPermission;
+      const {module, subModule, permission } = requiredPermission;
 
-      if (!this.userPermissionService.hasPermission(subModule, permission)) {
+      if (!this.userPermissionService.hasPermission(module,subModule, permission)) {
         this.router.navigate(['main/unauthorized']); // Redirect to an error page
         return false;
       }     

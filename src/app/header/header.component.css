@@ -18,6 +18,7 @@
   }
   
   .user-profile img {
+    margin-top: 5px;
     height: 35px;
     border-radius: 50%;
     margin-right: 10px;

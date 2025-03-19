@@ -20,7 +20,7 @@ export class UserPermissionService {
          }
      }
 
-     getPermissions(): UserPermission[] {
+     getPermissions(): any[] {
         const permissions = localStorage.getItem(STORAGE_KEYS.USER_PERMISSIONS);
         return permissions ? JSON.parse(permissions) : [];
       }
@@ -31,16 +31,28 @@ export class UserPermissionService {
             localStorage.setItem(STORAGE_KEYS.USER_PERMISSIONS, JSON.stringify(permissions));
         }
 
-        // Check if a specific permission exists
-        hasPermission(subModuleName: string, permissionName: string): boolean {
-           var permissions=this.getPermissions();
-            return permissions.some(
-            (p) =>
-                p.subModule.name === subModuleName &&
-                p.permission.name === permissionName
-            );
-        }
-
+        hasPermission(moduleName: string, subModuleName: string | null, permissionName: string): boolean {
+          const permissions = this.getPermissions();
+      
+          // Check for submodule-specific permission
+          if (subModuleName) {
+              return permissions.some(
+                  (p) =>
+                      p.moduleName === moduleName &&
+                      p.subModuleName === subModuleName &&
+                      p.permissions[permissionName]
+              );
+          }
+      
+          // Check for module-level permission if submodule is not present
+          return permissions.some(
+              (p) =>
+                  p.moduleName === moduleName &&
+                  !p.subModuleName &&
+                  p.permissions[permissionName]
+          );
+      }
+      
    // Clear permissions on logout
    clearPermissions(): void {
     this.permissions = [];
@@ -74,7 +86,16 @@ export class UserPermissionService {
   }
 
    getUserPermissionsGroup(userId: number): Observable<any> {
-      return this.http.get(`${BaseUrl.UserPermissions.UserPermissiongroup}/${userId}`);
+      return this.http.get<{ data: any}>(`${BaseUrl.UserPermissions.UserPermissiongroup}/${userId}`)
+      .pipe(
+        //  map(response => response.data || [])
+         map(response => {
+           let per= response.data || [];
+           this.setPermissions(per);
+           return per;
+         }),
+         catchError(this.handleError)
+     );
     }
   
     bulkUpdatePermissions(updates: any[], roleId :number): Observable<any> {

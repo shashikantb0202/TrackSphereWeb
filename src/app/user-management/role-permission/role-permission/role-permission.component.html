@@ -2,6 +2,7 @@
   <div class="d-flex align-items-center mb-3">
     <label class="me-2">Select Role:</label>
     <select class="form-select w-25" [(ngModel)]="selectedRole" (change)="onRoleChange()">
+      <option [ngValue]="null"  disabled selected>Select Role</option> <!-- Placeholder added -->
       <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
     </select>
   </div>
@@ -13,9 +14,10 @@
     </div>
   </div>
 
+  <div *ngIf="!isLoading">
   <!-- Permissions Table -->
-  <table *ngIf="!isLoading" class="table table-bordered table-striped">
-    <thead>
+  <table  class="table table-bordered table-striped">
+    <thead class="sticky-header">
       <tr>
         <th>Module</th>
         <th>Sub Module</th>
@@ -25,6 +27,7 @@
     </thead>
 
     <tbody>
+      <ng-container  *ngIf="permissions.length > 0; else noData">
       <ng-container *ngFor="let module of permissions">
 
         <!-- Collapsible Module Row -->
@@ -110,8 +113,17 @@
           </tr>
         </ng-container>
       </ng-container>
+      </ng-container>
+      <ng-template #noData>
+        <tr>
+            <td [attr.colspan]="permissionHeaders.length + 3" class="text-center py-3">
+                No data available
+            </td>
+        </tr>
+    </ng-template>
     </tbody>
   </table>
 
   <button class="btn btn-primary mt-3" (click)="savePermissions()">Save</button>
+</div>
 </div>

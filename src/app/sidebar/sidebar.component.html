@@ -1,53 +1,49 @@
 <div [class.collapsed]="isCollapsed" class="sidebar bg-dark text-white d-flex flex-column p-3">
 
-    <!-- App Logo & Toggle Button -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 *ngIf="!isCollapsed" class="mb-0">My App</h5>
-  
-    </div>
-  
-    <!-- Sidebar Menu -->
-    <div *ngFor="let module of sidebarMenu">
-        
+  <!-- App Logo & Toggle Button -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 *ngIf="!isCollapsed" class="mb-0">Track Sphere</h5>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <div *ngFor="let module of sidebarMenu">
       <!-- Main Module -->
       <div class="menu-item text-white d-flex align-items-center" 
-           (click)="toggleSubMenu(module.name)">
+      *ngIf="module.subModules.length"
+           (click)="toggleSubMenu(module.moduleName)">
         <i class="{{ module.icon }} me-2"></i>
-        <span *ngIf="!isCollapsed">{{ module.title }}</span>
-        <i *ngIf="!isCollapsed" 
+        <span *ngIf="!isCollapsed">{{ module.moduleTitle }}</span>
+        <i *ngIf="!isCollapsed && module.subModules.length" 
            class="bi bi-chevron-down ms-auto" 
-           [class.rotate]="subMenuOpen[module.name]">
+           [class.rotate]="subMenuOpen[module.moduleName]">
         </i>
       </div>
-  
+
+      <a class="d-flex align-items-center text-white text-decoration-none mt-2" 
+      *ngIf="!module.subModules.length"
+      [class.active]="activeItem === module.ModuleName"
+      (click)="setActiveItem(module.ModuleName)"
+      [routerLink]="[module.url]">
+      <i class="{{ module.icon }} me-2"></i>
+      <span *ngIf="!isCollapsed">{{ module.moduleTitle }}</span>   
+   </a>
+
       <!-- SubModule -->
-      <div class="submenu ps-4" *ngIf="subMenuOpen[module.name] && !isCollapsed">
-        <a 
-          *ngFor="let subModule of module.subModules"
-          class="text-white align-items-center text-decoration-none d-block margin-5p"
-          [class.active]="activeItem === subModule.name"
-          (click)="setActiveItem(subModule.name)"
-          [routerLink]="[subModule.url]"
-        >
-          <i class="{{ subModule.icon }} me-2"></i> {{ subModule.title }}
+      <div class="submenu ps-4" *ngIf="subMenuOpen[module.moduleName] && !isCollapsed">
+        <a *ngFor="let subModule of module.subModules"
+           class="text-white align-items-center text-decoration-none d-block margin-5p"
+           [class.active]="activeItem === subModule.subModuleName"
+           (click)="setActiveItem(subModule.subModuleName)"
+           [routerLink]="[subModule.url]">
+          <i class="{{ subModule.icon }} me-2"></i> {{ subModule.subModuleTitle }}
         </a>
       </div>
-    </div>
-  
-    <!-- Dashboard and Logout Links -->
-   
-      <a class="d-flex align-items-center text-white text-decoration-none mt-2"
-         [class.active]="activeItem === 'dashboard'"
-         (click)="setActiveItem('dashboard')">
-          <i class="bi bi-house-door me-2"></i>
-          <span *ngIf="!isCollapsed">Dashboard</span>
-      </a>
-  
-      <a class="d-flex align-items-center text-white text-decoration-none mt-2" 
-         (click)="logout()">
-          <i class="bi bi-box-arrow-right me-2"></i>
-          <span *ngIf="!isCollapsed">Logout</span>
-      </a>
-  
   </div>
-  
+
+
+  <a class="d-flex align-items-center text-white text-decoration-none mt-2" 
+     (click)="logout()">
+      <i class="bi bi-box-arrow-right me-2"></i>
+      <span *ngIf="!isCollapsed">Logout</span>
+  </a>
+</div>

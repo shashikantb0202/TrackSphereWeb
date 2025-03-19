@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class RolePermissionComponent implements OnInit {
   isLoading: boolean = false;
   roles: any[] = [];
-  selectedRole: number | any;
+  selectedRole: number | null=null;
   permissions: any[] = [];
   permissionHeaders: string[] = ['View', 'Add', 'Update', 'Delete', 'Download'];  // Dynamic headers
 
@@ -32,19 +32,23 @@ export class RolePermissionComponent implements OnInit {
     });
   }
 
-  // Full Access Logic
-toggleFullAccess(item: any): void {
-  if (!item.permissions) {
-    item.permissions = {};
+  toggleFullAccess(item: any): void {
+    var allEnabled =false;
+    if (item.permissions) {
+      allEnabled = this.isFullAccess(item.permissions);
+      // Toggle all permissions ON or OFF
+      Object.keys(item.permissions).forEach((perm) => {
+        item.permissions[perm] = !allEnabled;
+      });
+    }
+    else if(item.modulePermissions){
+      allEnabled = this.isFullAccess(item.modulePermissions);
+      // Toggle all permissions ON or OFF
+      Object.keys(item.modulePermissions).forEach((perm) => {
+        item.modulePermissions[perm] = !allEnabled;
+     });
+    }
   }
-
-  const allEnabled = this.isFullAccess(item.permissions);
-
-  // Toggle all permissions ON or OFF
-  Object.keys(item.permissions).forEach((perm) => {
-    item.permissions[perm] = !allEnabled;
-  });
-}
 
 // Check if All Permissions are Enabled
 isFullAccess(permissions: any): boolean {
@@ -143,7 +147,7 @@ onCheckboxChange(event: Event, module: any, perm: string): void {
       ])
     };
     this.isLoading = true; 
-    this.rolePermissionService.bulkUpdatePermissions(payload.permissions, payload.roleId).subscribe({
+    this.rolePermissionService.bulkUpdatePermissions(payload.permissions, payload.roleId!).subscribe({
       next: (response) => {
         this.onRoleChange();
         this.toastr.success(response.message, 'Success');

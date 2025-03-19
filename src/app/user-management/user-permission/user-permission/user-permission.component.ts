@@ -16,8 +16,8 @@ export class UserPermissionComponent implements OnInit {
 isLoading: boolean = false;
   roles: any[] = [];
   users: any[] = [];
-  selectedRole: number | any;
-  selectedUser: number | any;
+  selectedRole: number | null=null;
+  selectedUser: number | null=null;
   permissions: any[] = [];
   permissionHeaders: string[] = ['View', 'Add', 'Update', 'Delete', 'Download'];  // Dynamic headers
 
@@ -45,16 +45,21 @@ isLoading: boolean = false;
   }
   // Full Access Logic
 toggleFullAccess(item: any): void {
-  if (!item.permissions) {
-    item.permissions = {};
+  var allEnabled =false;
+  if (item.permissions) {
+    allEnabled = this.isFullAccess(item.permissions);
+    // Toggle all permissions ON or OFF
+    Object.keys(item.permissions).forEach((perm) => {
+      item.permissions[perm] = !allEnabled;
+    });
   }
-
-  const allEnabled = this.isFullAccess(item.permissions);
-
-  // Toggle all permissions ON or OFF
-  Object.keys(item.permissions).forEach((perm) => {
-    item.permissions[perm] = !allEnabled;
-  });
+  else if(item.modulePermissions){
+    allEnabled = this.isFullAccess(item.modulePermissions);
+    // Toggle all permissions ON or OFF
+    Object.keys(item.modulePermissions).forEach((perm) => {
+      item.modulePermissions[perm] = !allEnabled;
+});
+  }
 }
 
 // Check if All Permissions are Enabled
@@ -68,10 +73,11 @@ onRoleChange(): void {
   }
 }
   onUserChange(): void {
+    debugger
     if (this.selectedUser) {
       this.isLoading = true; 
       this.userPermissionService.getUserPermissionsGroup(this.selectedUser).subscribe((response) => {
-        this.transformPermissions(response.data);
+        this.transformPermissions(response);
         this.isLoading = false; 
       });
     }
@@ -83,10 +89,8 @@ onRoleChange(): void {
   // Updated Logic to Handle Module and SubModule Permissions
   transformPermissions(data: any[]): void {
     const groupedData: any[] = [];
-
     data.forEach(item => {
       const existingModule = groupedData.find(m => m.moduleId === item.moduleId);
-
       // If the Module already exists
       if (existingModule) {
         if (item.subModuleId) {
@@ -120,7 +124,6 @@ onRoleChange(): void {
         });
       }
     });
-
     this.permissions = groupedData;
   }
  
@@ -159,7 +162,7 @@ onCheckboxChange(event: Event, module: any, perm: string): void {
       ])
     };
     this.isLoading = true; 
-    this.userPermissionService.bulkUpdatePermissions(payload.permissions, payload.userId).subscribe({
+    this.userPermissionService.bulkUpdatePermissions(payload.permissions, payload.userId!).subscribe({
       next: (response) => {
         this.onUserChange();
         this.toastr.success(response.message, 'Success');
