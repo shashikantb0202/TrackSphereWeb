@@ -1,0 +1,29 @@
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.pagination .page-link {
+    cursor: pointer;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.page-item .page-link {
+    color: #007bff;
+}
+
+.table-responsive {
+    max-height: 400px; /* Enables scrolling */
+    overflow-y: auto;
+}
+
+.ngx-datatable .datatable-body-cell {
+    white-space: nowrap;  /* Prevents text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

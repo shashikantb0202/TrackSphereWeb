@@ -1,1 +1,41 @@
-<p>user-list works!</p>
+<div class="container mt-4">
+    <div class="d-flex align-items-center justify-content-between my-3">
+        <h3 class="mb-0">User Management</h3>
+        <button class="btn btn-success" (click)="navigateToAddUser()">Add User</button>
+    </div>
+    <!-- Search Input -->
+    <div class="mb-4 mt-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by name, email..."
+        [(ngModel)]="searchTerm"
+        (keyup)="searchUsers()"
+      />
+    </div>
+  
+    <!-- Ngx-Datatable for User List -->
+    <ngx-datatable
+      class="bootstrap"
+      [rows]="users"
+      [columns]="columns"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      
+      [limit]="pageSize"
+      [count]="totalRecords"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      (sort)="onSort($event)"
+      (page)="onPage($event)">
+   
+      <!-- Created On Column -->
+   
+      <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+        {{ row.createdOn | date: 'dd/MM/yyyy' }}
+      </ng-template>
+    </ngx-datatable>
+  </div>
+  
