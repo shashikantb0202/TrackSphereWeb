@@ -1,0 +1,112 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            Product Details
+        </div>
+
+        <div *ngIf="isLoading" class="loader-overlay">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <div *ngIf="!isLoading" class="card-body">
+            <div class="row">
+                <!-- PRODUCT NAME -->
+                <div class="col-md-6 mb-3">
+                    <strong>Product Name:</strong>
+                    <p>{{ product.name }}</p>
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="col-md-6 mb-3">
+                    <strong>Category:</strong>
+                    <p>{{ product.productCategory?.name }}</p>
+                </div>
+
+                <!-- HS CODE -->
+                <div class="col-md-6 mb-3">
+                    <strong>HS Code:</strong>
+                    <p>{{ product.hsCode }}</p>
+                </div>
+
+                <!-- GST % -->
+                <div class="col-md-6 mb-3">
+                    <strong>GST %:</strong>
+                    <p>{{ product.gstPer }}%</p>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="col-md-6 mb-3">
+                    <strong>Description:</strong>
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <!-- BENEFITS -->
+                <div class="col-md-6 mb-3">
+                    <strong>Benefits:</strong>
+                    <p>{{ product.benefits }}</p>
+                </div>
+
+                <!-- HOW TO USE -->
+                <div class="col-md-6 mb-3">
+                    <strong>How to Use:</strong>
+                    <p>{{ product.howToUse }}</p>
+                </div>
+
+                <!-- RETURN POLICY -->
+                <div class="col-md-6 mb-3">
+                    <strong>Return Policy:</strong>
+                    <p>{{ product.returnPolicy }}</p>
+                </div>
+
+                <!-- CREATED BY -->
+                <div class="col-md-6 mb-3">
+                    <strong>Created By:</strong>
+                    <p>{{ product.createdByUser?.name || 'N/A' }}</p>
+                </div>
+
+                <!-- CREATED ON -->
+                <div class="col-md-6 mb-3">
+                    <strong>Created On:</strong>
+                    <p>{{ product.createdOn | date:'dd-MMM-yyyy HH:mm:ss' }}</p>
+                </div>
+
+                <!-- UPDATED BY -->
+                <div class="col-md-6 mb-3">
+                    <strong>Updated By:</strong>
+                    <p>{{ product.updatedByUser?.name || 'N/A' }}</p>
+                </div>
+
+                <!-- UPDATED ON -->
+                <div class="col-md-6 mb-3">
+                    <strong>Updated On:</strong>
+                    <p>{{ product.updatedOn |  date:'dd-MMM-yyyy HH:mm:ss' }}</p>
+                </div>
+
+                <!-- IMAGE PREVIEW -->
+                <div class="col-md-12">
+                    <strong>Images:</strong>
+                    <div class="product-image-container">
+                        <div class="image-box" *ngFor="let image of product.images">
+                            <img 
+                                [src]="getFullImageUrl(image.imageUrl)" 
+                                alt="Product Image"
+                                class="product-image"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-end">
+            <button class="btn btn-primary" (click)="router.navigate(['main/product/edit-product', product.id])">
+                Edit Product
+            </button>
+            <button class="btn btn-secondary ms-2" (click)="router.navigate(['main/product/product-list'])">
+                Back to List
+            </button>
+        </div>
+    </div>
+</div>

@@ -12,8 +12,8 @@ import { getDirtyValues } from '../../../utils/form.utils';
 @Component({
   selector: 'app-user-form-component',
  imports: [CommonModule,
-     FormsModule,
-      ReactiveFormsModule],
+           FormsModule,
+           ReactiveFormsModule],
   templateUrl: './user-form-component.html',
   styleUrl: './user-form-component.css'
 })
@@ -154,7 +154,8 @@ isLoading: boolean=false;
                 next: (response) => {
                     this.toastr.success(response.message);
                     this.isLoading=false;
-                    this.router.navigate(['main/user-management/user-list']);
+                    this.router.navigate(['main/user-management/view-user', this.userId]);
+                   // this.router.navigate(['main/user-management/user-list']);
                 },
                 error: (error) => {
                   this.isLoading = false; 
@@ -168,7 +169,8 @@ isLoading: boolean=false;
             next: (response) => {
                 this.toastr.success(response.message);
                 this.isLoading=false;
-                this.router.navigate(['main/user-management/user-list']);
+                this.router.navigate(['main/user-management/view-user', response.data.id]);
+              //  this.router.navigate(['main/user-management/user-list']);
             },
             error: (error) => {
               this.isLoading = false; 

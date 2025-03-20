@@ -13,7 +13,7 @@ export function mapApiToRole(apiData: any): Role {
     name: apiData.name,
     description: apiData.description,
     createdBy:mapApiToBasicInfoBaseEntity(apiData?.createdBy),
-    createdOn: apiData.createdOn,
+    createdOn:new Date( apiData.createdOn),
     status:apiData.status as StatusEnum || StatusEnum.Null
   };
 }

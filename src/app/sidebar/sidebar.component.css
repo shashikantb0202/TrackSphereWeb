@@ -112,6 +112,7 @@ body, html {
     padding: 10px;
     display: block;
     transition: 0.3s;
+    font-size: 14px;
   }
   
   .sidebar a:hover {

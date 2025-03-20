@@ -6,9 +6,9 @@
 }
 
 .form-check-label {
-    /* margin-left: 5px; */
-    font-weight: 500;
     font-size: 12px;
+    font-weight: bold;
+    color: #495057;
 }
 .sticky-header th {
     position: sticky;

@@ -76,4 +76,7 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['main/user-management/edit-user', user.id]);
   }
   
+  viewUser(user: User): void {
+    this.router.navigate(['main/user-management/view-user', user.id]);
+  }
 }

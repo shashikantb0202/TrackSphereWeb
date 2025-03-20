@@ -124,6 +124,6 @@
     </tbody>
   </table>
 
-  <button class="btn btn-primary mt-3" (click)="savePermissions()">Save</button>
+  <button *ngIf="permissions.length > 0;" class="btn btn-primary mt-3" (click)="savePermissions()">Save</button>
 </div>
 </div>

@@ -1,0 +1,46 @@
+.unauthorized-container {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+.unauthorized-card {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.unauthorized-icon {
+    font-size: 4rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.unauthorized-heading {
+    font-weight: bold;
+    color: #343a40;
+}
+
+.unauthorized-text {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.btn-home {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-home:hover {
+    background-color: #0056b3;
+}

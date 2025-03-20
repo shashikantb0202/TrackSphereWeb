@@ -13,3 +13,6 @@ export function mapApiToBasicInfoBaseEntity(apiData: any): any {
         description: apiData.description || ''
     };
 }
+export function enumToStringArray<T>(enumObj: T): string[] {
+    return Object.keys(enumObj!).filter(key => isNaN(Number(key)));
+}

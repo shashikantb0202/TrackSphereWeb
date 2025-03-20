@@ -3,6 +3,8 @@ import { RolePermissionService } from '../../../Services/role-permission.service
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermissionEnum } from '../../../enums/permission.enum';
+import { enumToStringArray } from '../../../utils/common.utils';
 
 @Component({
   selector: 'app-role-permission',
@@ -15,7 +17,7 @@ export class RolePermissionComponent implements OnInit {
   roles: any[] = [];
   selectedRole: number | null=null;
   permissions: any[] = [];
-  permissionHeaders: string[] = ['View', 'Add', 'Update', 'Delete', 'Download'];  // Dynamic headers
+  permissionHeaders: string[] =  enumToStringArray(PermissionEnum);
 
   constructor(
     private rolePermissionService: RolePermissionService,

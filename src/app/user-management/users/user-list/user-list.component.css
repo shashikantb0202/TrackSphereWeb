@@ -27,3 +27,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+::ng-deep .ngx-datatable .datatable-header .datatable-header-cell {
+    font-weight: bold !important;
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    border-bottom: 2px solid #007bff;
+}

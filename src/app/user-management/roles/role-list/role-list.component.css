@@ -8,6 +8,7 @@
 input.form-control,
 select.form-select {
     width: 100%; /* Ensures input fits within the table cell */
+    font-size: 13px;
 }
 
 .badge {
@@ -40,6 +41,7 @@ select.form-select {
 /* Button Styling */
 .btn-success, .btn-secondary {
     margin: 1px;
+    font-size: 12px;
 }
 
 /* Loader Animation */
@@ -55,4 +57,32 @@ select.form-select {
     border: 1px solid #ced4da;
     border-radius: 0.375rem;
     padding: 0.5rem;
+}
+
+
+ngx-datatable {
+    width: 100%;
+    min-height: 400px;
+  }
+  
+  ngx-datatable .datatable-body-cell {
+    vertical-align: middle;
+    padding: 8px 12px;
+  }
+  
+  ngx-datatable .badge {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+
+  .btn {
+    display: inline-block !important; /* Force display */
+}
+
+  
+::ng-deep .ngx-datatable .datatable-header .datatable-header-cell {
+    font-weight: bold !important;
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    border-bottom: 2px solid #007bff;
 }

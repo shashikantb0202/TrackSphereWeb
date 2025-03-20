@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { User } from '../Models/user.model';
 import { Module, UserPermission } from '../Models/user-permission.model';
 import { AuthService } from '../auth/auth.service';
@@ -22,14 +22,16 @@ import { GlobalStateService } from '../Services/global-state.service';
 export class SidebarComponent {
   loggedInUser: User | null = null; // Store logged-in user's name
   isCollapsed = false;
-  activeItem: string = 'dashboard';
+  activeItem: string|null = 'dashboard';
   sidebarMenu: any = [];
   subMenuOpen: { [key: string]: boolean } = {};
+  
  
   
   constructor(private authService: AuthService,
      private userPermissionService:UserPermissionService,
-     private globalStateService: GlobalStateService) {
+     private globalStateService: GlobalStateService,
+     private router: Router) {
       this.globalStateService.isCollapsed$.subscribe(
         (state) => this.isCollapsed = state
       );
@@ -41,6 +43,14 @@ export class SidebarComponent {
   }
 
   ngOnInit() {
+
+    this.activeItem = localStorage.getItem('activeItem');
+    const activeModule = localStorage.getItem('activeModule');
+
+    if (activeModule) {
+      this.subMenuOpen[activeModule] = true;
+  }
+   this.autoSetActiveItem();
     this.loggedInUser = this.authService.getUserData(); // Get user name from AuthService
     let permission=this.userPermissionService.getPermissions();
     if(permission!=null && permission.length>0){
@@ -48,9 +58,12 @@ export class SidebarComponent {
     }else{
       this.userPermissionService.getUserPermissionsGroup(this.loggedInUser?.id!).subscribe(data => {
         this.sidebarMenu=  this.mapPermissionsToMenuStructure(data)
+        this.userPermissionService.setPermissions(data);
       });
     }
+    console.log(JSON.stringify( this.sidebarMenu));
   }
+
 
   mapPermissionsToMenuStructure(permissions: any[]): any[] {
     const groupedModules = permissions.reduce((acc: any, curr: any) => {
@@ -94,12 +107,30 @@ export class SidebarComponent {
 
 
 
-  setActiveItem(item: string) {
-    this.activeItem = item;
+setActiveItem(item: string) {
+  this.activeItem = item;
+  localStorage.setItem('activeItem', item);
+}
+
+
+autoSetActiveItem() {
+  
+    const currentRoute = this.router.url;
+    this.sidebarMenu.forEach((module: { subModules: any[]; moduleName: string; }) => {
+      module.subModules.forEach(subModule => {
+          if (currentRoute.includes(subModule.url)) {
+              this.activeItem = subModule.subModuleName;
+              this.subMenuOpen[module.moduleName] = true;
+              localStorage.setItem('activeItem', subModule.subModuleName);
+              localStorage.setItem('activeModule', module.moduleName);
+          }
+      });
+    });
 }
 
   toggleSubMenu(menuName: string) {
     this.subMenuOpen[menuName] = !this.subMenuOpen[menuName];
+    localStorage.setItem('activeModule', menuName);
 }
 
   logout() {

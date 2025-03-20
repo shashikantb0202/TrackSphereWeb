@@ -1,0 +1,67 @@
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.pagination .page-link {
+    cursor: pointer;
+}
+
+ngx-datatable {
+    width: 100% !important;
+    display: block;
+}
+
+.datatable-container {
+    transition: width 0.3s ease;
+}
+
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.page-item .page-link {
+    color: #007bff;
+}
+
+.table-responsive {
+    max-height: 400px; /* Enables scrolling */
+    overflow-y: auto;
+}
+
+.ngx-datatable .datatable-body-cell {
+    white-space: nowrap;  /* Prevents text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .ngx-datatable .datatable-header .datatable-header-cell {
+    font-weight: bold !important;
+    background-color: #f8f9fa !important;
+    color: #343a40 !important;
+    border-bottom: 2px solid #007bff;
+}
+::ng-deep .datatable-body .empty-row {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #007bff;
+}
+
+::ng-deep .custom-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    flex-direction: column;
+}
+
+::ng-deep .custom-spinner .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}

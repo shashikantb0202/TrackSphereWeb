@@ -22,7 +22,6 @@ export class HeaderComponent {
  
   constructor(private authService: AuthService, private globalStateService:GlobalStateService) {}
   toggleSidebar(): void {
-    debugger
     this.isCollapsed = !this.isCollapsed;
     this.globalStateService.setSidebarState(this.isCollapsed); 
   }

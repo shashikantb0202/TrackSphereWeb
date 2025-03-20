@@ -36,12 +36,12 @@ export class UserPermissionService {
       
           // Check for submodule-specific permission
           if (subModuleName) {
-              return permissions.some(
-                  (p) =>
-                      p.moduleName === moduleName &&
-                      p.subModuleName === subModuleName &&
-                      p.permissions[permissionName]
-              );
+            return permissions.some(
+                (p) =>
+                    p.moduleName.toLowerCase() === moduleName.toLowerCase() &&
+                    p.subModuleName.toLowerCase() === subModuleName.toLowerCase() &&
+                    p.permissions[permissionName]
+            );
           }
       
           // Check for module-level permission if submodule is not present
@@ -91,7 +91,7 @@ export class UserPermissionService {
         //  map(response => response.data || [])
          map(response => {
            let per= response.data || [];
-           this.setPermissions(per);
+          // this.setPermissions(per);
            return per;
          }),
          catchError(this.handleError)

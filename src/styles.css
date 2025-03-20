@@ -13,3 +13,14 @@ app-root {
   height: 100vh;
   width: 100%;
 }
+
+.btn{
+  font-size: 13px;
+}
+.form-control {
+  font-size: 14px;
+}
+.form-select{
+  font-size: 14px;
+}
+

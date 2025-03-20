@@ -5,6 +5,8 @@ import { UserService } from '../../../Services/user.service';
 import { UserPermissionService } from '../../../Services/user-permission.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermissionEnum } from '../../../enums/permission.enum';
+import { enumToStringArray } from '../../../utils/common.utils';
 
 @Component({
   selector: 'app-user-permission',
@@ -19,7 +21,7 @@ isLoading: boolean = false;
   selectedRole: number | null=null;
   selectedUser: number | null=null;
   permissions: any[] = [];
-  permissionHeaders: string[] = ['View', 'Add', 'Update', 'Delete', 'Download'];  // Dynamic headers
+  permissionHeaders: string[] = enumToStringArray(PermissionEnum);   // Dynamic headers
 
   constructor(
     private roleService: RoleService,
@@ -73,7 +75,6 @@ onRoleChange(): void {
   }
 }
   onUserChange(): void {
-    debugger
     if (this.selectedUser) {
       this.isLoading = true; 
       this.userPermissionService.getUserPermissionsGroup(this.selectedUser).subscribe((response) => {
