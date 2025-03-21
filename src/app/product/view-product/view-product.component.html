@@ -15,73 +15,87 @@
                 <!-- PRODUCT NAME -->
                 <div class="col-md-6 mb-3">
                     <strong>Product Name:</strong>
-                    <p>{{ product.name }}</p>
+                    {{ product.name }}
                 </div>
 
                 <!-- CATEGORY -->
                 <div class="col-md-6 mb-3">
                     <strong>Category:</strong>
-                    <p>{{ product.productCategory?.name }}</p>
+                {{ product.productCategory?.name }}
                 </div>
 
                 <!-- HS CODE -->
                 <div class="col-md-6 mb-3">
                     <strong>HS Code:</strong>
-                    <p>{{ product.hsCode }}</p>
+                    {{ product.hsCode }}
                 </div>
 
                 <!-- GST % -->
                 <div class="col-md-6 mb-3">
                     <strong>GST %:</strong>
-                    <p>{{ product.gstPer }}%</p>
+                    {{ product.gstPer }}%
                 </div>
 
                 <!-- DESCRIPTION -->
                 <div class="col-md-6 mb-3">
                     <strong>Description:</strong>
-                    <p>{{ product.description }}</p>
+                    {{ product.description }}
                 </div>
 
                 <!-- BENEFITS -->
                 <div class="col-md-6 mb-3">
                     <strong>Benefits:</strong>
-                    <p>{{ product.benefits }}</p>
+                    {{ product.benefits }}
                 </div>
 
                 <!-- HOW TO USE -->
                 <div class="col-md-6 mb-3">
                     <strong>How to Use:</strong>
-                    <p>{{ product.howToUse }}</p>
+                    {{ product.howToUse }}
                 </div>
 
                 <!-- RETURN POLICY -->
                 <div class="col-md-6 mb-3">
                     <strong>Return Policy:</strong>
-                    <p>{{ product.returnPolicy }}</p>
+                    {{ product.returnPolicy }}
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Status:</strong>  
+                        <span  
+                        class="badge p-0 px-2 py-1 fs-7 small-badge" 
+                        style="font-size: 10px;margin-left: 7px;"
+                        [class.bg-success]="product.status === 'Active'" 
+                        [class.bg-danger]="product.status === 'InActive'"
+                      >
+                        {{ product.status }}
+                      </span>
+                    </div>
                 </div>
 
                 <!-- CREATED BY -->
                 <div class="col-md-6 mb-3">
                     <strong>Created By:</strong>
-                    <p>{{ product.createdByUser?.name || 'N/A' }}</p>
+                    {{ product.createdByUser?.name || 'N/A' }}
                 </div>
 
                 <!-- CREATED ON -->
                 <div class="col-md-6 mb-3">
                     <strong>Created On:</strong>
-                    <p>{{ product.createdOn | date:'dd-MMM-yyyy HH:mm:ss' }}</p>
+                    {{ product.createdOn | date:'dd-MMM-yyyy HH:mm:ss' }}
                 </div>
 
                 <!-- UPDATED BY -->
                 <div class="col-md-6 mb-3">
                     <strong>Updated By:</strong>
-                    <p>{{ product.updatedByUser?.name || 'N/A' }}</p>
+                    {{ product.updatedByUser?.name || 'N/A' }}
                 </div>
 
                 <!-- UPDATED ON -->
                 <div class="col-md-6 mb-3">
                     <strong>Updated On:</strong>
-                    <p>{{ product.updatedOn |  date:'dd-MMM-yyyy HH:mm:ss' }}</p>
+                    {{ product.updatedOn |  date:'dd-MMM-yyyy HH:mm:ss' }}
                 </div>
 
                 <!-- IMAGE PREVIEW -->

@@ -14,7 +14,7 @@ export function mapApiToRole(apiData: any): Role {
     description: apiData.description,
     createdBy:mapApiToBasicInfoBaseEntity(apiData?.createdBy),
     createdOn:new Date( apiData.createdOn),
-    status:apiData.status as StatusEnum || StatusEnum.Null
+    status:apiData.status as StatusEnum || ""
   };
 }
 

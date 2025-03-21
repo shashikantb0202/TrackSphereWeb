@@ -41,6 +41,7 @@ export interface User {
   updatedBy?: { id: number; name: string } | null;
   createdOn: string;
   updatedOn: string;
+  status:string
 }
 
 export interface UserResponse {

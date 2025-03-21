@@ -1,3 +1,5 @@
+import { StatusEnum } from "../enums/status.enum";
+
 export interface Product {
     id: number;
     name: string;
@@ -17,6 +19,7 @@ export interface Product {
     updatedByUser?: { id: number; name: string } | null;
     createdOn: string;
     updatedOn?: string;
+    status:StatusEnum
 }
 
 export interface ProductCategory {

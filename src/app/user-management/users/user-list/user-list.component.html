@@ -1,69 +1,154 @@
 <div>
-    <div class="d-flex align-items-center justify-content-between my-3">
-        <h3 class="mb-0">User Management</h3>
-        <button class="btn btn-success" (click)="navigateToAddUser()">Add User</button>
-    </div>
+  <div class="d-flex align-items-center justify-content-between gap-2">
+    <h3 class="mb-0">User Management</h3>
+    <button class="btn btn-success" (click)="navigateToAddUser()">
+      Add User
+    </button>
+  </div>
+  <!-- Search Input -->
+  <div class="row mb-4 mt-2">
     <!-- Search Input -->
-    <div class="mb-4 mt-2">
+    <div class="col-md-4">
+      <label for="search" class="form-label">🔍 Search Product</label>
       <input
         type="text"
+        id="search"
         class="form-control"
-        placeholder="Search by name, email..."
+        placeholder="Enter name or category..."
         [(ngModel)]="searchTerm"
         (keyup)="searchUsers()"
       />
     </div>
-  
-    <!-- Ngx-Datatable for User List -->
-    <ngx-datatable
-      class="bootstrap"
-      [rows]="users"
-      [columnMode]="'force'"
-      [headerHeight]="50"
-      [footerHeight]="50"
-      [rowHeight]="'auto'"
-      
-      [limit]="pageSize"
-      [count]="totalRecords"
-      [externalPaging]="true"
-      [externalSorting]="true"
-      (sort)="onSort($event)"
-      (page)="onPage($event)">
- 
-      <!-- Created On Column -->
-      <ngx-datatable-column name="ID" prop="id" width="70"  [sortable]="true"></ngx-datatable-column>
-      <ngx-datatable-column name="Username" prop="username"  [sortable]="true" ></ngx-datatable-column>
-      <ngx-datatable-column name="Name" prop="name"  [sortable]="true" ></ngx-datatable-column>
-      <!-- <ngx-datatable-column name="Email" prop="email" ></ngx-datatable-column>
-      <ngx-datatable-column name="Contact No" prop="contactNo" ></ngx-datatable-column> -->
-      <ngx-datatable-column name="Role" prop="role.name"  [sortable]="false"></ngx-datatable-column>
-      <ngx-datatable-column name="Created By" prop="createdBy.name"   [sortable]="false"></ngx-datatable-column>
-      <ngx-datatable-column 
-          name="createdOn" 
-          width="150" 
-          [sortable]="true"
-          [cellTemplate]="createdOnTemplate">
-     </ngx-datatable-column>
-      <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
-        {{ row.createdOn | date: 'dd/MM/yyyy' }}
-      </ng-template>
 
-      <ngx-datatable-column 
-      name="Actions" 
-      width="150" 
-      [sortable]="false"
-      [cellTemplate]="actionTemplate">
-  </ngx-datatable-column>
+    <!-- Filter by Category -->
+    <div class="col-md-4">
+      <label for="role" class="form-label">📂 Filter by Role</label>
+      <select
+        id="role"
+        class="form-control"
+        [(ngModel)]="selectedRole"
+        (change)="onSearch()"
+      >
+        <option value="0" selected>Select a Role</option>
+        <option *ngFor="let role of roleList" [value]="role.id">
+          {{ role.name }}
+        </option>
+      </select>
+    </div>
 
-<ng-template #actionTemplate let-row="row">
-
-<div>
-  <button class="btn btn-primary btn-sm" style="font-size: 12px;" (click)="editUser(row)">Edit</button>
-  <button class="btn btn-primary btn-sm" style="font-size: 12px;margin-left: 10px;" (click)="viewUser(row)">View</button>
-</div>
-</ng-template>
-
-
-    </ngx-datatable>
+    <!-- Filter by Status -->
+    <div class="col-md-4">
+      <label for="status" class="form-label">⚡ Filter by Status</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="selectedStatus"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select status</option>
+        <option *ngFor="let status of statusList" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
   </div>
-  
+
+  <!-- Ngx-Datatable for User List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="users"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <!-- Created On Column -->
+    <ngx-datatable-column
+      name="ID"
+      prop="id"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Username"
+      prop="username"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Name"
+      prop="name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <!-- <ngx-datatable-column name="Email" prop="email" ></ngx-datatable-column>
+      <ngx-datatable-column name="Contact No" prop="contactNo" ></ngx-datatable-column> -->
+    <ngx-datatable-column
+      name="Role"
+      prop="role.name"
+      [sortable]="false"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Created By"
+      prop="createdBy.name"
+      [sortable]="false"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="createdOn"
+      [sortable]="true"
+      [cellTemplate]="createdOnTemplate"
+    >
+    </ngx-datatable-column>
+    <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+      {{ row.createdOn | date : "dd/MM/yyyy" }}
+    </ng-template>
+
+    <!-- Status Column -->
+    <ngx-datatable-column
+      name="Status"
+      [cellTemplate]="StatusTemplate"
+      [sortable]="true"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #StatusTemplate let-row="row" ngx-datatable-cell>
+      <span
+        class="badge p-0 px-2 py-1 fs-7 small-badge"
+        style="font-size: 10px"
+        [class.bg-success]="row.status === 'Active'"
+        [class.bg-danger]="row.status === 'InActive'"
+      >
+        {{ row.status }}
+      </span>
+    </ng-template>
+
+    <ngx-datatable-column
+      name="Actions"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div>
+        <button
+          class="btn btn-primary btn-sm"
+          style="font-size: 12px"
+          (click)="editUser(row)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          style="font-size: 12px; margin-left: 10px"
+          (click)="viewUser(row)"
+        >
+          View
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

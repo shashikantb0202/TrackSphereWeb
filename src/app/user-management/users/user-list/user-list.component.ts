@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User, UserResponse } from '../../../Models/user.model';
+import { Role, User, UserResponse } from '../../../Models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +7,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { UserService } from '../../../Services/user.service';
 import { Router } from '@angular/router';
+import { RoleService } from '../../../Services/role.service';
+import { StatusEnum } from '../../../enums/status.enum';
+import { enumToStringArray } from '../../../utils/common.utils';
 
 @Component({
   selector: 'app-user-list',
@@ -17,6 +20,10 @@ import { Router } from '@angular/router';
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent implements OnInit {
+roleList: Role|any;
+selectedRole: any=0;
+selectedStatus: any="";
+statusList: string[]=enumToStringArray(StatusEnum); ;
   users: User[] = [];
 
 
@@ -27,28 +34,43 @@ export class UserListComponent implements OnInit {
   sortColumn: string = '';
   sortDirection: string = '';
 
-  constructor(private http: HttpClient,private userService:UserService,private router: Router) {}
+  constructor(private http: HttpClient,
+    private userService:UserService,
+    private router: Router,
+    private roleService:RoleService
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
+    this.getRoles();
   }
 
   navigateToAddUser(): void {
     this.router.navigate(['main/user-management/add-user']);
   }
-
+  onSearch() {
+    this.currentPage = 1; // ngx-datatable starts at 0
+      this.loadUsers();
+  }
   loadUsers(): void {
     const params = {
       page: this.currentPage.toString(),
       pageSize: this.pageSize.toString(),
       search: this.searchTerm,
       sortColumn: this.sortColumn,
-      sortDirection: this.sortDirection
+      sortDirection: this.sortDirection,
+      roleId:this.selectedRole,
+      ...(this.selectedStatus ? { status: this.selectedStatus } : {})
     };
 
     this.userService.getAllUsers(params).subscribe((response) => {
       this.users = Array.isArray(response.data.data) ? response.data.data : []; // ✅ Ensure `data.data` is an array
       this.totalRecords = response.data.totalRecords; // ✅ Access `totalRecords` directly
+    });
+  }
+  getRoles(){
+    this.roleService.getAllRoles().subscribe((response) => {
+      this.roleList = Array.isArray(response) ? response : []; 
     });
   }
 

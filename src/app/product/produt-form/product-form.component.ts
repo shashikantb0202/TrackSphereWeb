@@ -8,6 +8,8 @@ import { Product, ProductCategory } from '../../Models/product.model';
 import { ProductService } from '../../Services/product.service';
 import { ProductCategoryService } from '../../Services/product-category.service';
 import { getDirtyValues } from '../../utils/form.utils';
+import { StatusEnum } from '../../enums/status.enum';
+import { enumToStringArray } from '../../utils/common.utils';
 
 @Component({
   selector: 'app-product-form.component',
@@ -25,6 +27,7 @@ export class ProductFormComponent implements OnInit {
   categories: ProductCategory[] = [];
   isLoading: boolean = false;
   selectedFiles: { name: string; file: File; preview?: string }[] = [];
+  statusList:string[]= enumToStringArray(StatusEnum); 
 
 
   constructor(
@@ -56,7 +59,8 @@ export class ProductFormComponent implements OnInit {
         benefits: ['', [Validators.required, Validators.minLength(10)]],
         howToUse: ['', [Validators.required, Validators.minLength(10)]],
         youtubeLink: [''], // No validation as per request
-        returnPolicy: ['', Validators.required]
+        returnPolicy: ['', Validators.required],
+        status: ['', Validators.required]
     });
   }
 
@@ -90,7 +94,8 @@ export class ProductFormComponent implements OnInit {
           benefits: productData.benefits,
           howToUse: productData.howToUse,
           youtubeLink: productData.youtubeLink,
-          returnPolicy: productData.returnPolicy
+          returnPolicy: productData.returnPolicy,
+          status:productData.status
       });
   }
 

@@ -231,6 +231,24 @@
                             Employee Code is required.
                         </div>
                     </div>
+
+                    <div class="col-md-4" *ngIf="isEditMode">
+                        <label for="status" class="form-label">Status</label>
+                        <select 
+                            id="status"
+                            class="form-select"
+                            formControlName="status"
+                            [class.is-valid]="isSubmitted && userForm.get('status')?.valid"
+                            [class.is-invalid]="isSubmitted && userForm.get('status')?.invalid"
+                            required
+                        >
+                        <option value="" selected>Select status</option>
+                        <option  *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a status.
+                        </div>
+                    </div>
                 </div>
             </div>
             

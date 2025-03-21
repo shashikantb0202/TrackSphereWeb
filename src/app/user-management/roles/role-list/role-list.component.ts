@@ -7,6 +7,7 @@ import { mapApiToRole } from '../../../utils/role.utils';
 import { Modal } from 'bootstrap';
 import { StatusEnum } from '../../../enums/status.enum';
 import { CommonModule } from '@angular/common';
+import { enumToStringArray } from '../../../utils/common.utils';
 
 @Component({
   selector: 'app-role-list',
@@ -26,7 +27,7 @@ export class RoleListComponent implements OnInit {
   isSubmitted: boolean = false;
   isLoading: boolean = false;
   isSaving: boolean = false;
-
+ statusList: string[] = enumToStringArray(StatusEnum); 
   // Inline Editing
   editRoleId: number | null = null;
   editableRole: Partial<Role> = {};
@@ -34,16 +35,6 @@ export class RoleListComponent implements OnInit {
   // Modal Instance
   roleModalInstance: Modal | null = null;
 
-
-  columns = [
-    { name: 'ID', prop: 'id', width: 70 },
-    { name: 'Name', prop: 'name', width: 150 },
-    { name: 'Description', prop: 'description', width: 200 },
-    { name: 'Created By', prop: 'createdBy.name', width: 100 },
-    { name: 'Created On', prop: 'createdOn', width: 100}, // Correct reference
-    { name: 'Status', prop: 'status', width: 200 },
-    { name: 'Actions', prop: 'actions', width: 200 } // Correct reference
-];
 
   // Pagination Variables
   pageSize: number = 5;

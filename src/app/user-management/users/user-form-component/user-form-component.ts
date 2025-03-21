@@ -8,6 +8,8 @@ import { DropdownService } from '../../../Services/dropdown.service';
 import { RoleService } from '../../../Services/role.service';
 import { ToastrService } from 'ngx-toastr';
 import { getDirtyValues } from '../../../utils/form.utils';
+import { enumToStringArray } from '../../../utils/common.utils';
+import { StatusEnum } from '../../../enums/status.enum';
 
 @Component({
   selector: 'app-user-form-component',
@@ -31,6 +33,7 @@ departments: Department[] = [];
 designations: Designation[] = [];
 roles: Role[] = [];  // Assuming roles are fetched separately
 isLoading: boolean=false;
+statusList: string[]=enumToStringArray(StatusEnum);
   constructor(
       private fb: FormBuilder,
       private userService: UserService,
@@ -74,6 +77,7 @@ isLoading: boolean=false;
           stateId: [null, Validators.required],
           cityId: [null, Validators.required],
           roleId: [null, Validators.required],
+          status: [null, Validators.required],
       }, { validator: this.passwordMatchValidator });
   }
 
@@ -130,7 +134,8 @@ isLoading: boolean=false;
         countryId: userData.country?.id,
         stateId: userData.state?.id,
         cityId: userData.city?.id,
-        roleId: userData.role?.id
+        roleId: userData.role?.id,
+        status:userData.status
     });
 }
   

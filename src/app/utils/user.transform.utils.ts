@@ -23,6 +23,7 @@ export function transformToUserModel(data: any): User {
     createdBy: data.createdBy || null,
     updatedBy: data.updatedBy || null,
     createdOn: data.createdOn,
-    updatedOn: data.updatedOn
+    updatedOn: data.updatedOn,
+    status:data.status
   };
 }
