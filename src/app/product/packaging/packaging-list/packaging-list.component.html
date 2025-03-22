@@ -1,0 +1,127 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2">
+    <h3 class="mb-0">Packaging Management</h3>
+    <button class="btn btn-success" (click)="navigateToAddPackaging()">
+      Add Packaging
+    </button>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Search Input -->
+    <div class="col-md-6">
+      <label for="search" class="form-label">🔍 Search Packaging</label>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Enter packaging name..."
+        [(ngModel)]="searchTerm"
+        (keyup)="onSearch()"
+      />
+    </div>
+
+    <!-- Filter by Status -->
+    <div class="col-md-6">
+      <label for="status" class="form-label">⚡ Filter by Status</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="selectedStatus"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select status</option>
+        <option *ngFor="let status of statusList" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for Packaging List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="packagings"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <ngx-datatable-column
+      name="ID"
+      prop="id"
+      width="70"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Name"
+      prop="name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Unit"
+      prop="unit.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Created By"
+      prop="createdBy.name"
+      [sortable]="false"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Created On"
+      width="150"
+      [sortable]="true"
+      [cellTemplate]="createdOnTemplate"
+    >
+    </ngx-datatable-column>
+    <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+      {{ row.createdOn | date : "dd/MM/yyyy" }}
+    </ng-template>
+
+    <!-- Status Column -->
+    <ngx-datatable-column
+      name="Status"
+      width="120"
+      [cellTemplate]="StatusTemplate"
+      [sortable]="true"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #StatusTemplate let-row="row" ngx-datatable-cell>
+      <span
+        class="badge p-0 px-2 py-1 fs-7 small-badge"
+        style="font-size: 10px"
+        [class.bg-success]="row.status === 'Active'"
+        [class.bg-danger]="row.status === 'InActive'"
+      >
+        {{ row.status }}
+      </span>
+    </ng-template>
+
+    <ngx-datatable-column
+      name="Actions"
+      width="150"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div>
+        <button class="btn btn-primary btn-sm" (click)="editPackaging(row)">
+          Edit
+        </button>
+        <button class="btn btn-info btn-sm ms-2" (click)="viewPackaging(row)">
+          View
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

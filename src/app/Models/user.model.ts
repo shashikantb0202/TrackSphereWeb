@@ -1,3 +1,5 @@
+import { Role } from './Role';
+
 export interface Designation {
   id: number;
   name: string;
@@ -9,11 +11,6 @@ export interface Department {
 }
 
 export interface Location {
-  id: number;
-  name: string;
-}
-
-export interface Role {
   id: number;
   name: string;
 }
@@ -41,7 +38,7 @@ export interface User {
   updatedBy?: { id: number; name: string } | null;
   createdOn: string;
   updatedOn: string;
-  status:string
+  status: string;
 }
 
 export interface UserResponse {
@@ -51,7 +48,6 @@ export interface UserResponse {
   errors: any[];
   totalRecords: number;
 }
-
 
 export interface AddUser {
   id?: number;

@@ -1,0 +1,84 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">
+      Product Category Details
+    </div>
+
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- CATEGORY NAME -->
+        <div class="col-md-6 mb-3">
+          <strong>Category Name:</strong>
+          {{ category.name }}
+        </div>
+
+        <!-- PRIORITY -->
+        <div class="col-md-6 mb-3">
+          <strong>Priority:</strong>
+          {{ category.priority }}
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-md-12 mb-3">
+          <strong>Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            style="font-size: 10px; margin-left: 7px"
+            [class.bg-success]="category.status === 'Active'"
+            [class.bg-danger]="category.status === 'Inactive'"
+          >
+            {{ category.status }}
+          </span>
+        </div>
+
+        <!-- CREATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Created By:</strong>
+          {{ category.createdBy?.name || "N/A" }}
+        </div>
+
+        <!-- CREATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Created On:</strong>
+          {{ category.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+
+        <!-- UPDATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated By:</strong>
+          {{ category.updatedBy?.name || "N/A" }}
+        </div>
+
+        <!-- UPDATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated On:</strong>
+          {{ category.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="
+          router.navigate(['main/product-category/edit-category', category.id])
+        "
+      >
+        Edit Category
+      </button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/product-category/category-list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

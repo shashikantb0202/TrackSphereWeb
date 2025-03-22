@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Role, User, UserResponse } from '../../../Models/user.model';
+import { User, UserResponse } from '../../../Models/user.model';
+import { Role } from '../../../Models/Role';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,19 +14,16 @@ import { enumToStringArray } from '../../../utils/common.utils';
 
 @Component({
   selector: 'app-user-list',
-  imports: [CommonModule,
-              FormsModule,
-              ReactiveFormsModule,NgxDatatableModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxDatatableModule],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.css'
+  styleUrl: './user-list.component.css',
 })
 export class UserListComponent implements OnInit {
-roleList: Role|any;
-selectedRole: any=0;
-selectedStatus: any="";
-statusList: string[]=enumToStringArray(StatusEnum); ;
+  roleList: Role | any;
+  selectedRole: any = 0;
+  selectedStatus: any = '';
+  statusList: string[] = enumToStringArray(StatusEnum);
   users: User[] = [];
-
 
   searchTerm: string = '';
   pageSize: number = 10;
@@ -34,10 +32,11 @@ statusList: string[]=enumToStringArray(StatusEnum); ;
   sortColumn: string = '';
   sortDirection: string = '';
 
-  constructor(private http: HttpClient,
-    private userService:UserService,
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
     private router: Router,
-    private roleService:RoleService
+    private roleService: RoleService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +49,7 @@ statusList: string[]=enumToStringArray(StatusEnum); ;
   }
   onSearch() {
     this.currentPage = 1; // ngx-datatable starts at 0
-      this.loadUsers();
+    this.loadUsers();
   }
   loadUsers(): void {
     const params = {
@@ -59,8 +58,8 @@ statusList: string[]=enumToStringArray(StatusEnum); ;
       search: this.searchTerm,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
-      roleId:this.selectedRole,
-      ...(this.selectedStatus ? { status: this.selectedStatus } : {})
+      roleId: this.selectedRole,
+      ...(this.selectedStatus ? { status: this.selectedStatus } : {}),
     };
 
     this.userService.getAllUsers(params).subscribe((response) => {
@@ -68,20 +67,20 @@ statusList: string[]=enumToStringArray(StatusEnum); ;
       this.totalRecords = response.data.totalRecords; // ✅ Access `totalRecords` directly
     });
   }
-  getRoles(){
+  getRoles() {
     this.roleService.getAllRoles().subscribe((response) => {
-      this.roleList = Array.isArray(response) ? response : []; 
+      this.roleList = Array.isArray(response) ? response : [];
     });
   }
 
-   // Load Users with Search Logic
-   searchUsers(): void {
+  // Load Users with Search Logic
+  searchUsers(): void {
     const trimmedText = this.searchTerm.trim();
     // Trigger only if 3+ characters entered or empty string
     if (trimmedText.length >= 3 || trimmedText === '') {
       this.loadUsers();
     }
-}
+  }
 
   onPage(event: any): void {
     this.currentPage = event.offset + 1; // ngx-datatable starts at 0
@@ -97,7 +96,7 @@ statusList: string[]=enumToStringArray(StatusEnum); ;
   editUser(user: User): void {
     this.router.navigate(['main/user-management/edit-user', user.id]);
   }
-  
+
   viewUser(user: User): void {
     this.router.navigate(['main/user-management/view-user', user.id]);
   }

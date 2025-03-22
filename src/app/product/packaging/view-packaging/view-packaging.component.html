@@ -1,0 +1,82 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Packaging Details</div>
+
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- PACKAGING NAME -->
+        <div class="col-md-6 mb-3">
+          <strong>Packaging Name:</strong>
+          {{ packaging.name }}
+        </div>
+
+        <!-- UNIT -->
+        <div class="col-md-6 mb-3">
+          <strong>Unit:</strong>
+          {{ packaging.unit?.name || "N/A" }}
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-md-12 mb-3">
+          <strong>Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            style="font-size: 10px; margin-left: 7px"
+            [class.bg-success]="packaging.status === 'Active'"
+            [class.bg-danger]="packaging.status === 'InActive'"
+          >
+            {{ packaging.status }}
+          </span>
+        </div>
+
+        <!-- CREATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Created By:</strong>
+          {{ packaging.createdBy?.name || "N/A" }}
+        </div>
+
+        <!-- CREATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Created On:</strong>
+          {{ packaging.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+
+        <!-- UPDATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated By:</strong>
+          {{ packaging.updatedBy?.name || "N/A" }}
+        </div>
+
+        <!-- UPDATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated On:</strong>
+          {{ packaging.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="
+          router.navigate(['main/packaging/edit-packaging', packaging.id])
+        "
+      >
+        Edit Packaging
+      </button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/packaging/packaging-list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

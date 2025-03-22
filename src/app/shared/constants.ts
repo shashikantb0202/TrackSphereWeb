@@ -21,6 +21,16 @@ export const BaseUrl = {
   },
   ProductCategory: {
     ProductCategory: '/api/productCategory',
+    ProductCategoryAll: '/api/productCategory/all',
+    ProductCategoryWithFilter: '/api/productCategory/filter',
+  },
+  Packaging: {
+    Packaging: '/api/Packaging',
+    PackagingAll: '/api/Packaging',
+    PackagingWithFilter: '/api/Packaging/filter',
+  },
+  Unit: {
+    Unit: '/api/Unit',
   },
   GeoLocation: {
     GeoLocation: '/api/GeoLocation',

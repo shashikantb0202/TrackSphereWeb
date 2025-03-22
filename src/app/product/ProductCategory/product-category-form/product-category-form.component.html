@@ -1,0 +1,102 @@
+<div class="container mb-2">
+  <h3>{{ isEditMode ? "Edit Product Category" : "Add Product Category" }}</h3>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= CATEGORY DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Category Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- CATEGORY NAME -->
+            <div class="col-md-6">
+              <label for="name" class="form-label">Category Name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="Enter Category Name"
+                formControlName="name"
+                [class.is-valid]="
+                  isSubmitted && categoryForm.get('name')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && categoryForm.get('name')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Category name is required (minimum 3 characters).
+              </div>
+            </div>
+
+            <!-- PRIORITY -->
+            <div class="col-md-6">
+              <label for="priority" class="form-label">Priority</label>
+              <input
+                id="priority"
+                type="number"
+                class="form-control"
+                placeholder="Enter Priority"
+                formControlName="priority"
+                [class.is-valid]="
+                  isSubmitted && categoryForm.get('priority')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && categoryForm.get('priority')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Priority is required.</div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-6" *ngIf="isEditMode">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                [class.is-valid]="
+                  isSubmitted && categoryForm.get('status')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && categoryForm.get('status')?.invalid
+                "
+                required
+              >
+                <option value="" selected>Select Status</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a status.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? "Update Category" : "Add Category" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="router.navigate(['main/product-category/category-list'])"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

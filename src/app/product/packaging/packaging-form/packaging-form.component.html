@@ -1,0 +1,105 @@
+<div class="container mb-2">
+  <h3>{{ isEditMode ? "Edit Packaging" : "Add Packaging" }}</h3>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="packagingForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= PACKAGING DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Packaging Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- PACKAGING NAME -->
+            <div class="col-md-6">
+              <label for="name" class="form-label">Packaging Name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="Enter Packaging Name"
+                formControlName="name"
+                [class.is-valid]="
+                  isSubmitted && packagingForm.get('name')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && packagingForm.get('name')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Packaging name is required (minimum 3 characters).
+              </div>
+            </div>
+
+            <!-- UNIT DROPDOWN -->
+            <div class="col-md-6">
+              <label for="unitId" class="form-label">Unit</label>
+              <select
+                id="unitId"
+                class="form-select"
+                formControlName="unitId"
+                [class.is-valid]="
+                  isSubmitted && packagingForm.get('unitId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && packagingForm.get('unitId')?.invalid
+                "
+                required
+              >
+                <option value="" selected disabled>Select a Unit</option>
+                <option *ngFor="let unit of unitList" [value]="unit.id">
+                  {{ unit.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a unit.</div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-6" *ngIf="isEditMode">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                [class.is-valid]="
+                  isSubmitted && packagingForm.get('status')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && packagingForm.get('status')?.invalid
+                "
+                required
+              >
+                <option value="" selected>Select Status</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a status.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? "Update Packaging" : "Add Packaging" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="router.navigate(['main/packaging/packaging-list'])"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
