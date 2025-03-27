@@ -1,173 +1,167 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    flex-direction: column;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
-    display: flex;
-    height: calc(100vh - 60px); /* Full height minus header */
-    margin-top: 60px; /* Prevents content from being hidden behind header */
+  display: flex;
+  height: calc(100vh - 60px); /* Full height minus header */
+  margin-top: 60px; /* Prevents content from being hidden behind header */
 }
 
 .left-panel {
-    width: 250px;
-    background: #f4f4f4;
-    padding: 20px;
-    transition: width 0.3s;
+  width: 250px;
+  background: #f4f4f4;
+  padding: 20px;
+  transition: width 0.3s;
 }
 
 .main-content {
-    flex: 1;
-    padding: 20px;
-    background: #fff;
-    overflow-y: auto; /* Allows scrolling */
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+  overflow-y: auto; /* Allows scrolling */
 }
 
+.logo img {
+  height: 40px;
+  margin-right: 10px;
+}
 
-  
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
 
-  
-  .logo img {
-    height: 40px;
-    margin-right: 10px;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-  }
-  
-  .nav-links a:hover {
-    text-decoration: underline;
-  }
-  
-  .user-profile {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-profile img {
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
 
-  /* Colaps panal css */
+.nav-links a:hover {
+  text-decoration: underline;
+}
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Layout container */
-  .layout-container {
-    display: flex;
-  }
-  
-  /* Sidebar */
-  .sidebar-container {
-    position: fixed;
-    top: 60px; /* Adjust based on header height */
-    left: 0;
-    height: 100vh;
-    width: 22%;
-    background: #2c3e50;
-    color: white;
-    transition: width 0.3s ease;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    background-color: #343a40; /* Dark Sidebar */
-  }
-  
-  .sidebar {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    height: -webkit-fill-available;
-  }
-  
-  .sidebar a {
-    text-decoration: none;
-    color: white;
-    padding: 10px;
-    display: block;
-    transition: 0.3s;
-    font-size: 14px;
-  }
-  
-  .sidebar a:hover {
-    background: #34495e;
-  
-  }
-  
-  /* Toggle Button */
-  .toggle-btn {
-    position: absolute;
-    top: 3%;
-    left: 80%; /* Adjust for better visibility */
-    background: #2575fc;
-    color: white;
-    border: none;
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    border-radius: 5px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: left 0.3s ease;
-  }
-  
-  /* Collapsed Sidebar */
-  .collapsed {
-    width: 60px;
-  }
-  
-  .collapsed .toggle-btn {
-    left: 10px;
-  }
-  
-  .collapsed .sidebar {
-    display: none;
-  }
-  
-  /* Main Content */
-  .main-content {
-    margin-left: 250px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-    width: calc(100% - 250px);
-  }
-  
-  /* Adjust main content when sidebar is collapsed */
-  .expanded {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-  }
-  
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+.user-profile img {
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Colaps panal css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Layout container */
+.layout-container {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar-container {
+  position: fixed;
+  top: 60px; /* Adjust based on header height */
+  left: 0;
+  height: 100vh;
+  width: 22%;
+  background: #2c3e50;
+  color: white;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #343a40; /* Dark Sidebar */
+}
+
+.sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: -webkit-fill-available;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  display: block;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.sidebar a:hover {
+  background: #34495e;
+}
+
+/* Toggle Button */
+.toggle-btn {
+  position: absolute;
+  top: 3%;
+  left: 80%; /* Adjust for better visibility */
+  background: #2575fc;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s ease;
+}
+
+/* Collapsed Sidebar */
+.collapsed {
+  width: 60px;
+}
+
+.collapsed .toggle-btn {
+  left: 10px;
+}
+
+.collapsed .sidebar {
+  display: none;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  width: calc(100% - 250px);
+}
+
+/* Adjust main content when sidebar is collapsed */
+.expanded {
+  margin-left: 60px;
+  width: calc(100% - 60px);
+}
+
 /* colaps panal css end    */
-
 
 .sidebar-container.collapsed {
   width: 80px;
@@ -191,11 +185,11 @@ body, html {
   transform: rotate(180deg);
 }
 a.active {
-  background-color:#34495e; /* Bootstrap primary color */
+  background-color: #34495e; /* Bootstrap primary color */
   border-radius: 5px;
   padding: 8px;
 }
-.togle-btn{
+.togle-btn {
   margin-bottom: 30%;
   margin-left: 30%;
 }
@@ -206,7 +200,7 @@ a.active {
 }
 
 .sidebar.collapsed {
-  width: 70px;  /* Only icons visible */
+  width: 70px; /* Only icons visible */
   overflow: hidden;
 }
 
@@ -251,4 +245,27 @@ button.togle-btn {
   transform: rotate(180deg);
 }
 
+.sidebar {
+  height: 100vh; /* Full height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
 
+/* Optional: Customize scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}

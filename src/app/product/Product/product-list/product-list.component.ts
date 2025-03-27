@@ -28,7 +28,7 @@ export class ProductListComponent implements OnInit {
   selectedStatus: any = '';
   products: Product[] = [];
   searchTerm: string = '';
-  pageSize: number = 10;
+  pageSize: number = 5;
   currentPage: number = 1;
   totalRecords: number = 0;
   sortColumn: string = '';

@@ -62,7 +62,7 @@ export class UserListComponent implements OnInit {
       ...(this.selectedStatus ? { status: this.selectedStatus } : {}),
     };
 
-    this.userService.getAllUsers(params).subscribe((response) => {
+    this.userService.getAllUsersWithFilter(params).subscribe((response) => {
       this.users = Array.isArray(response.data.data) ? response.data.data : []; // ✅ Ensure `data.data` is an array
       this.totalRecords = response.data.totalRecords; // ✅ Access `totalRecords` directly
     });

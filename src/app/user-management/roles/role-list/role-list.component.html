@@ -1,197 +1,238 @@
 <div>
-  <div class="d-flex align-items-center justify-content-between my-3">
-    <h3 class="mb-0">Role Management</h3>
+  <div class="d-flex align-items-center justify-content-between mb-15">
+    <h3 class="mb-0">Role</h3>
     <button class="btn btn-success" (click)="openRoleModal()">Add Role</button>
-</div>
-    <!-- Loader for List Data -->
-    <div *ngIf="isLoading" class="text-center my-3">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-   
-    <div *ngIf="!isLoading" class="table-responsive shadow-sm">
-      <ngx-datatable
-        class="bootstrap"
-        [rows]="filteredRoles"
-        [columnMode]="'force'"
-        [headerHeight]="40"
-        [rowHeight]="10"
-        [footerHeight]="40"
-        [rowHeight]="'auto'"
-        [limit]="pageSize"
-        [count]="totalRecords"
-        [externalPaging]="true"
-        [externalSorting]="true"
-        (sort)="onSort($event)"
-        (page)="onPage($event)">
-  
-        <!-- ID Column -->
-        <ngx-datatable-column name="ID" prop="id" width="70"></ngx-datatable-column>
-
-        <!-- Name Column -->
-        <ngx-datatable-column 
-        name="Name"
-         width="150"
-         [cellTemplate]="NameTemplate">
-          
-        </ngx-datatable-column>
-        <ng-template #NameTemplate let-row="row" ngx-datatable-cell>
-          <input 
-            *ngIf="editRoleId === row.id"
-            type="text"
-            required="true"
-            class="form-control"
-            [(ngModel)]="editableRole.name"
-          />
-          <span *ngIf="editRoleId !== row.id">{{ row.name }}</span>
-        </ng-template>
-        <!-- Description Column -->
-        <ngx-datatable-column 
-        name="Description" 
-        width="200"
-        [cellTemplate]="DescriptionTemplate">
-        </ngx-datatable-column>
-
-        <ng-template #DescriptionTemplate let-row="row" ngx-datatable-cell>
-          <input 
-            *ngIf="editRoleId === row.id"
-            type="text"
-            class="form-control"
-            [(ngModel)]="editableRole.description"
-          />
-          <span *ngIf="editRoleId !== row.id">{{ row.description }}</span>
-        </ng-template>
-        <!-- Created By Column -->
-        <ngx-datatable-column name="Created By" prop="createdBy.name" width="150"></ngx-datatable-column>
-        
-        <!-- Created On Column -->
-        <ngx-datatable-column 
-           name="createdOn" 
-          width="150" 
-          [cellTemplate]="createdOnTemplate">
-          </ngx-datatable-column>
-        <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
-          {{ row.createdOn | date: 'dd/MM/yyyy' }}
-        </ng-template>
-
-        
-        <!-- Status Column -->
-        <ngx-datatable-column 
-        name="Status"
-         width="150"
-        [cellTemplate]="StatusTemplate">
-          
-        </ngx-datatable-column>
-
-        <ng-template #StatusTemplate let-row="row" ngx-datatable-cell>
-          <select 
-            *ngIf="editRoleId === row.id"
-            class="form-select"
-            [(ngModel)]="editableRole.status"
-          >
-          <option  *ngFor="let status of statusList" [value]="status">{{ status }}</option>
-          </select>
-          <span 
-            *ngIf="editRoleId !== row.id" 
-            class="badge p-0 px-2 py-1 fs-7 small-badge" 
-            style="font-size: 10px;"
-            [class.bg-success]="row.status === 'Active'" 
-            [class.bg-danger]="row.status === 'InActive'"
-          >
-            {{ row.status }}
-          </span>
-        </ng-template>
-      
-        <!-- Actions Column -->
-        <ngx-datatable-column 
-            name="Actions" 
-            width="150" 
-            [cellTemplate]="actionTemplate">
-        </ngx-datatable-column>
-
-<ng-template #actionTemplate let-row="row">
-    <div *ngIf="editRoleId === row.id">
-        <button class="btn btn-success btn-sm" (click)="saveRole()">Save</button>
-        <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
-    </div>
-    <div *ngIf="editRoleId !== row.id">
-        <button class="btn btn-primary btn-sm" style="font-size: 12px;" (click)="editRole(row)">Edit</button>
-    </div>
-</ng-template>
-
-  
-      </ngx-datatable>
   </div>
-  
-  
+  <!-- Loader for List Data -->
+  <div *ngIf="isLoading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 
-    <!-- Popup Modal for Add Role -->
-   <!-- Add Role Modal -->
-<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+  <div *ngIf="!isLoading" class="table-responsive shadow-sm">
+    <ngx-datatable
+      class="bootstrap"
+      [rows]="filteredRoles"
+      [columnMode]="'force'"
+      [headerHeight]="40"
+      [rowHeight]="10"
+      [footerHeight]="40"
+      [rowHeight]="'auto'"
+      [limit]="pageSize"
+      [count]="totalRecords"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      (sort)="onSort($event)"
+      (page)="onPage($event)"
+    >
+      <!-- ID Column -->
+      <ngx-datatable-column
+        name="ID"
+        prop="id"
+        width="70"
+      ></ngx-datatable-column>
+
+      <!-- Name Column -->
+      <ngx-datatable-column
+        name="Name"
+        width="150"
+        [cellTemplate]="NameTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #NameTemplate let-row="row" ngx-datatable-cell>
+        <input
+          *ngIf="editRoleId === row.id"
+          type="text"
+          required="true"
+          class="form-control"
+          [(ngModel)]="editableRole.name"
+        />
+        <span *ngIf="editRoleId !== row.id">{{ row.name }}</span>
+      </ng-template>
+      <!-- Description Column -->
+      <ngx-datatable-column
+        name="Description"
+        width="200"
+        [cellTemplate]="DescriptionTemplate"
+      >
+      </ngx-datatable-column>
+
+      <ng-template #DescriptionTemplate let-row="row" ngx-datatable-cell>
+        <input
+          *ngIf="editRoleId === row.id"
+          type="text"
+          class="form-control"
+          [(ngModel)]="editableRole.description"
+        />
+        <span *ngIf="editRoleId !== row.id">{{ row.description }}</span>
+      </ng-template>
+      <!-- Created By Column -->
+      <ngx-datatable-column
+        name="Created By"
+        prop="createdBy.name"
+        width="150"
+      ></ngx-datatable-column>
+
+      <!-- Created On Column -->
+      <ngx-datatable-column
+        name="createdOn"
+        width="150"
+        [cellTemplate]="createdOnTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+        {{ row.createdOn | date : "dd/MM/yyyy" }}
+      </ng-template>
+
+      <!-- Status Column -->
+      <ngx-datatable-column
+        name="Status"
+        width="150"
+        [cellTemplate]="StatusTemplate"
+      >
+      </ngx-datatable-column>
+
+      <ng-template #StatusTemplate let-row="row" ngx-datatable-cell>
+        <select
+          *ngIf="editRoleId === row.id"
+          class="form-select"
+          [(ngModel)]="editableRole.status"
+        >
+          <option *ngFor="let status of statusList" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+        <span
+          *ngIf="editRoleId !== row.id"
+          class="badge p-0 px-2 py-1 fs-7 small-badge"
+          style="font-size: 10px"
+          [class.bg-success]="row.status === 'Active'"
+          [class.bg-danger]="row.status === 'InActive'"
+        >
+          {{ row.status }}
+        </span>
+      </ng-template>
+
+      <!-- Actions Column -->
+      <ngx-datatable-column
+        name="Actions"
+        width="150"
+        [cellTemplate]="actionTemplate"
+      >
+      </ngx-datatable-column>
+
+      <ng-template #actionTemplate let-row="row">
+        <div *ngIf="editRoleId === row.id">
+          <button class="btn btn-success btn-sm" (click)="saveRole()">
+            Save
+          </button>
+          <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+            Cancel
+          </button>
+        </div>
+        <div *ngIf="editRoleId !== row.id">
+          <button
+            class="btn btn-primary btn-sm"
+            style="font-size: 12px"
+            (click)="editRole(row)"
+          >
+            Edit
+          </button>
+        </div>
+      </ng-template>
+    </ngx-datatable>
+  </div>
+
+  <!-- Popup Modal for Add Role -->
+  <!-- Add Role Modal -->
+  <div
+    class="modal fade"
+    id="roleModal"
+    tabindex="-1"
+    aria-labelledby="roleModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title" id="roleModalLabel">Add New Role</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-  
+
         <div class="modal-body">
           <form [formGroup]="roleForm" (ngSubmit)="saveNewRole()" novalidate>
-            
             <!-- Name Field -->
             <div class="input-group has-validation mb-3">
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
                 placeholder="Enter Role Name"
                 formControlName="name"
                 [class.is-valid]="isSubmitted && roleForm.get('name')?.valid"
-                [class.is-invalid]="isSubmitted && roleForm.get('name')?.invalid"
+                [class.is-invalid]="
+                  isSubmitted && roleForm.get('name')?.invalid
+                "
                 required
               />
               <div class="invalid-feedback">
                 Role name is required (minimum 3 characters).
               </div>
             </div>
-  
+
             <!-- Description Field -->
             <div class="input-group has-validation mb-3">
-              <textarea 
-                class="form-control" 
+              <textarea
+                class="form-control"
                 placeholder="Enter Description"
                 formControlName="description"
-                [class.is-valid]="isSubmitted && roleForm.get('description')?.valid"
-                [class.is-invalid]="isSubmitted && roleForm.get('description')?.invalid"
+                [class.is-valid]="
+                  isSubmitted && roleForm.get('description')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && roleForm.get('description')?.invalid
+                "
                 required
               ></textarea>
-              <div class="invalid-feedback">
-                Description is required.
-              </div>
+              <div class="invalid-feedback">Description is required.</div>
             </div>
-  
+
             <!-- Status Field -->
             <div class="input-group has-validation mb-3">
-              <select 
+              <select
                 class="form-select"
                 formControlName="status"
                 placeholder="Select Status"
                 [class.is-valid]="isSubmitted && roleForm.get('status')?.valid"
-                [class.is-invalid]="isSubmitted && roleForm.get('status')?.invalid"
+                [class.is-invalid]="
+                  isSubmitted && roleForm.get('status')?.invalid
+                "
                 required
               >
                 <option value="" disabled selected>Select Status</option>
-                <option  *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
               </select>
-              <div class="invalid-feedback">
-                Status is required.
-              </div>
+              <div class="invalid-feedback">Status is required.</div>
             </div>
-  
+
             <!-- Save Button with Loader -->
             <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-success" [disabled]="isSaving">
-                <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <button
+                type="submit"
+                class="btn btn-success"
+                [disabled]="isSaving"
+              >
+                <span
+                  *ngIf="isSaving"
+                  class="spinner-border spinner-border-sm me-2"
+                ></span>
                 Save Role
               </button>
             </div>
@@ -200,5 +241,4 @@
       </div>
     </div>
   </div>
-  
 </div>

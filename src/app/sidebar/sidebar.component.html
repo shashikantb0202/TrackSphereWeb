@@ -1,6 +1,6 @@
 <div
   [class.collapsed]="isCollapsed"
-  class="sidebar bg-dark text-white d-flex flex-column p-3"
+  class="sidebar bg-dark text-white d-flex flex-column p-3 overflow-auto"
 >
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 *ngIf="!isCollapsed" class="mb-0">Track Sphere</h5>
@@ -18,14 +18,14 @@
       <span *ngIf="!isCollapsed">{{ module.moduleTitle }}</span>
       <i
         *ngIf="!isCollapsed && module.subModules.length"
-        class="bi bi-chevron-down ms-auto"
+        class="bi bi-chevron-down ms-auto fs-6"
         [class.rotate]="subMenuOpen[module.moduleName]"
       >
       </i>
     </div>
 
     <a
-      class="d-flex align-items-center text-white text-decoration-none mt-2"
+      class="d-flex align-items-center text-white text-decoration-none"
       *ngIf="!module.subModules.length"
       [class.active]="activeItem === module.moduleName"
       (click)="setActiveItem(module.moduleName)"

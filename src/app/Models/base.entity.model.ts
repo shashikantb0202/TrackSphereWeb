@@ -6,7 +6,7 @@ export interface BaseEntity {
   createdOn: Date; // ISO date string format
   updatedBy?: BasicInfoBaseEntity;
   organization?: BasicInfoBaseEntity;
-  updatedOn?: string;
+  updatedOn?: Date;
   status: StatusEnum;
 }
 

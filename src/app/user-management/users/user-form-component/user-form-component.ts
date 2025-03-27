@@ -8,13 +8,7 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../../Services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AddUser,
-  User,
-  Location,
-  Department,
-  Designation,
-} from '../../../Models/user.model';
+import { AddUser, User } from '../../../Models/user.model';
 import { Role } from '../../../Models/Role';
 import { CommonModule } from '@angular/common';
 import { DropdownService } from '../../../Services/dropdown.service';
@@ -23,6 +17,11 @@ import { ToastrService } from 'ngx-toastr';
 import { getDirtyValues } from '../../../utils/form.utils';
 import { enumToStringArray } from '../../../utils/common.utils';
 import { StatusEnum } from '../../../enums/status.enum';
+import {
+  DepartmentBasicInfo,
+  DesignationBasicInfo,
+  LocationBasicInfo,
+} from '../../../Models/common.model';
 
 @Component({
   selector: 'app-user-form-component',
@@ -36,11 +35,11 @@ export class UserFormComponent implements OnInit {
   userId: number | null = null;
   isSubmitted: boolean = false;
 
-  countries: Location[] = [];
-  states: Location[] = [];
-  cities: Location[] = [];
-  departments: Department[] = [];
-  designations: Designation[] = [];
+  countries: LocationBasicInfo[] = [];
+  states: LocationBasicInfo[] = [];
+  cities: LocationBasicInfo[] = [];
+  departments: DepartmentBasicInfo[] = [];
+  designations: DesignationBasicInfo[] = [];
   roles: Role[] = []; // Assuming roles are fetched separately
   isLoading: boolean = false;
   statusList: string[] = enumToStringArray(StatusEnum);

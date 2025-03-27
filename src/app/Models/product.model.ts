@@ -4,6 +4,10 @@ import {
   ProductCategoryBasicInfo,
 } from './Product.category.model';
 
+export interface ProductBasicInfo {
+  id: number;
+  name: string;
+}
 export interface Product {
   id: number;
   name: string;

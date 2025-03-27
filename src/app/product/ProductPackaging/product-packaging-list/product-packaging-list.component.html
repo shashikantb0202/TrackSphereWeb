@@ -1,1 +1,155 @@
-<p>product-packaging-list works!</p>
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">Product Packaging</h3>
+    <button class="btn btn-success" (click)="navigateToAddProductPackaging()">
+      Add Product Packaging
+    </button>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Search Input -->
+    <div class="col-md-4">
+      <label for="search" class="form-label">🔍 Search Product Packaging</label>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Enter product packaging name..."
+        [(ngModel)]="searchTerm"
+        (keyup)="onSearch()"
+      />
+    </div>
+
+    <!-- Filter by Packaging -->
+    <div class="col-md-4">
+      <label for="packaging" class="form-label">📦 Filter by Packaging</label>
+      <select
+        id="packaging"
+        class="form-control"
+        [(ngModel)]="selectedPackaging"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select Packaging</option>
+        <option *ngFor="let pack of packagingList" [value]="pack.id">
+          {{ pack.name }}
+        </option>
+      </select>
+    </div>
+    <!-- Filter by Status -->
+    <div class="col-md-4">
+      <label for="status" class="form-label">⚡ Filter by Status</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="selectedStatus"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select status</option>
+        <option *ngFor="let status of statusList" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for Product Packaging List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="productPackagings"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <ngx-datatable-column
+      name="ID"
+      prop="id"
+      width="70"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Pack Name"
+      prop="productPackName"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Packaging"
+      prop="packaging.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="MRP"
+      prop="mrp"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Created By"
+      prop="createdBy.name"
+      [sortable]="false"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Created On"
+      width="150"
+      [sortable]="true"
+      [cellTemplate]="createdOnTemplate"
+    ></ngx-datatable-column>
+
+    <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+      {{ row.createdOn | date : "dd/MM/yyyy" }}
+    </ng-template>
+
+    <!-- Status Column -->
+    <ngx-datatable-column
+      name="Status"
+      width="120"
+      [cellTemplate]="StatusTemplate"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ng-template #StatusTemplate let-row="row" ngx-datatable-cell>
+      <span
+        class="badge p-0 px-2 py-1 fs-7 small-badge"
+        style="font-size: 10px"
+        [class.bg-success]="row.status === 'Active'"
+        [class.bg-danger]="row.status === 'InActive'"
+      >
+        {{ row.status }}
+      </span>
+    </ng-template>
+
+    <ngx-datatable-column
+      name="Actions"
+      width="150"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    ></ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div>
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="editProductPackaging(row)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-info btn-sm ms-2"
+          (click)="viewProductPackaging(row)"
+        >
+          View
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

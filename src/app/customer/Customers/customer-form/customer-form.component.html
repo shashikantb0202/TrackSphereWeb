@@ -1,0 +1,319 @@
+<div class="container mb-2">
+  <h3>{{ isEditMode ? "Edit Customer" : "Add Customer" }}</h3>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= CUSTOMER DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Customer Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- CUSTOMER NAME -->
+            <div class="col-md-4">
+              <label for="name" class="form-label">Name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="Enter Name"
+                formControlName="name"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('name')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('name')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Name is required (min 3 characters).
+              </div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="col-md-4">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                placeholder="Enter Email"
+                formControlName="email"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('email')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('email')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Valid email is required.</div>
+            </div>
+
+            <!-- CONTACT NUMBER -->
+            <div class="col-md-4">
+              <label for="contactNo" class="form-label">Contact Number</label>
+              <input
+                id="contactNo"
+                type="text"
+                class="form-control"
+                placeholder="Enter Contact Number"
+                formControlName="contactNo"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('contactNo')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('contactNo')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Contact number must be 10 digits.
+              </div>
+            </div>
+
+            <!-- ADDRESS LINE 1 -->
+            <div class="col-md-4">
+              <label for="addressLine1" class="form-label"
+                >Address Line 1</label
+              >
+              <input
+                id="addressLine1"
+                type="text"
+                class="form-control"
+                placeholder="Enter Address Line 1"
+                formControlName="addressLine1"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('addressLine1')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('addressLine1')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Address Line 1 is required.</div>
+            </div>
+
+            <!-- ADDRESS LINE 2 -->
+            <div class="col-md-4">
+              <label for="addressLine2" class="form-label"
+                >Address Line 2</label
+              >
+              <input
+                id="addressLine2"
+                type="text"
+                class="form-control"
+                placeholder="Enter Address Line 2"
+                formControlName="addressLine2"
+              />
+            </div>
+
+            <!-- LANDMARK -->
+            <div class="col-md-4">
+              <label for="landmark" class="form-label">Landmark</label>
+              <input
+                id="landmark"
+                type="text"
+                class="form-control"
+                placeholder="Enter Landmark"
+                formControlName="landmark"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('landmark')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('landmark')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Landmark is required.</div>
+            </div>
+
+            <!-- COUNTRY -->
+            <div class="col-md-4">
+              <label for="countryId" class="form-label">Country</label>
+              <select
+                id="countryId"
+                class="form-select"
+                formControlName="countryId"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('countryId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('countryId')?.invalid
+                "
+                (change)="onCountryChange()"
+                required
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Country
+                </option>
+                <option *ngFor="let country of countries" [value]="country.id">
+                  {{ country.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a country.</div>
+            </div>
+
+            <!-- STATE -->
+            <div class="col-md-4">
+              <label for="stateId" class="form-label">State</label>
+              <select
+                id="stateId"
+                class="form-select"
+                formControlName="stateId"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('stateId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('stateId')?.invalid
+                "
+                (change)="onStateChange()"
+                required
+              >
+                <option [ngValue]="null" disabled selected>Select State</option>
+                <option *ngFor="let state of states" [value]="state.id">
+                  {{ state.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a state.</div>
+            </div>
+
+            <!-- CITY -->
+            <div class="col-md-4">
+              <label for="cityId" class="form-label">City</label>
+              <select
+                id="cityId"
+                class="form-select"
+                formControlName="cityId"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('cityId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('cityId')?.invalid
+                "
+                required
+              >
+                <option [ngValue]="null" disabled selected>Select City</option>
+                <option *ngFor="let city of cities" [value]="city.id">
+                  {{ city.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a city.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="pincode" class="form-label">Pincode</label>
+              <input
+                id="pincode"
+                type="text"
+                class="form-control"
+                placeholder="Enter Pincode"
+                formControlName="pincode"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('pincode')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('pincode')?.invalid
+                "
+                required
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="customerForm.get('pincode')?.errors?.['required']"
+              >
+                Pincode is required.
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="customerForm.get('pincode')?.errors?.['pattern']"
+              >
+                Pincode must be exactly 6 digits.
+              </div>
+            </div>
+
+            <!-- CUSTOMER TYPE -->
+            <div class="col-md-4">
+              <label for="customerTypeId" class="form-label"
+                >Customer Type</label
+              >
+              <select
+                id="customerTypeId"
+                class="form-select"
+                formControlName="customerTypeId"
+                [class.is-valid]="
+                  isSubmitted && customerForm.get('customerTypeId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && customerForm.get('customerTypeId')?.invalid
+                "
+                required
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Customer Type
+                </option>
+                <option *ngFor="let type of customerTypes" [value]="type.id">
+                  {{ type.name }}
+                </option>
+              </select>
+              <div
+                class="invalid-feedback"
+                *ngIf="customerForm.get('customerTypeId')?.errors?.['required']"
+              >
+                Please select a customer type.
+              </div>
+            </div>
+            <!-- GST NO -->
+            <div class="col-md-4">
+              <label for="gstNo" class="form-label">GST No</label>
+              <input
+                id="gstNo"
+                type="text"
+                class="form-control"
+                placeholder="Enter GST No"
+                formControlName="gstNo"
+              />
+            </div>
+
+            <!-- STATUS (EDIT MODE ONLY) -->
+            <div class="col-md-4" *ngIf="isEditMode">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                required
+              >
+                <option value="" disabled selected>Select status</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? "Update Customer" : "Add Customer" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="router.navigate(['main/customer/customer-list'])"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

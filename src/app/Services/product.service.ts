@@ -4,7 +4,11 @@ import { catchError, map, Observable } from 'rxjs';
 import { AddUser, User, UserResponse } from '../Models/user.model';
 import { Role } from '../Models/Role';
 import { BaseUrl } from '../shared/constants';
-import { Product, ProductResponse } from '../Models/product.model';
+import {
+  Product,
+  ProductBasicInfo,
+  ProductResponse,
+} from '../Models/product.model';
 import { ApiFilterResponse } from '../Models/base.entity.model';
 
 @Injectable({
@@ -30,5 +34,11 @@ export class ProductService {
   }
   addProduct(productData: FormData): Observable<any> {
     return this.http.post(`${BaseUrl.Product.Product}`, productData);
+  }
+
+  getAllProducts(): Observable<ProductBasicInfo[]> {
+    return this.http
+      .get<{ data: ProductBasicInfo[] }>(BaseUrl.Product.ProductAll)
+      .pipe(map((response) => response.data));
   }
 }

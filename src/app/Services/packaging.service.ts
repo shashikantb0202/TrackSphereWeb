@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Packaging, Unit } from '../Models/packaging.model';
+import { Packaging, PackagingBasicInfo, Unit } from '../Models/packaging.model';
 import { ApiFilterResponse } from '../Models/base.entity.model';
 import { BaseUrl } from '../shared/constants';
 
@@ -17,9 +17,9 @@ export class PackagingService {
       .pipe(map((response) => response.data));
   }
 
-  getAllPackaging(): Observable<Packaging[]> {
+  getAllPackaging(): Observable<PackagingBasicInfo[]> {
     return this.http
-      .get<{ data: Packaging[] }>(BaseUrl.Packaging.Packaging)
+      .get<{ data: PackagingBasicInfo[] }>(BaseUrl.Packaging.Packaging)
       .pipe(map((response) => response.data));
   }
 

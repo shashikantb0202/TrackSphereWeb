@@ -1,0 +1,139 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Customer Details</div>
+
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- CUSTOMER NAME -->
+        <div class="col-md-6 mb-3">
+          <strong>Name:</strong>
+          {{ customer.name }}
+        </div>
+
+        <!-- CUSTOMER TYPE -->
+        <div class="col-md-6 mb-3">
+          <strong>Customer Type:</strong>
+          {{ customer.customerType?.name }}
+        </div>
+
+        <!-- CONTACT NUMBER -->
+        <div class="col-md-6 mb-3">
+          <strong>Contact No:</strong>
+          {{ customer.contactNo }}
+        </div>
+
+        <!-- EMAIL -->
+        <div class="col-md-6 mb-3">
+          <strong>Email:</strong>
+          {{ customer.email }}
+        </div>
+
+        <!-- ADDRESS LINE 1 -->
+        <div class="col-md-6 mb-3">
+          <strong>Address Line 1:</strong>
+          {{ customer.addressLine1 }}
+        </div>
+
+        <!-- ADDRESS LINE 2 -->
+        <div class="col-md-6 mb-3">
+          <strong>Address Line 2:</strong>
+          {{ customer.addressLine2 }}
+        </div>
+
+        <!-- LANDMARK -->
+        <div class="col-md-6 mb-3">
+          <strong>Landmark:</strong>
+          {{ customer.landmark }}
+        </div>
+
+        <!-- PINCODE -->
+        <div class="col-md-6 mb-3">
+          <strong>Pincode:</strong>
+          {{ customer.pincode }}
+        </div>
+
+        <!-- COUNTRY -->
+        <div class="col-md-6 mb-3">
+          <strong>Country:</strong>
+          {{ customer.country?.name }}
+        </div>
+
+        <!-- STATE -->
+        <div class="col-md-6 mb-3">
+          <strong>State:</strong>
+          {{ customer.state?.name }}
+        </div>
+
+        <!-- CITY -->
+        <div class="col-md-6 mb-3">
+          <strong>City:</strong>
+          {{ customer.city?.name }}
+        </div>
+
+        <!-- GST NUMBER -->
+        <div class="col-md-6 mb-3">
+          <strong>GST No:</strong>
+          {{ customer.gstNo }}
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-md-12 mb-3">
+          <strong>Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            style="font-size: 10px; margin-left: 7px"
+            [class.bg-success]="customer.status === 'Active'"
+            [class.bg-danger]="customer.status === 'Inactive'"
+          >
+            {{ customer.status }}
+          </span>
+        </div>
+
+        <!-- CREATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Created By:</strong>
+          {{ customer.createdBy?.name || "N/A" }}
+        </div>
+
+        <!-- CREATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Created On:</strong>
+          {{ customer.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+
+        <!-- UPDATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated By:</strong>
+          {{ customer.updatedBy?.name || "N/A" }}
+        </div>
+
+        <!-- UPDATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated On:</strong>
+          {{ customer.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="router.navigate(['main/customer/edit-customer', customer.id])"
+      >
+        Edit Customer
+      </button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/customer/customer-list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

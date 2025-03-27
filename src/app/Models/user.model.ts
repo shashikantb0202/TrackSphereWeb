@@ -1,21 +1,17 @@
+import { BaseEntity } from './base.entity.model';
+import {
+  DepartmentBasicInfo,
+  DesignationBasicInfo,
+  LocationBasicInfo,
+} from './common.model';
 import { Role } from './Role';
 
-export interface Designation {
+export interface UserBasicInfo {
   id: number;
+  username: string;
   name: string;
 }
-
-export interface Department {
-  id: number;
-  name: string;
-}
-
-export interface Location {
-  id: number;
-  name: string;
-}
-
-export interface User {
+export interface User extends BaseEntity {
   id: number;
   username: string;
   name: string;
@@ -24,21 +20,15 @@ export interface User {
   email: string;
   workEmail?: string;
   empCode: string;
-  designation: Designation;
-  department: Department;
-  country: Location;
-  state: Location;
-  city: Location;
+  designation: DesignationBasicInfo;
+  department: DepartmentBasicInfo;
+  country: LocationBasicInfo;
+  state: LocationBasicInfo;
+  city: LocationBasicInfo;
   addressLine1: string;
   addressLine2: string;
   landmark: string;
   role: Role;
-  organization?: string | null;
-  createdBy?: { id: number; name: string } | null;
-  updatedBy?: { id: number; name: string } | null;
-  createdOn: string;
-  updatedOn: string;
-  status: string;
 }
 
 export interface UserResponse {

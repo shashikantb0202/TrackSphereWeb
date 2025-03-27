@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
 /*pagination css end */
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
 }
@@ -14,13 +14,16 @@ app-root {
   width: 100%;
 }
 
-.btn{
+.btn {
   font-size: 13px;
 }
 .form-control {
   font-size: 14px;
 }
-.form-select{
+.form-select {
   font-size: 14px;
 }
 
+.mb-15 {
+  margin-bottom: 15px;
+}

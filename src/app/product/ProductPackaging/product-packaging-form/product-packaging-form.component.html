@@ -1,1 +1,288 @@
-<p>product-packaging-form works!</p>
+<div class="container mb-2">
+  <h3>{{ isEditMode ? "Edit Product Packaging" : "Add Product Packaging" }}</h3>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="productPackagingForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= PRODUCT PACKAGING DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+          Product Packaging Details
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- PRODUCT PACKAGING NAME -->
+            <div class="col-md-6">
+              <label for="productPackName" class="form-label"
+                >Packaging Name</label
+              >
+              <input
+                id="productPackName"
+                type="text"
+                class="form-control"
+                placeholder="Enter Packaging Name"
+                formControlName="productPackName"
+                [class.is-valid]="
+                  isSubmitted &&
+                  productPackagingForm.get('productPackName')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  productPackagingForm.get('productPackName')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Product packaging name is required (minimum 3 characters).
+              </div>
+            </div>
+
+            <!-- SELECT PRODUCT -->
+            <div class="col-md-6">
+              <label for="productId" class="form-label">Select Product</label>
+              <select
+                id="productId"
+                class="form-select"
+                formControlName="productId"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('productId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && productPackagingForm.get('productId')?.invalid
+                "
+                required
+              >
+                <option value="" selected disabled>Select a Product</option>
+                <option
+                  *ngFor="let product of productList"
+                  [value]="product.id"
+                >
+                  {{ product.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a product.</div>
+            </div>
+
+            <!-- SELECT PACKAGING -->
+            <div class="col-md-6">
+              <label for="packagingId" class="form-label"
+                >Select Packaging</label
+              >
+              <select
+                id="packagingId"
+                class="form-select"
+                formControlName="packagingId"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('packagingId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  productPackagingForm.get('packagingId')?.invalid
+                "
+                required
+              >
+                <option value="" selected disabled>Select a Packaging</option>
+                <option
+                  *ngFor="let packaging of packagingList"
+                  [value]="packaging.id"
+                >
+                  {{ packaging.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a packaging.</div>
+            </div>
+
+            <!-- PRICES -->
+            <div class="col-md-6">
+              <label for="mrp" class="form-label">MRP</label>
+              <input
+                id="mrp"
+                type="number"
+                class="form-control"
+                placeholder="Enter MRP"
+                formControlName="mrp"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('mrp')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && productPackagingForm.get('mrp')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                MRP is required and must be greater than 0.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="dPrice" class="form-label">Discounted Price</label>
+              <input
+                id="dPrice"
+                type="number"
+                class="form-control"
+                placeholder="Enter Discounted Price"
+                formControlName="dPrice"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('dPrice')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && productPackagingForm.get('dPrice')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Discounted price is required and must be greater than 0.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="pPrice" class="form-label">Purchase Price</label>
+              <input
+                id="pPrice"
+                type="number"
+                class="form-control"
+                placeholder="Enter Purchase Price"
+                formControlName="pPrice"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('pPrice')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && productPackagingForm.get('pPrice')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Purchase price is required and must be greater than 0.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="minSalePrice" class="form-label"
+                >Min Sale Price</label
+              >
+              <input
+                id="minSalePrice"
+                type="number"
+                class="form-control"
+                placeholder="Enter Min Sale Price"
+                formControlName="minSalePrice"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('minSalePrice')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  productPackagingForm.get('minSalePrice')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Min sale price is required and must be greater than 0.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="maxSalePrice" class="form-label"
+                >Max Sale Price</label
+              >
+              <input
+                id="maxSalePrice"
+                type="number"
+                class="form-control"
+                placeholder="Enter Max Sale Price"
+                formControlName="maxSalePrice"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('maxSalePrice')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  productPackagingForm.get('maxSalePrice')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Max sale price is required and must be greater than 0.
+              </div>
+            </div>
+
+            <!-- MIN ORDER QUANTITY -->
+            <div class="col-md-6">
+              <label for="minOrderQty" class="form-label"
+                >Min Order Quantity</label
+              >
+              <input
+                id="minOrderQty"
+                type="number"
+                class="form-control"
+                placeholder="Enter Min Order Quantity"
+                formControlName="minOrderQty"
+                min="1"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('minOrderQty')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  productPackagingForm.get('minOrderQty')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Min order quantity is required and must be at least 1.
+              </div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-6">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                [class.is-valid]="
+                  isSubmitted && productPackagingForm.get('status')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && productPackagingForm.get('status')?.invalid
+                "
+                required
+              >
+                <option value="" selected>Select Status</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a status.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? "Update Packaging" : "Add Packaging" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="
+            router.navigate(['main/product-packaging/product-packaging-list'])
+          "
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

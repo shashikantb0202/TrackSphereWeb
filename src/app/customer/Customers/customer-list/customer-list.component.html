@@ -1,0 +1,143 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">Customers</h3>
+    <button class="btn btn-success" (click)="navigateToAddCustomer()">
+      Add Customer
+    </button>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Search Input -->
+    <div class="col-md-3">
+      <label for="search" class="form-label">🔍 Search Customer</label>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Enter customer name or email..."
+        [(ngModel)]="searchTerm"
+        (keyup)="searchCustomers()"
+      />
+    </div>
+
+    <!-- Filter by Customer Type -->
+    <div class="col-md-3">
+      <label for="customerType" class="form-label">👥 Customer Type</label>
+      <select
+        id="customerType"
+        class="form-control"
+        [(ngModel)]="selectedCustomerType"
+        (change)="onSearch()"
+      >
+        <option value="0" selected>Select a customer type</option>
+        <option *ngFor="let type of customerTypeList" [value]="type.id">
+          {{ type.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by State -->
+    <div class="col-md-3">
+      <label for="state" class="form-label">🌍 State</label>
+      <select
+        id="state"
+        class="form-control"
+        [(ngModel)]="selectedState"
+        (change)="onSearch(); loadCities()"
+      >
+        <option value="0" selected>Select a state</option>
+        <option *ngFor="let state of stateList" [value]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by City -->
+    <div class="col-md-3">
+      <label for="city" class="form-label">🏙️ City</label>
+      <select
+        id="city"
+        class="form-control"
+        [(ngModel)]="selectedCity"
+        (change)="onSearch()"
+      >
+        <option value="0" selected>Select a city</option>
+        <option *ngFor="let city of cityList" [value]="city.id">
+          {{ city.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for Customer List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="customers"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <ngx-datatable-column
+      name="ID"
+      prop="id"
+      width="70"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Name"
+      prop="name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Customer Type"
+      prop="customerType.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Contact No"
+      prop="contactNo"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Email"
+      prop="email"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="State"
+      prop="state.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="City"
+      prop="city.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+
+    <ngx-datatable-column
+      name="Actions"
+      width="150"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div>
+        <button class="btn btn-primary btn-sm" (click)="editCustomer(row)">
+          Edit
+        </button>
+        <button class="btn btn-info btn-sm ms-2" (click)="viewCustomer(row)">
+          View
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

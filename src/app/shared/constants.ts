@@ -19,6 +19,18 @@ export const BaseUrl = {
     ProductAll: '/api/Product/all',
     ProductWithFilter: '/api/Product/filter',
   },
+  Customer: {
+    Customer: '/api/customer',
+    CustomerType: '/api/customer/type',
+    CustomerAll: '/api/Customer/all',
+    CustomerWithFilter: '/api/Customer/filter',
+  },
+  CustomerVisit: {
+    CustomerVisit: '/api/CustomerVisit',
+    CustomerVisitType: '/api/CustomerVisit/type',
+    CustomerVisitAll: '/api/CustomerVisit/all',
+    CustomerVisitWithFilter: '/api/CustomerVisit/filter',
+  },
   ProductCategory: {
     ProductCategory: '/api/productCategory',
     ProductCategoryAll: '/api/productCategory/all',
@@ -28,6 +40,11 @@ export const BaseUrl = {
     Packaging: '/api/Packaging',
     PackagingAll: '/api/Packaging',
     PackagingWithFilter: '/api/Packaging/filter',
+  },
+  ProductPackaging: {
+    ProductPackaging: '/api/ProductPackaging',
+    ProductPackagingAll: '/api/ProductPackaging',
+    ProductPackagingWithFilter: '/api/ProductPackaging/filter',
   },
   Unit: {
     Unit: '/api/Unit',

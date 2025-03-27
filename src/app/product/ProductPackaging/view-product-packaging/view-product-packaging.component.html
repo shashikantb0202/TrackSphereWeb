@@ -1,1 +1,126 @@
-<p>view-product-packaging works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">
+      Product Packaging Details
+    </div>
+
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- PRODUCT PACKAGING NAME -->
+        <div class="col-md-6 mb-3">
+          <strong>Product Packaging Name:</strong>
+          {{ productPackaging.productPackName }}
+        </div>
+
+        <!-- PRODUCT -->
+        <div class="col-md-6 mb-3">
+          <strong>Product:</strong>
+          {{ productPackaging.product?.name || "N/A" }}
+        </div>
+
+        <!-- PACKAGING -->
+        <div class="col-md-6 mb-3">
+          <strong>Packaging:</strong>
+          {{ productPackaging.packaging?.name || "N/A" }}
+        </div>
+
+        <!-- MRP -->
+        <div class="col-md-6 mb-3">
+          <strong>MRP:</strong>
+          {{ productPackaging.mrp | currency }}
+        </div>
+
+        <!-- DISTRIBUTOR PRICE -->
+        <div class="col-md-6 mb-3">
+          <strong>Distributor Price:</strong>
+          {{ productPackaging.dPrice | currency }}
+        </div>
+
+        <!-- PURCHASE PRICE -->
+        <div class="col-md-6 mb-3">
+          <strong>Purchase Price:</strong>
+          {{ productPackaging.pPrice | currency }}
+        </div>
+
+        <!-- MINIMUM SALE PRICE -->
+        <div class="col-md-6 mb-3">
+          <strong>Min Sale Price:</strong>
+          {{ productPackaging.minSalePrice | currency }}
+        </div>
+
+        <!-- MAXIMUM SALE PRICE -->
+        <div class="col-md-6 mb-3">
+          <strong>Max Sale Price:</strong>
+          {{ productPackaging.maxSalePrice | currency }}
+        </div>
+
+        <!-- MINIMUM ORDER QUANTITY -->
+        <div class="col-md-6 mb-3">
+          <strong>Minimum Order Quantity:</strong>
+          {{ productPackaging.minOrderQty }}
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-md-6 mb-3">
+          <strong>Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            style="font-size: 10px; margin-left: 7px"
+            [class.bg-success]="productPackaging.status === 'Active'"
+            [class.bg-danger]="productPackaging.status === 'InActive'"
+          >
+            {{ productPackaging.status }}
+          </span>
+        </div>
+
+        <!-- CREATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Created By:</strong>
+          {{ productPackaging.createdBy?.name || "N/A" }}
+        </div>
+
+        <!-- CREATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Created On:</strong>
+          {{ productPackaging.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+
+        <!-- UPDATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated By:</strong>
+          {{ productPackaging.updatedBy?.name || "N/A" }}
+        </div>
+
+        <!-- UPDATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated On:</strong>
+          {{ productPackaging.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="
+          router.navigate(['main/product-packaging/edit', productPackaging.id])
+        "
+      >
+        Edit Product Packaging
+      </button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/product-packaging/list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

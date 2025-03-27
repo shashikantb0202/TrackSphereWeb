@@ -1,9 +1,19 @@
-<div class="container mt-4">
+<div class="">
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-3">Role Permissions</h3>
+  </div>
   <div class="d-flex align-items-center mb-3">
     <label class="me-2">Select Role:</label>
-    <select class="form-select w-25" [(ngModel)]="selectedRole" (change)="onRoleChange()">
-      <option [ngValue]="null"  disabled selected>Select Role</option> <!-- Placeholder added -->
-      <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+    <select
+      class="form-select w-25"
+      [(ngModel)]="selectedRole"
+      (change)="onRoleChange()"
+    >
+      <option [ngValue]="null" disabled selected>Select Role</option>
+      <!-- Placeholder added -->
+      <option *ngFor="let role of roles" [value]="role.id">
+        {{ role.name }}
+      </option>
     </select>
   </div>
 
@@ -15,115 +25,154 @@
   </div>
 
   <div *ngIf="!isLoading">
-  <!-- Permissions Table -->
-  <table  class="table table-bordered table-striped">
-    <thead class="sticky-header">
-      <tr>
-        <th>Module</th>
-        <th>Sub Module</th>
-        <th>Full Access</th>  <!-- New Column Added -->
-        <th *ngFor="let perm of permissionHeaders">{{ perm }}</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <ng-container  *ngIf="permissions.length > 0; else noData">
-      <ng-container *ngFor="let module of permissions">
-
-        <!-- Collapsible Module Row -->
-        <tr class="bg-light" (click)="toggleCollapse(module)" *ngIf="module.subModules.length" style="cursor: pointer;">
-          <td>
-            <b>
-            <i
-              class="bi"
-              [ngClass]="{'bi bi-dash': !module.collapsed, 'bi bi-plus': module.collapsed}">
-            </i>
-           {{ module.moduleTitle }}</b>
-          </td>
-          <td [attr.colspan]="permissionHeaders.length + 2"></td>
+    <!-- Permissions Table -->
+    <table class="table table-bordered table-striped">
+      <thead class="sticky-header">
+        <tr>
+          <th>Module</th>
+          <th>Sub Module</th>
+          <th>Full Access</th>
+          <!-- New Column Added -->
+          <th *ngFor="let perm of permissionHeaders">{{ perm }}</th>
         </tr>
+      </thead>
 
-        <!-- MODULE WITH MODULE-LEVEL PERMISSIONS (No SubModules) -->
-        <tr *ngIf="!module.subModules.length && !module.collapsed">
-          <td><b>{{ module.moduleTitle }}</b></td>
-          <td>-</td>
+      <tbody>
+        <ng-container *ngIf="permissions.length > 0; else noData">
+          <ng-container *ngFor="let module of permissions">
+            <!-- Collapsible Module Row -->
+            <tr
+              class="bg-light"
+              (click)="toggleCollapse(module)"
+              *ngIf="module.subModules.length"
+              style="cursor: pointer"
+            >
+              <td>
+                <b>
+                  <i
+                    class="bi"
+                    [ngClass]="{
+                      'bi bi-dash': !module.collapsed,
+                      'bi bi-plus': module.collapsed
+                    }"
+                  >
+                  </i>
+                  {{ module.moduleTitle }}</b
+                >
+              </td>
+              <td [attr.colspan]="permissionHeaders.length + 2"></td>
+            </tr>
 
-          <!-- Full Access for Module Level -->
-          <td>
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                (change)="toggleFullAccess(module)"
-                [checked]="isFullAccess(module.modulePermissions)"
-              />
-              <label class="form-check-label">Full Access</label>
-            </div>
-          </td>
+            <!-- MODULE WITH MODULE-LEVEL PERMISSIONS (No SubModules) -->
+            <tr *ngIf="!module.subModules.length && !module.collapsed">
+              <td>
+                <b>{{ module.moduleTitle }}</b>
+              </td>
+              <td>-</td>
 
-          <td *ngFor="let perm of permissionHeaders">
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                [(ngModel)]="module.modulePermissions[perm]"
-                [id]="'toggle_module_' + module.moduleId + '_' + perm"
-              />
-              <label class="form-check-label"
-                     [for]="'toggle_module_' + module.moduleId + '_' + perm">
-                {{ module.modulePermissions[perm] ? 'Yes' : 'No' }}
-              </label>
-            </div>
-          </td>
-        </tr>
+              <!-- Full Access for Module Level -->
+              <td>
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    (change)="toggleFullAccess(module)"
+                    [checked]="isFullAccess(module.modulePermissions)"
+                  />
+                  <label class="form-check-label">Full Access</label>
+                </div>
+              </td>
 
-        <!-- MODULE WITH SUBMODULES -->
-        <ng-container *ngIf="!module.collapsed">
-          <tr *ngFor="let subModule of module.subModules">
-            <td></td>
-            <td>{{ subModule.subModuleTitle }}</td>
+              <td *ngFor="let perm of permissionHeaders">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [(ngModel)]="module.modulePermissions[perm]"
+                    [id]="'toggle_module_' + module.moduleId + '_' + perm"
+                  />
+                  <label
+                    class="form-check-label"
+                    [for]="'toggle_module_' + module.moduleId + '_' + perm"
+                  >
+                    {{ module.modulePermissions[perm] ? "Yes" : "No" }}
+                  </label>
+                </div>
+              </td>
+            </tr>
 
-            <!-- Full Access for SubModule Level -->
-            <td>
-              <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  (change)="toggleFullAccess(subModule)"
-                  [checked]="isFullAccess(subModule.permissions)"
-                />
-                <label class="form-check-label">Full Access</label>
-              </div>
-            </td>
+            <!-- MODULE WITH SUBMODULES -->
+            <ng-container *ngIf="!module.collapsed">
+              <tr *ngFor="let subModule of module.subModules">
+                <td></td>
+                <td>{{ subModule.subModuleTitle }}</td>
 
-            <td *ngFor="let perm of permissionHeaders">
-              <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  [(ngModel)]="subModule.permissions[perm]"
-                  [id]="'toggle_' + module.moduleId + '_' + subModule.subModuleId + '_' + perm"
-                />
-                <label class="form-check-label"
-                      [for]="'toggle_' + module.moduleId + '_' + subModule.subModuleId + '_' + perm">
-                  {{ subModule.permissions[perm] ? 'Yes' : 'No' }}
-                </label>
-              </div>
+                <!-- Full Access for SubModule Level -->
+                <td>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      (change)="toggleFullAccess(subModule)"
+                      [checked]="isFullAccess(subModule.permissions)"
+                    />
+                    <label class="form-check-label">Full Access</label>
+                  </div>
+                </td>
+
+                <td *ngFor="let perm of permissionHeaders">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [(ngModel)]="subModule.permissions[perm]"
+                      [id]="
+                        'toggle_' +
+                        module.moduleId +
+                        '_' +
+                        subModule.subModuleId +
+                        '_' +
+                        perm
+                      "
+                    />
+                    <label
+                      class="form-check-label"
+                      [for]="
+                        'toggle_' +
+                        module.moduleId +
+                        '_' +
+                        subModule.subModuleId +
+                        '_' +
+                        perm
+                      "
+                    >
+                      {{ subModule.permissions[perm] ? "Yes" : "No" }}
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        <ng-template #noData>
+          <tr>
+            <td
+              [attr.colspan]="permissionHeaders.length + 3"
+              class="text-center py-3"
+            >
+              No data available
             </td>
           </tr>
-        </ng-container>
-      </ng-container>
-      </ng-container>
-      <ng-template #noData>
-        <tr>
-            <td [attr.colspan]="permissionHeaders.length + 3" class="text-center py-3">
-                No data available
-            </td>
-        </tr>
-    </ng-template>
-    </tbody>
-  </table>
+        </ng-template>
+      </tbody>
+    </table>
 
-  <button *ngIf="permissions.length > 0;" class="btn btn-primary mt-3" (click)="savePermissions()">Save</button>
-</div>
+    <button
+      *ngIf="permissions.length > 0"
+      class="btn btn-primary mt-3"
+      (click)="savePermissions()"
+    >
+      Save
+    </button>
+  </div>
 </div>

@@ -17,11 +17,17 @@ export class UserService {
       .pipe(map((response) => response.data));
   }
 
-  getAllUsers(params: any): Observable<any> {
+  getAllUsersWithFilter(params: any): Observable<any> {
     return this.http.get<{ response: UserResponse }>(
       BaseUrl.User.UserWithFilter,
       { params }
     );
+  }
+
+  getAllUser(): Observable<any> {
+    return this.http
+      .get<{ data: User[] }>(BaseUrl.User.UserAll)
+      .pipe(map((response) => response.data));
   }
 
   addUser(user: AddUser): Observable<any> {
