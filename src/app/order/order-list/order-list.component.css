@@ -1,0 +1,111 @@
+/* General Layout */
+.order-list-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+/* Filters Section */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filter-container .form-control,
+.filter-container .form-select {
+  min-width: 200px;
+}
+
+/* Table Styling */
+.ngx-datatable.bootstrap {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ngx-datatable .datatable-header {
+  font-weight: bold;
+  background: #343a40;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.ngx-datatable .datatable-body {
+  font-size: 14px;
+}
+
+.ngx-datatable .datatable-footer {
+  background: #f1f1f1;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Badge Styles for Order Status & Payment Status */
+.badge {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.badge-pending {
+  background-color: #ffc107;
+  color: black;
+}
+
+.badge-confirmed {
+  background-color: #007bff;
+  color: white;
+}
+
+.badge-processing {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-shipped {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.badge-delivered {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-cancelled {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-refunded {
+  background-color: #20c997;
+  color: white;
+}
+
+.badge-failed {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons .btn {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+  }
+
+  .ngx-datatable.bootstrap {
+    font-size: 12px;
+  }
+}

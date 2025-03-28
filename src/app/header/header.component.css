@@ -1,84 +1,51 @@
+/* Header Styling */
+.header {
+  background-color: #343a40 !important; /* Dark Gray */
+  color: #ffffff; /* White text */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+}
 
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo img {
-    height: 40px;
-    margin-right: 10px;
-  }
-  
+/* Logo Section */
+.logo {
+  display: flex;
+  align-items: center;
+}
 
-  
-  .user-profile {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-profile img {
-    margin-top: 5px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
+.logo img {
+  height: 40px;
+  margin-right: 10px;
+}
 
+/* User Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+}
 
+.user-profile img {
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
 
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
 
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
 
-
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden; /* Prevents outer page scrolling */
-  }
-  
-  .sidebar {
-    width: 250px;
-    transition: width 0.3s ease;
-  }
-  
-  .sidebar.collapsed {
-    width: 0; /* Collapses sidebar on smaller screens */
-    overflow: hidden;
-  }
-  
-  .main-content {
-    background-color: #f8f9fa;
-  }
-  
-  .content-area {
-    max-height: calc(100vh - 60px); /* Ensures content doesn't overflow */
-    overflow-y: auto;
-  }
-  
-  .header {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 60px;
-  }
-  
-  .container-fluid {
-    padding: 20px;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 992px) {
-    .sidebar {
-        position: absolute;
-        z-index: 1000;
-        width: 250px;  /* Sidebar appears when toggled */
-    }
-  
-    .sidebar.collapsed {
-        width: 0; /* Fully collapse sidebar on mobile */
-    }
-  
-    .main-content {
-        width: 100%;
-    }
-  }
-  
+.nav-links a:hover {
+  text-decoration: underline;
+}

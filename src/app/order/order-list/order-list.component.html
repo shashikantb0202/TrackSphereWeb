@@ -1,0 +1,207 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">Orders</h3>
+    <button class="btn btn-success" (click)="navigateToAddOrder()">
+      Add Order
+    </button>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Filter by Customer -->
+    <div class="col-md-3">
+      <label for="customer" class="form-label">👤 Filter by Customer</label>
+      <select
+        id="customer"
+        class="form-control"
+        [(ngModel)]="selectedCustomerId"
+        (change)="onSearch()"
+      >
+        <option value="0" selected>Select a customer</option>
+        <option *ngFor="let customer of customerList" [value]="customer.id">
+          {{ customer.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by User -->
+    <div class="col-md-3">
+      <label for="user" class="form-label">🧑‍💼 Order Created By</label>
+      <select
+        id="user"
+        class="form-control"
+        [(ngModel)]="selectedUserId"
+        (change)="onSearch()"
+      >
+        <option value="0" selected>Select a user</option>
+        <option *ngFor="let user of userList" [value]="user.id">
+          {{ user.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Payment Status -->
+    <div class="col-md-3">
+      <label for="paymentStatus" class="form-label">💰 Payment Status</label>
+      <select
+        id="paymentStatus"
+        class="form-control"
+        [(ngModel)]="selectedPaymentStatus"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select Payment Status</option>
+        <option *ngFor="let status of paymentStatusList" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Order Status -->
+    <div class="col-md-3">
+      <label for="orderStatus" class="form-label">📦 Order Status</label>
+      <select
+        id="orderStatus"
+        class="form-control"
+        [(ngModel)]="selectedOrderStatus"
+        (change)="onSearch()"
+      >
+        <option value="" selected>Select Order Status</option>
+        <option *ngFor="let status of orderStatusList" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <!-- Filter by Order Date -->
+    <div class="col-md-3">
+      <label for="orderDate" class="form-label">📅 Order Date</label>
+      <input
+        type="date"
+        id="orderDate"
+        class="form-control"
+        [(ngModel)]="orderDate"
+        (change)="onSearch()"
+      />
+    </div>
+    <!-- Search Order -->
+    <!-- <div class="col-md-4">
+      <label for="search" class="form-label">🔍 Search Order</label>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Enter order ID or details..."
+        [(ngModel)]="searchTerm"
+        (keyup)="onSearch()"
+      />
+    </div> -->
+  </div>
+
+  <!-- Ngx-Datatable for Order List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="orders"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <ngx-datatable-column
+      name="ID"
+      prop="id"
+      width="70"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Customer"
+      prop="customer.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="User"
+      prop="user.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Order Date"
+      prop="orderDate"
+      width="150"
+      [sortable]="true"
+      [cellTemplate]="orderDateTemplate"
+    >
+    </ngx-datatable-column>
+    <ng-template #orderDateTemplate let-row="row" ngx-datatable-cell>
+      {{ row.orderDate | date : "dd/MM/yyyy" }}
+    </ng-template>
+    <ngx-datatable-column
+      name="total Amount"
+      prop="totalAmount"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Order Status"
+      [sortable]="true"
+      width="140"
+      [cellTemplate]="orderStatusTemplate"
+    >
+    </ngx-datatable-column>
+    <ng-template #orderStatusTemplate let-row="row" ngx-datatable-cell>
+      <span
+        class="badge p-0 px-2 py-1 fs-7"
+        style="font-size: 10px"
+        [class.bg-primary]="row.orderStatus === 'Pending'"
+        [class.bg-success]="row.orderStatus === 'Completed'"
+        [class.bg-warning]="row.orderStatus === 'Processing'"
+        [class.bg-danger]="row.orderStatus === 'Cancelled'"
+      >
+        {{ row.orderStatus }}
+      </span>
+    </ng-template>
+
+    <ngx-datatable-column
+      name="Payment Status"
+      [sortable]="true"
+      width="150"
+      [cellTemplate]="paymentStatusTemplate"
+    >
+    </ngx-datatable-column>
+    <ng-template #paymentStatusTemplate let-row="row" ngx-datatable-cell>
+      <span
+        class="badge p-0 px-2 py-1 fs-7"
+        style="font-size: 10px"
+        [class.bg-danger]="row.paymentStatus === 'Unpaid'"
+        [class.bg-warning]="row.paymentStatus === 'Pending'"
+        [class.bg-success]="row.paymentStatus === 'Paid'"
+        [class.bg-success]="row.paymentStatus === 'Completed'"
+      >
+        {{ row.paymentStatus }}
+      </span>
+    </ng-template>
+
+    <ngx-datatable-column
+      name="Actions"
+      width="150"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div>
+        <button class="btn btn-primary btn-sm" (click)="editOrder(row)">
+          Edit
+        </button>
+        <button class="btn btn-info btn-sm ms-2" (click)="viewOrder(row)">
+          View
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

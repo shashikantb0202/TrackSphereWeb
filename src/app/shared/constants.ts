@@ -19,6 +19,11 @@ export const BaseUrl = {
     ProductAll: '/api/Product/all',
     ProductWithFilter: '/api/Product/filter',
   },
+  Order: {
+    Order: '/api/orders',
+    OrderAll: '/api/orders/all',
+    OrderWithFilter: '/api/orders/filter',
+  },
   Customer: {
     Customer: '/api/customer',
     CustomerType: '/api/customer/type',

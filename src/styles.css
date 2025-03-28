@@ -27,3 +27,136 @@ app-root {
 .mb-15 {
   margin-bottom: 15px;
 }
+
+.btn-primary {
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8 !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  background-color: #138496 !important;
+  border-color: #117a8b !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+.btn-success {
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
+  color: #ffffff !important;
+}
+
+.btn-danger {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.btn-warning {
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #212529 !important; /* Dark text */
+}
+
+.btn-info {
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8 !important;
+  color: #ffffff !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* ORDER STATUSES */
+.badge-warning {
+  /* Pending */
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge-info {
+  /* Processing */
+  background-color: #17a2b8 !important;
+  color: #ffffff !important;
+}
+
+.badge-primary {
+  /* Shipped */
+  background-color: #007bff !important;
+  color: #ffffff !important;
+}
+
+.badge-success {
+  /* Delivered, Paid */
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+}
+
+.badge-danger {
+  /* Cancelled, Failed */
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.badge-secondary {
+  /* Returned, Refunded */
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* ORDER STATUSES */
+.badge-warning {
+  /* Pending */
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge-info {
+  /* Processing */
+  background-color: #17a2b8 !important;
+  color: #ffffff !important;
+}
+
+.badge-primary {
+  /* Shipped */
+  background-color: #007bff !important;
+  color: #ffffff !important;
+}
+
+.badge-success {
+  /* Delivered, Paid */
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+}
+
+.badge-danger {
+  /* Cancelled, Failed */
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.badge-secondary {
+  /* Returned, Refunded */
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}

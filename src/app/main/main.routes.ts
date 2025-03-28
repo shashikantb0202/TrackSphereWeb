@@ -6,6 +6,7 @@ import { dashboardRoutes } from '../dashboard/dashboard.routes';
 import { userManagementRoutes } from '../user-management/user-management.routes';
 import { productRoutes } from '../product/product.routes';
 import { customerRoutes } from '../customer/customer.routes';
+import { orderRoutes } from '../order/order.route';
 
 export const mainRoutes: Routes = [
   {
@@ -17,6 +18,7 @@ export const mainRoutes: Routes = [
       ...userManagementRoutes,
       ...productRoutes,
       ...customerRoutes,
+      ...orderRoutes,
       { path: 'unauthorized', component: UnauthorizedComponent },
     ],
   },
