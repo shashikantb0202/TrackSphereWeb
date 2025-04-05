@@ -1,0 +1,180 @@
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <!-- Sidebar -->
+    <div class="col-md-4 col-lg-4 sidebar">
+      <div class="p-2" style="cursor: pointer">
+        <!-- Employee Selector -->
+        <div class="mb-2">
+          <label class="form-label">Select Employee</label>
+          <div class="dropdown" [class.show]="isDropdownOpen">
+            <button
+              class="btn btn-outline-primary w-100 text-start"
+              type="button"
+              (click)="toggleDropdown()"
+            >
+              <div class="d-flex align-items-center">
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  class="rounded-circle me-2"
+                  width="32"
+                  height="32"
+                  alt="Employee"
+                />
+                <span>{{ selectedUser?.name || "Select Employee" }}</span>
+              </div>
+            </button>
+            <div
+              class="dropdown-menu w-100 employee-dropdown"
+              [class.show]="isDropdownOpen"
+            >
+              <div class="p-2">
+                <input
+                  type="text"
+                  class="form-control form-control-sm mb-2"
+                  placeholder="Search employees..."
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="filterEmployees()"
+                />
+              </div>
+              <div
+                *ngFor="let employee of filteredUsers"
+                class="dropdown-item employee-card"
+                [class.active]="employee.id === selectedUser?.id"
+                (click)="selectEmployee(employee)"
+              >
+                <div class="d-flex align-items-center">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/32.jpg"
+                    class="rounded-circle me-2"
+                    width="32"
+                    height="32"
+                    alt="Employee"
+                  />
+                  <div>
+                    <div class="fw-medium">{{ employee.name }}</div>
+                    <small class="text-muted">{{ employee.role.name }}</small>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="filteredUsers.length === 0"
+                class="dropdown-item text-muted"
+              >
+                No employees found
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Picker -->
+        <div class="mb-3">
+          <label class="form-label">Select Date</label>
+          <input
+            type="date"
+            class="form-control"
+            style="cursor: pointer"
+            id="datePicker"
+            [(ngModel)]="selectedDate"
+            (change)="selectDate()"
+          />
+        </div>
+
+        <!-- Timeline -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0">Today's Activities</h6>
+            <div class="dropdown" [class.show]="isFilterDropdownOpen">
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                type="button"
+                (click)="toggleFilterDropdown()"
+              >
+                <i class="bi bi-funnel"></i> Filter
+              </button>
+              <div
+                class="dropdown-menu dropdown-menu-end"
+                [class.show]="isFilterDropdownOpen"
+              >
+                <button
+                  *ngFor="let visitType of customerVisitTypeList"
+                  class="dropdown-item"
+                  (click)="applyFilter(visitType)"
+                >
+                  {{ visitType.name }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="timeline" id="activityTimeline">
+            <!-- Loading State -->
+            <div *ngIf="isLoading" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="text-muted mt-2 mb-0">Loading visits...</p>
+            </div>
+
+            <!-- No Visits State -->
+            <div
+              *ngIf="!isLoading && visits.length === 0"
+              class="text-center py-4"
+            >
+              <div class="text-muted">
+                <i class="bi bi-calendar-x fs-4 mb-2"></i>
+                <p class="mb-0">No visits available for this date</p>
+              </div>
+            </div>
+
+            <!-- Visits List -->
+            <div *ngIf="!isLoading">
+              <div *ngFor="let visit of visits" class="timeline-item">
+                <div class="timeline-content" [class.active-visit]="true">
+                  <div
+                    class="d-flex justify-content-between align-items-start mb-1"
+                  >
+                    <h6 class="text-sm fw-medium mb-0">
+                      <i
+                        [class]="'bi bi-car-front-fill text-secondary me-2'"
+                      ></i>
+                      {{ "Visit: " + visit.customer.name }}
+                    </h6>
+                    <small class="visit-duration">{{
+                      visit.visitDate | date : "hh:mm a"
+                    }}</small>
+                  </div>
+                  <p class="visit-address mb-1">
+                    <b>Address :</b> {{ visit.customer.addressLine1 }},
+                    {{ visit.customer!.city!.name! }},
+                    {{ visit.customer!.state!.name! }} -
+                    {{ visit.customer.pincode }}
+                  </p>
+                  <small class="text-muted"
+                    ><b>Purpose:</b> {{ visit.reason }}</small
+                  >
+
+                  <p class="visit-address mb-1">
+                    <small class="text-muted"
+                      ><b>Visit Type:</b>
+                      {{ visit.customerVisitType.name }}</small
+                    >
+                  </p>
+
+                  <div class="mt-2 p-2 bg-light rounded">
+                    <small class="text-muted">{{
+                      visit.visitDate | date : "MMM d, y, hh:mm a"
+                    }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="col-md-8 col-lg-8 map-container">
+      <div #mapContainer id="map"></div>
+    </div>
+  </div>
+</div>
