@@ -114,12 +114,20 @@
     </ngx-datatable-column>
 
     <ng-template #actionTemplate let-row="row">
-      <div>
-        <button class="btn btn-primary btn-sm" (click)="editPackaging(row)">
-          Edit
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="editPackaging(row)"
+          title="Edit Packaging"
+        >
+          <i class="bi bi-pencil-square"></i>
         </button>
-        <button class="btn btn-info btn-sm ms-2" (click)="viewPackaging(row)">
-          View
+        <button
+          class="btn btn-info btn-sm"
+          (click)="viewPackaging(row)"
+          title="View Packaging"
+        >
+          <i class="bi bi-eye"></i>
         </button>
       </div>
     </ng-template>

@@ -114,12 +114,20 @@
     </ngx-datatable-column>
 
     <ng-template #actionTemplate let-row="row">
-      <div>
-        <button class="btn btn-primary btn-sm" (click)="editCategory(row)">
-          Edit
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="editCategory(row)"
+          title="Edit Category"
+        >
+          <i class="bi bi-pencil-square"></i>
         </button>
-        <button class="btn btn-info btn-sm ms-2" (click)="viewCategory(row)">
-          View
+        <button
+          class="btn btn-info btn-sm"
+          (click)="viewCategory(row)"
+          title="View Category"
+        >
+          <i class="bi bi-eye"></i>
         </button>
       </div>
     </ng-template>

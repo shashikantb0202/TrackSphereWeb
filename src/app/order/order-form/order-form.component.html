@@ -1,1 +1,305 @@
-<p>order-form works!</p>
+<div class="container mb-2">
+  <h3>{{ isEditMode ? "Edit Order" : "Add Order" }}</h3>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= ORDER DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Order Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- CUSTOMER -->
+            <div class="col-md-4">
+              <label for="customerId" class="form-label">Customer</label>
+              <select
+                id="customerId"
+                class="form-select"
+                formControlName="customerId"
+                [class.is-invalid]="
+                  isSubmitted && orderForm.get('customerId')?.errors
+                "
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Customer
+                </option>
+                <option
+                  *ngFor="let customer of customerList"
+                  [value]="customer.id"
+                >
+                  {{ customer.name }}
+                </option>
+              </select>
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('customerId')?.errors?.['required']"
+              >
+                Please select a customer.
+              </div>
+            </div>
+
+            <!-- ORDER DATE -->
+            <div class="col-md-4">
+              <label for="orderDate" class="form-label">Order Date</label>
+              <input
+                id="orderDate"
+                type="date"
+                class="form-control"
+                formControlName="orderDate"
+                [class.is-invalid]="
+                  isSubmitted && orderForm.get('orderDate')?.errors
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('orderDate')?.errors?.['required']"
+              >
+                Please select an order date.
+              </div>
+            </div>
+
+            <!-- ORDER STATUS -->
+            <div class="col-md-4">
+              <label for="orderStatus" class="form-label">Order Status</label>
+              <select
+                id="orderStatus"
+                class="form-select"
+                formControlName="orderStatus"
+                [class.is-invalid]="
+                  isSubmitted && orderForm.get('orderStatus')?.errors
+                "
+              >
+                <option value="" disabled selected>Select Status</option>
+                <option *ngFor="let status of orderStatusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('orderStatus')?.errors?.['required']"
+              >
+                Please select an order status.
+              </div>
+            </div>
+
+            <!-- PAYMENT STATUS -->
+            <div class="col-md-4">
+              <label for="paymentStatus" class="form-label"
+                >Payment Status</label
+              >
+              <select
+                id="paymentStatus"
+                class="form-select"
+                formControlName="paymentStatus"
+                [class.is-invalid]="
+                  isSubmitted && orderForm.get('paymentStatus')?.errors
+                "
+              >
+                <option value="" disabled selected>
+                  Select Payment Status
+                </option>
+                <option
+                  *ngFor="let status of paymentStatusList"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('paymentStatus')?.errors?.['required']"
+              >
+                Please select a payment status.
+              </div>
+            </div>
+
+            <!-- TOTAL AMOUNT -->
+            <div class="col-md-4">
+              <label for="totalAmount" class="form-label">Total Amount</label>
+              <input
+                id="totalAmount"
+                type="number"
+                class="form-control"
+                formControlName="totalAmount"
+                placeholder="Enter total amount"
+                [class.is-invalid]="
+                  isSubmitted && orderForm.get('totalAmount')?.errors
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('totalAmount')?.errors?.['required']"
+              >
+                Please enter total amount.
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="isSubmitted && orderForm.get('totalAmount')?.errors?.['min']"
+              >
+                Total amount must be greater than or equal to 0.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ORDER ITEMS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>Order Items</div>
+            <button
+              type="button"
+              class="btn btn-sm btn-light"
+              (click)="addOrderItem()"
+            >
+              <i class="bi bi-plus-lg"></i> Add Item
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div formArrayName="orderItems">
+            <div
+              *ngFor="let item of orderItems.controls; let i = index"
+              [formGroupName]="i"
+              class="row mb-3 order-item-row"
+            >
+              <!-- PRODUCT PACK -->
+              <div class="col-md-4">
+                <label [for]="'productPackId' + i" class="form-label"
+                  >Product Pack</label
+                >
+                <select
+                  [id]="'productPackId' + i"
+                  class="form-select"
+                  formControlName="productPackId"
+                  [class.is-invalid]="
+                    isSubmitted && item.get('productPackId')?.errors
+                  "
+                >
+                  <option [ngValue]="null" disabled selected>
+                    Select Product Pack
+                  </option>
+                  <option
+                    *ngFor="let pack of productPackList"
+                    [value]="pack.id"
+                  >
+                    {{ pack.productPackName }}
+                  </option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isSubmitted && item.get('productPackId')?.errors?.['required']"
+                >
+                  Please select a product pack.
+                </div>
+              </div>
+
+              <!-- QUANTITY -->
+              <div class="col-md-3">
+                <label [for]="'productQty' + i" class="form-label"
+                  >Quantity</label
+                >
+                <input
+                  [id]="'productQty' + i"
+                  type="number"
+                  class="form-control"
+                  formControlName="productQty"
+                  [class.is-invalid]="
+                    isSubmitted && item.get('productQty')?.errors
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isSubmitted && item.get('productQty')?.errors?.['required']"
+                >
+                  Please enter a quantity.
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isSubmitted && item.get('productQty')?.errors?.['min']"
+                >
+                  Quantity must be greater than 0.
+                </div>
+              </div>
+
+              <!-- RATE PER UNIT -->
+              <div class="col-md-3">
+                <label [for]="'ratePerUnit' + i" class="form-label"
+                  >Rate per Unit</label
+                >
+                <input
+                  [id]="'ratePerUnit' + i"
+                  type="number"
+                  class="form-control"
+                  formControlName="ratePerUnit"
+                  [class.is-invalid]="
+                    isSubmitted && item.get('ratePerUnit')?.errors
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isSubmitted && item.get('ratePerUnit')?.errors?.['required']"
+                >
+                  Please enter a rate.
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="isSubmitted && item.get('ratePerUnit')?.errors?.['min']"
+                >
+                  Rate must be greater than or equal to 0.
+                </div>
+              </div>
+
+              <!-- REMOVE ITEM -->
+              <div
+                class="col-md-2 d-flex align-items-center"
+                style="margin-top: 30px"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="removeOrderItem(i)"
+                  [disabled]="orderItems.length === 1"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="action-buttons">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          <i
+            class="bi"
+            [ngClass]="
+              isLoading
+                ? 'bi-hourglass-split'
+                : isEditMode
+                ? 'bi-pencil-square'
+                : 'bi-save'
+            "
+          ></i>
+          {{ isEditMode ? "Update Order" : "Add Order" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          [disabled]="isLoading"
+          (click)="navigateToList()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -156,10 +156,17 @@
       <span
         class="badge p-0 px-2 py-1 fs-7"
         style="font-size: 10px"
-        [class.bg-primary]="row.orderStatus === 'Pending'"
+        [class.bg-warning]="row.orderStatus === 'Pending'"
         [class.bg-success]="row.orderStatus === 'Completed'"
-        [class.bg-warning]="row.orderStatus === 'Processing'"
+        [class.bg-info]="row.orderStatus === 'Processing'"
         [class.bg-danger]="row.orderStatus === 'Cancelled'"
+        [class.bg-info]="row.orderStatus === 'Confirmed'"
+        [class.bg-primary]="row.orderStatus === 'Shipped'"
+        [class.bg-success]="row.orderStatus === 'Delivered'"
+        [class.bg-danger]="row.orderStatus === 'Failed'"
+        [class.bg-secondary]="row.orderStatus === 'OnHold'"
+        [class.bg-secondary]="row.orderStatus === 'Returned'"
+        [class.bg-secondary]="row.orderStatus === 'Refunded'"
       >
         {{ row.orderStatus }}
       </span>
@@ -177,9 +184,13 @@
         class="badge p-0 px-2 py-1 fs-7"
         style="font-size: 10px"
         [class.bg-danger]="row.paymentStatus === 'Unpaid'"
-        [class.bg-warning]="row.paymentStatus === 'Pending'"
-        [class.bg-success]="row.paymentStatus === 'Paid'"
+        [class.bg-info]="row.paymentStatus === 'Pending'"
         [class.bg-success]="row.paymentStatus === 'Completed'"
+        [class.bg-danger]="row.paymentStatus === 'Failed'"
+        [class.bg-secondary]="row.paymentStatus === 'Refunded'"
+        [class.bg-warning]="row.paymentStatus === 'PartiallyPaid'"
+        [class.bg-danger]="row.paymentStatus === 'Cancelled'"
+        [class.bg-primary]="row.paymentStatus === 'OnHold'"
       >
         {{ row.paymentStatus }}
       </span>
@@ -194,12 +205,20 @@
     </ngx-datatable-column>
 
     <ng-template #actionTemplate let-row="row">
-      <div>
-        <button class="btn btn-primary btn-sm" (click)="editOrder(row)">
-          Edit
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="editOrder(row)"
+          title="Edit Order"
+        >
+          <i class="bi bi-pencil-square"></i>
         </button>
-        <button class="btn btn-info btn-sm ms-2" (click)="viewOrder(row)">
-          View
+        <button
+          class="btn btn-info btn-sm"
+          (click)="viewOrder(row)"
+          title="View Order"
+        >
+          <i class="bi bi-eye"></i>
         </button>
       </div>
     </ng-template>
