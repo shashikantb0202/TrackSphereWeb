@@ -6,7 +6,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../Services/user.service';
@@ -18,11 +18,13 @@ import { CustomerVisitTypeBasicInfo } from '../../Models/common.model';
 import { DropdownService } from '../../Services/dropdown.service';
 import { LocationTrackerService } from '../../Services/location.tracker.service';
 import { LocationTracker } from '../../Models/location.tracker.model';
+import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-location',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DateFormatPipe],
+  providers: [DatePipe],
   templateUrl: './view-location.component.html',
   styleUrl: './view-location.component.css',
 })
@@ -159,6 +161,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
   loadVisits(): void {
     this.visits = [];
     this.isLoading = true;
+    const selected = new Date(this.selectedDate);
     const params: any = {
       page: this.currentPage.toString(),
       pageSize: this.pageSize.toString(),
@@ -166,7 +169,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
       ...(this.selectedVisitType?.id
         ? { customerVisitTypeId: this.selectedVisitType?.id }
         : {}),
-      ...(this.selectedDate ? { VisitDate: this.selectedDate } : {}),
+      ...(this.selectedDate ? { VisitDate: selected.toISOString() } : {}),
     };
 
     this.customerVisitService.getAllCustomerVisitsWithFilter(params).subscribe({

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -11,10 +11,19 @@ import { CustomerVisit } from '../../../Models/customer.visit.model';
 import { CustomerVisitService } from '../../../Services/customer.visit.service';
 import { UserService } from '../../../Services/user.service';
 import { CustomerService } from '../../../Services/customer.service';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-customer-visit-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxDatatableModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxDatatableModule,
+    DateFormatPipe,
+  ],
+  providers: [DatePipe],
   templateUrl: './customer-visit-list.component.html',
   styleUrl: './customer-visit-list.component.css',
 })

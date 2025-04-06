@@ -24,7 +24,7 @@
         <!-- VISIT DATE -->
         <div class="col-md-6 mb-3">
           <strong>Visit Date:</strong>
-          {{ customerVisit.visitDate | date : "dd-MMM-yyyy HH:mm:ss" }}
+          {{ customerVisit.visitDate | dateFormat : "DEFAULT" }}
         </div>
 
         <!-- LATITUDE -->
@@ -54,7 +54,7 @@
         <!-- REVISIT DATE -->
         <div class="col-md-6 mb-3">
           <strong>Revisit Date:</strong>
-          {{ customerVisit.revisitDate | date : "dd-MMM-yyyy HH:mm:ss" }}
+          {{ customerVisit.revisitDate | dateFormat : "DEFAULT" }}
         </div>
 
         <!-- STATUS -->
@@ -78,7 +78,7 @@
         <!-- CREATED ON -->
         <div class="col-md-6 mb-3">
           <strong>Created On:</strong>
-          {{ customerVisit.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          {{ customerVisit.createdOn | dateFormat : "DEFAULT" }}
         </div>
 
         <!-- UPDATED BY -->
@@ -90,7 +90,7 @@
         <!-- UPDATED ON -->
         <div class="col-md-6 mb-3">
           <strong>Updated On:</strong>
-          {{ customerVisit.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          {{ customerVisit.updatedOn | dateFormat : "DEFAULT" }}
         </div>
 
         <!-- IMAGE PREVIEW -->

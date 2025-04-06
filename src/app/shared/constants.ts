@@ -36,6 +36,9 @@ export const BaseUrl = {
     CustomerVisitAll: '/api/CustomerVisit/all',
     CustomerVisitWithFilter: '/api/CustomerVisit/filter',
   },
+  locationtrackers: {
+    locationtrackersWithFilter: '/api/locationtrackers/filter',
+  },
   ProductCategory: {
     ProductCategory: '/api/productCategory',
     ProductCategoryAll: '/api/productCategory/all',

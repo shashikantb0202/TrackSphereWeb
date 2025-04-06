@@ -42,7 +42,7 @@ export const orderRoutes: Routes = [
     },
   },
   {
-    path: 'order/view-order:id',
+    path: 'order/view-order/:id',
     component: ViewOrderComponent,
     canActivate: [AuthGuard], // Protects Order Details
     data: {

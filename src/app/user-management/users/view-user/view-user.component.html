@@ -91,13 +91,14 @@
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-3">
             <strong>Created On:</strong>
-            {{ user.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+            {{ user.createdOn | dateFormat : "DEFAULT" }}
           </div>
-          <div class="col-md-6">
+
+          <div class="col-md-6 mb-3">
             <strong>Updated On:</strong>
-            {{ user?.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+            {{ user?.updatedOn | dateFormat : "DEFAULT" }}
           </div>
         </div>
       </div>

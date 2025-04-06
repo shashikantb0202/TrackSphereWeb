@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CustomerVisit } from '../../../Models/customer.visit.model';
 import { CustomerVisitService } from '../../../Services/customer.visit.service';
 import { environment } from '../../../../environment';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-customer-visit',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, DateFormatPipe],
+  providers: [DatePipe],
   templateUrl: './view-customer-visit.component.html',
   styleUrl: './view-customer-visit.component.css',
 })
-export class ViewCustomerVisitComponent {
+export class ViewCustomerVisitComponent implements OnInit {
   customerVisitId: number = 0;
   isLoading: boolean = false;
   customerVisit: CustomerVisit | any = {};

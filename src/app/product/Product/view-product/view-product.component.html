@@ -1,126 +1,130 @@
 <div class="container mt-4">
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
-            Product Details
-        </div>
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Product Details</div>
 
-        <div *ngIf="isLoading" class="loader-overlay">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
-        <div *ngIf="!isLoading" class="card-body">
-            <div class="row">
-                <!-- PRODUCT NAME -->
-                <div class="col-md-6 mb-3">
-                    <strong>Product Name:</strong>
-                    {{ product.name }}
-                </div>
-
-                <!-- CATEGORY -->
-                <div class="col-md-6 mb-3">
-                    <strong>Category:</strong>
-                {{ product.productCategory?.name }}
-                </div>
-
-                <!-- HS CODE -->
-                <div class="col-md-6 mb-3">
-                    <strong>HS Code:</strong>
-                    {{ product.hsCode }}
-                </div>
-
-                <!-- GST % -->
-                <div class="col-md-6 mb-3">
-                    <strong>GST %:</strong>
-                    {{ product.gstPer }}%
-                </div>
-
-                <!-- DESCRIPTION -->
-                <div class="col-md-6 mb-3">
-                    <strong>Description:</strong>
-                    {{ product.description }}
-                </div>
-
-                <!-- BENEFITS -->
-                <div class="col-md-6 mb-3">
-                    <strong>Benefits:</strong>
-                    {{ product.benefits }}
-                </div>
-
-                <!-- HOW TO USE -->
-                <div class="col-md-6 mb-3">
-                    <strong>How to Use:</strong>
-                    {{ product.howToUse }}
-                </div>
-
-                <!-- RETURN POLICY -->
-                <div class="col-md-6 mb-3">
-                    <strong>Return Policy:</strong>
-                    {{ product.returnPolicy }}
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Status:</strong>  
-                        <span  
-                        class="badge p-0 px-2 py-1 fs-7 small-badge" 
-                        style="font-size: 10px;margin-left: 7px;"
-                        [class.bg-success]="product.status === 'Active'" 
-                        [class.bg-danger]="product.status === 'InActive'"
-                      >
-                        {{ product.status }}
-                      </span>
-                    </div>
-                </div>
-
-                <!-- CREATED BY -->
-                <div class="col-md-6 mb-3">
-                    <strong>Created By:</strong>
-                    {{ product.createdByUser?.name || 'N/A' }}
-                </div>
-
-                <!-- CREATED ON -->
-                <div class="col-md-6 mb-3">
-                    <strong>Created On:</strong>
-                    {{ product.createdOn | date:'dd-MMM-yyyy HH:mm:ss' }}
-                </div>
-
-                <!-- UPDATED BY -->
-                <div class="col-md-6 mb-3">
-                    <strong>Updated By:</strong>
-                    {{ product.updatedByUser?.name || 'N/A' }}
-                </div>
-
-                <!-- UPDATED ON -->
-                <div class="col-md-6 mb-3">
-                    <strong>Updated On:</strong>
-                    {{ product.updatedOn |  date:'dd-MMM-yyyy HH:mm:ss' }}
-                </div>
-
-                <!-- IMAGE PREVIEW -->
-                <div class="col-md-12">
-                    <strong>Images:</strong>
-                    <div class="product-image-container">
-                        <div class="image-box" *ngFor="let image of product.images">
-                            <img 
-                                [src]="getFullImageUrl(image.imageUrl)" 
-                                alt="Product Image"
-                                class="product-image"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer text-end">
-            <button class="btn btn-primary" (click)="router.navigate(['main/product/edit-product', product.id])">
-                Edit Product
-            </button>
-            <button class="btn btn-secondary ms-2" (click)="router.navigate(['main/product/product-list'])">
-                Back to List
-            </button>
-        </div>
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- PRODUCT NAME -->
+        <div class="col-md-6 mb-3">
+          <strong>Product Name:</strong>
+          {{ product.name }}
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="col-md-6 mb-3">
+          <strong>Category:</strong>
+          {{ product.productCategory?.name }}
+        </div>
+
+        <!-- HS CODE -->
+        <div class="col-md-6 mb-3">
+          <strong>HS Code:</strong>
+          {{ product.hsCode }}
+        </div>
+
+        <!-- GST % -->
+        <div class="col-md-6 mb-3">
+          <strong>GST %:</strong>
+          {{ product.gstPer }}%
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="col-md-6 mb-3">
+          <strong>Description:</strong>
+          {{ product.description }}
+        </div>
+
+        <!-- BENEFITS -->
+        <div class="col-md-6 mb-3">
+          <strong>Benefits:</strong>
+          {{ product.benefits }}
+        </div>
+
+        <!-- HOW TO USE -->
+        <div class="col-md-6 mb-3">
+          <strong>How to Use:</strong>
+          {{ product.howToUse }}
+        </div>
+
+        <!-- RETURN POLICY -->
+        <div class="col-md-6 mb-3">
+          <strong>Return Policy:</strong>
+          {{ product.returnPolicy }}
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Status:</strong>
+            <span
+              class="badge p-0 px-2 py-1 fs-7 small-badge"
+              style="font-size: 10px; margin-left: 7px"
+              [class.bg-success]="product.status === 'Active'"
+              [class.bg-danger]="product.status === 'InActive'"
+            >
+              {{ product.status }}
+            </span>
+          </div>
+        </div>
+
+        <!-- CREATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Created By:</strong>
+          {{ product.createdByUser?.name || "N/A" }}
+        </div>
+
+        <!-- CREATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Created On:</strong>
+          {{ product.createdOn | dateFormat : "DEFAULT" }}
+        </div>
+
+        <!-- UPDATED BY -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated By:</strong>
+          {{ product.updatedByUser?.name || "N/A" }}
+        </div>
+
+        <!-- UPDATED ON -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated On:</strong>
+          {{ product.updatedOn | dateFormat : "DEFAULT" }}
+        </div>
+
+        <!-- IMAGE PREVIEW -->
+        <div class="col-md-12">
+          <strong>Images:</strong>
+          <div class="product-image-container">
+            <div class="image-box" *ngFor="let image of product.images">
+              <img
+                [src]="getFullImageUrl(image.imageUrl)"
+                alt="Product Image"
+                class="product-image"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="router.navigate(['main/product/edit-product', product.id])"
+      >
+        Edit Product
+      </button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/product/product-list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
 </div>

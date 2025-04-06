@@ -57,7 +57,6 @@ export class SidebarComponent {
           this.userPermissionService.setPermissions(data);
         });
     }
-    console.log(JSON.stringify(this.sidebarMenu));
   }
 
   mapPermissionsToMenuStructure(permissions: any[]): any[] {

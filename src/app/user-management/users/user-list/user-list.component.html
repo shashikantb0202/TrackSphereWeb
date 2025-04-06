@@ -103,7 +103,7 @@
     >
     </ngx-datatable-column>
     <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
-      {{ row.createdOn | date : "dd/MM/yyyy" }}
+      {{ row.createdOn | dateFormat : "DEFAULT" }}
     </ng-template>
 
     <!-- Status Column -->

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User, UserResponse } from '../../../Models/user.model';
 import { Role } from '../../../Models/Role';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -11,10 +11,19 @@ import { Router } from '@angular/router';
 import { RoleService } from '../../../Services/role.service';
 import { StatusEnum } from '../../../enums/status.enum';
 import { enumToStringArray } from '../../../utils/common.utils';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-user-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxDatatableModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxDatatableModule,
+    DateFormatPipe,
+  ],
+  providers: [DatePipe],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
 })

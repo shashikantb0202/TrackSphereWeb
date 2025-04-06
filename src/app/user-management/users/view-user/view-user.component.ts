@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../Services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { User } from '../../../Models/user.model';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-user',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, DateFormatPipe],
+  providers: [DatePipe],
   templateUrl: './view-user.component.html',
   styleUrl: './view-user.component.css',
 })
-export class ViewUserComponent {
+export class ViewUserComponent implements OnInit {
   userId: number = 0;
   isLoading: boolean = false;
   user: User | any = {};

@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../../../Models/product.model';
 import { ProductService } from '../../../Services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { environment } from '../../../../environment';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-product',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, DateFormatPipe],
+  providers: [DatePipe],
   templateUrl: './view-product.component.html',
   styleUrl: './view-product.component.css',
 })
-export class ViewProductComponent {
+export class ViewProductComponent implements OnInit {
   productId: number = 0;
   isLoading: boolean = false;
   product: Product | any = {};

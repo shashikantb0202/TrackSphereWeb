@@ -7,6 +7,7 @@ import { userManagementRoutes } from '../user-management/user-management.routes'
 import { productRoutes } from '../product/product.routes';
 import { customerRoutes } from '../customer/customer.routes';
 import { orderRoutes } from '../order/order.route';
+import { locationTrackerRoutes } from '../location-tracker/location-tracker.routes';
 
 export const mainRoutes: Routes = [
   {
@@ -19,6 +20,7 @@ export const mainRoutes: Routes = [
       ...productRoutes,
       ...customerRoutes,
       ...orderRoutes,
+      ...locationTrackerRoutes,
       { path: 'unauthorized', component: UnauthorizedComponent },
     ],
   },

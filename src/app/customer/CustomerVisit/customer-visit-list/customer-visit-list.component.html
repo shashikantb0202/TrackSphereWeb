@@ -104,7 +104,7 @@
     ></ngx-datatable-column>
 
     <ng-template #visitDateTemplate let-row="row" ngx-datatable-cell>
-      {{ row.visitDate | date : "dd/MM/yyyy" }}
+      {{ row.visitDate | dateFormat : "DEFAULT" }}
     </ng-template>
 
     <ngx-datatable-column
@@ -124,7 +124,7 @@
       [sortable]="true"
     ></ngx-datatable-column>
     <ng-template #ReVisitDateTemplate let-row="row" ngx-datatable-cell>
-      {{ row.revisitDate | date : "dd/MM/yyyy" }}
+      {{ row.revisitDate | dateFormat : "DEFAULT" }}
     </ng-template>
 
     <ngx-datatable-column

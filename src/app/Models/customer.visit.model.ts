@@ -5,7 +5,7 @@ import { User, UserBasicInfo } from './user.model';
 export interface CustomerVisit extends BaseEntity {
   id: number;
   user: UserBasicInfo;
-  customer: CustomerBasicInfo;
+  customer: Customer;
   visitDate: string; // ISO string format (e.g., "2025-03-02T10:00:00")
   latitude: number;
   longitude: number;

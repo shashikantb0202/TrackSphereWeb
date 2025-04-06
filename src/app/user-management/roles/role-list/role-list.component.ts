@@ -1,21 +1,34 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Role } from '../../../Models/role.model';
 import { RoleService } from '../../../Services/role.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { mapApiToRole } from '../../../utils/role.utils';
 import { Modal } from 'bootstrap';
 import { StatusEnum } from '../../../enums/status.enum';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { enumToStringArray } from '../../../utils/common.utils';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-role-list',
-  imports: [CommonModule,
-                FormsModule,
-                ReactiveFormsModule,NgxDatatableModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxDatatableModule,
+    DateFormatPipe,
+  ],
+  providers: [DatePipe],
   templateUrl: './role-list.component.html',
-  styleUrl: './role-list.component.css'
+  styleUrl: './role-list.component.css',
 })
 export class RoleListComponent implements OnInit {
   roles: Role[] = [];
@@ -27,14 +40,13 @@ export class RoleListComponent implements OnInit {
   isSubmitted: boolean = false;
   isLoading: boolean = false;
   isSaving: boolean = false;
- statusList: string[] = enumToStringArray(StatusEnum); 
+  statusList: string[] = enumToStringArray(StatusEnum);
   // Inline Editing
   editRoleId: number | null = null;
   editableRole: Partial<Role> = {};
 
   // Modal Instance
   roleModalInstance: Modal | null = null;
-
 
   // Pagination Variables
   pageSize: number = 5;
@@ -45,17 +57,15 @@ export class RoleListComponent implements OnInit {
     this.roleForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', Validators.required],
-      status: ['', Validators.required]
+      status: ['', Validators.required],
     });
   }
   // Open Add Role Modal
   openRoleModal(): void {
-    
     this.roleForm.reset();
     this.editableRole = {} as Role;
     this.roleModalInstance?.show();
-    
-}
+  }
   ngOnInit(): void {
     this.loadRoles();
     const modalElement = document.getElementById('roleModal');
@@ -63,12 +73,12 @@ export class RoleListComponent implements OnInit {
       this.roleModalInstance = new Modal(modalElement);
     }
   }
-// Cancel Edit
-cancelEdit(): void {
-  this.editRoleId = null;      // Reset edit mode
-  this.editableRole = {};      // Clear editable role object
-  this.applyClientPagination(); // Refresh data to reset unsaved changes
-}
+  // Cancel Edit
+  cancelEdit(): void {
+    this.editRoleId = null; // Reset edit mode
+    this.editableRole = {}; // Clear editable role object
+    this.applyClientPagination(); // Refresh data to reset unsaved changes
+  }
   // Load Roles
   loadRoles(): void {
     this.isLoading = true;
@@ -82,7 +92,7 @@ cancelEdit(): void {
       error: (error) => {
         console.error('Error loading roles:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -103,39 +113,42 @@ cancelEdit(): void {
   onSort(event: any): void {
     const sortColumn = event.sorts[0].prop as keyof Role;
     const sortDirection = event.sorts[0].dir;
-  
+
     this.filteredRoles.sort((a, b) => {
       const valueA = a[sortColumn];
       const valueB = b[sortColumn];
-  
+
       // Handle undefined or null values gracefully
       if (valueA === undefined || valueA === null) return 1;
       if (valueB === undefined || valueB === null) return -1;
-  
+
       // Handle Date strings safely
-      if (sortColumn === 'createdOn' && typeof valueA === 'string' && typeof valueB === 'string') {
+      if (
+        sortColumn === 'createdOn' &&
+        typeof valueA === 'string' &&
+        typeof valueB === 'string'
+      ) {
         return sortDirection === 'asc'
           ? new Date(valueA).getTime() - new Date(valueB).getTime()
           : new Date(valueB).getTime() - new Date(valueA).getTime();
       }
-  
+
       // Handle numeric sorting
       if (typeof valueA === 'number' && typeof valueB === 'number') {
         return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
       }
-  
+
       // Handle string sorting
       if (typeof valueA === 'string' && typeof valueB === 'string') {
         return sortDirection === 'asc'
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
       }
-  
+
       return 0; // Default case for unhandled data types
     });
   }
-  
-  
+
   // Edit Role
   editRole(role: Role): void {
     this.editRoleId = role.id;
@@ -149,7 +162,9 @@ cancelEdit(): void {
     this.isSaving = true;
     this.roleService.updateRole(this.editableRole).subscribe({
       next: () => {
-        const index = this.roles.findIndex(r => r.id === this.editableRole.id);
+        const index = this.roles.findIndex(
+          (r) => r.id === this.editableRole.id
+        );
         if (index !== -1) this.roles[index] = { ...this.editableRole } as Role;
         this.isSaving = false;
         this.editRoleId = null;
@@ -158,12 +173,13 @@ cancelEdit(): void {
       error: (err) => {
         console.error('Error saving role:', err);
         this.isSaving = false;
-      }
+      },
     });
   }
 
   // Save New Role (Add Role via Modal)
-  saveNewRole(): void {  // NEW FUNCTION
+  saveNewRole(): void {
+    // NEW FUNCTION
     this.isSubmitted = true; // Form submission tracking // NEW
     if (this.roleForm.invalid) return; // Prevent submission if invalid // NEW
     this.isSaving = true; // Loader Start
@@ -172,17 +188,17 @@ cancelEdit(): void {
         this.isSaving = false;
         this.editRoleId = null;
         this.editableRole = {};
-            // Close Modal Programmatically
-            this.roleModalInstance?.hide();
+        // Close Modal Programmatically
+        this.roleModalInstance?.hide();
         this.loadRoles();
       },
       error: (err) => {
         console.error('Error adding role:', err);
         this.isSaving = false; // Loader End
-      }
+      },
     });
   }
-  
+
   // TrackBy for Improved Performance
   trackById(index: number, role: Role): number {
     return role.id;

@@ -6,13 +6,22 @@ import { ProductCategoryService } from '../../../Services/product-category.servi
 import { Router } from '@angular/router';
 import { GlobalStateService } from '../../../Services/global-state.service';
 import { ProductCategory } from '../../../Models/Product.category.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-product-category-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxDatatableModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxDatatableModule,
+    DateFormatPipe,
+  ],
+  providers: [DatePipe],
   templateUrl: './product-category-list.component.html',
   styleUrl: './product-category-list.component.css',
 })
