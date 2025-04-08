@@ -13,8 +13,6 @@ import { BaseUrl } from '../shared/constants';
   providedIn: 'root',
 })
 export class LocationTrackerService {
-  private apiUrl = `${environment.apiUrl}/api/LocationTracker`;
-
   constructor(private http: HttpClient) {}
 
   getAllLocationTrackersWithFilter(params: any): Observable<any> {

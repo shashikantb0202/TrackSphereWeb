@@ -39,6 +39,9 @@ export const BaseUrl = {
   locationtrackers: {
     locationtrackersWithFilter: '/api/locationtrackers/filter',
   },
+  UserCheckIn: {
+    UserCheckInWithFilter: '/api/UserCheckIn/filter',
+  },
   ProductCategory: {
     ProductCategory: '/api/productCategory',
     ProductCategoryAll: '/api/productCategory/all',

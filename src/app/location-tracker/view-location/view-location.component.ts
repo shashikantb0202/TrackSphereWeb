@@ -19,6 +19,8 @@ import { DropdownService } from '../../Services/dropdown.service';
 import { LocationTrackerService } from '../../Services/location.tracker.service';
 import { LocationTracker } from '../../Models/location.tracker.model';
 import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
+import { UserCheckInService } from '../../Services/user.checkin.service';
+import { UserCheckIn } from '../../Models/user.checkin.model';
 
 @Component({
   selector: 'app-view-location',
@@ -45,6 +47,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
 
   visits: CustomerVisit[] = [];
   locationTrackers: LocationTracker[] = [];
+  userCheckIns: UserCheckIn[] = [];
   pageSize: number = 0;
   currentPage: number = 0;
   totalRecords: number = 0;
@@ -59,6 +62,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     private userService: UserService,
     private customerVisitService: CustomerVisitService,
     private locationTrackerService: LocationTrackerService,
+    private userCheckInService: UserCheckInService,
     private dropDownService: DropdownService
   ) {}
 
@@ -122,6 +126,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
 
           this.loadVisits();
           this.loadLocationTracker();
+          this.loadUserCheckIns();
           if (this.map) {
             this.showEmployeeRoute(this.selectedUser);
           }
@@ -156,6 +161,30 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
           this.locationTrackers = [];
         },
       });
+  }
+
+  loadUserCheckIns(): void {
+    this.isLoading = true;
+    const params: any = {
+      page: 0,
+      pageSize: 0,
+      ...(this.selectedUser?.id ? { userId: this.selectedUser?.id } : {}),
+      ...(this.selectedDate ? { CheckInDate: this.selectedDate } : {}),
+      //  ...(this.selectedDate ? { CheckOutDate: this.selectedDate } : {}),
+    };
+    this.userCheckInService.getAllUserCheckInsWithFilter(params).subscribe({
+      next: (response) => {
+        this.userCheckIns = Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+        console.log(this.userCheckIns);
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.userCheckIns = [];
+      },
+    });
   }
 
   loadVisits(): void {
@@ -202,6 +231,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isDropdownOpen = false;
     this.loadVisits();
     this.loadLocationTracker();
+    this.loadUserCheckIns();
     this.showEmployeeRoute(user);
   }
 
@@ -209,12 +239,14 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showEmployeeRoute(this.selectedUser!);
     this.loadVisits();
     this.loadLocationTracker();
+    this.loadUserCheckIns();
   }
 
   applyFilter(visitType: CustomerVisitTypeBasicInfo): void {
     this.selectedVisitType = visitType;
     this.loadVisits();
     this.loadLocationTracker();
+    this.loadUserCheckIns();
     this.isFilterDropdownOpen = false;
   }
 
@@ -224,8 +256,60 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.polylines.forEach((polyline) => this.map.removeLayer(polyline));
     this.markers = [];
     this.polylines = [];
-    // Add markers for each visit
-    const visitCoordinates: [number, number][] = [];
+
+    // Add markers for check-ins
+    this.userCheckIns.forEach((checkIn, index) => {
+      // Add check-in marker
+      const checkInMarker = L.marker([
+        checkIn.checkInLatitude,
+        checkIn.checkInLongitude,
+      ]).addTo(this.map);
+      this.markers.push(checkInMarker);
+      checkInMarker.bindPopup(
+        `<div class="font-medium">Check-In</div>
+          <div class="text-sm text-gray-600">${checkIn.route}</div>
+          <div class="text-xs text-gray-500 mt-1">${checkIn.checkInDateTime}</div>
+          <div class="text-xs mt-1"><span class="font-medium">KM Reading:</span> ${checkIn.checkInKmReading}</div>
+          <div class="text-xs mt-1"><span class="font-medium">Travelled By:</span> ${checkIn.travelledBy}</div>
+        `
+      );
+
+      // Add check-out marker if available
+      if (checkIn.checkOutLatitude && checkIn.checkOutLongitude) {
+        const checkOutMarker = L.marker([
+          checkIn.checkOutLatitude,
+          checkIn.checkOutLongitude,
+        ]).addTo(this.map);
+        this.markers.push(checkOutMarker);
+        checkOutMarker.bindPopup(
+          `<div class="font-medium">Check-Out</div>
+            <div class="text-sm text-gray-600">${checkIn.route}</div>
+            <div class="text-xs text-gray-500 mt-1">${checkIn.checkOutDateTime}</div>
+            <div class="text-xs mt-1"><span class="font-medium">KM Reading:</span> ${checkIn.checkOutKmReading}</div>
+            <div class="text-xs mt-1"><span class="font-medium">Travelled By:</span> ${checkIn.travelledBy}</div>
+          `
+        );
+      }
+
+      // Add polyline between check-in and check-out if both are available
+      if (checkIn.checkOutLatitude && checkIn.checkOutLongitude) {
+        const polyline = L.polyline(
+          [
+            [checkIn.checkInLatitude, checkIn.checkInLongitude],
+            [checkIn.checkOutLatitude, checkIn.checkOutLongitude],
+          ],
+          {
+            color: '#3b82f6',
+            weight: 4,
+            dashArray: '5, 5',
+            opacity: 0.8,
+          }
+        ).addTo(this.map);
+        this.polylines.push(polyline);
+      }
+    });
+
+    // Add markers for visits
     this.visits.forEach((visit, index) => {
       const marker = L.marker([visit.latitude, visit.longitude]).addTo(
         this.map
@@ -256,10 +340,9 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
           iconSize: [24, 24],
         })
       );
-
-      visitCoordinates.push([visit.latitude, visit.latitude]);
     });
 
+    // Add location tracker route
     const empTravelRoute: [number, number][] = this.locationTrackers.map(
       (item) => [item.latitude, item.longitude]
     );
@@ -273,12 +356,19 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
         opacity: 0.8,
       }).addTo(this.map);
       this.polylines.push(polyline);
+    }
 
-      // Fit map to show the entire route
-      const bounds = L.latLngBounds(empTravelRoute);
+    // Fit map to show all markers and routes
+    const allPoints = [
+      ...this.markers.map((m) => m.getLatLng()),
+      ...this.polylines.flatMap((p) => p.getLatLngs()),
+    ];
+
+    if (allPoints.length > 0) {
+      const bounds = L.latLngBounds(allPoints);
       this.map.fitBounds(bounds, {
         padding: [50, 50],
-        maxZoom: 15, // Optional: limit maximum zoom level
+        maxZoom: 15,
       });
     }
   }
