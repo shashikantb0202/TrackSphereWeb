@@ -10,7 +10,7 @@ import { environment } from '../../environment';
 import { STORAGE_KEYS } from '../shared/constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl; // Change this based on your .NET API
@@ -22,9 +22,27 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/api/User/login`, credentials).pipe(
       tap((response: any) => {
         localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.token);
-        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(response.data.user));
+        localStorage.setItem(
+          STORAGE_KEYS.USER_INFO,
+          JSON.stringify(response.data.user)
+        );
       })
     );
+  }
+
+  forgotPassword(credentials: { Email: string }): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/api/User/request-password-reset`, credentials)
+      .pipe(tap((response: any) => {}));
+  }
+
+  resetPassword(credentials: {
+    token: string;
+    newPassword: string;
+  }): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/api/User/reset-password`, credentials)
+      .pipe(tap((response: any) => {}));
   }
 
   register(user: any): Observable<any> {
@@ -43,8 +61,8 @@ export class AuthService {
   }
 
   getUserData(): User | null {
-    let userata=JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_INFO)!);
-    return  transformToUserModel(userata);
+    let userata = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_INFO)!);
+    return transformToUserModel(userata);
   }
 
   isAuthenticated(): boolean {
