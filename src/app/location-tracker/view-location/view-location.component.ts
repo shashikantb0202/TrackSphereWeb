@@ -21,12 +21,13 @@ import { LocationTracker } from '../../Models/location.tracker.model';
 import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 import { UserCheckInService } from '../../Services/user.checkin.service';
 import { UserCheckIn } from '../../Models/user.checkin.model';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-view-location',
   standalone: true,
   imports: [CommonModule, FormsModule, DateFormatPipe],
-  providers: [DatePipe],
+  providers: [DatePipe, DateFormatPipe],
   templateUrl: './view-location.component.html',
   styleUrl: './view-location.component.css',
 })
@@ -56,6 +57,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoading: boolean = false;
   customerVisitTypeList: CustomerVisitTypeBasicInfo[] = [];
   selectedVisitType: CustomerVisitTypeBasicInfo | null = null;
+  visitMarkers: Map<number, L.Marker<any>> | null = null;
 
   constructor(
     private http: HttpClient,
@@ -63,12 +65,20 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     private customerVisitService: CustomerVisitService,
     private locationTrackerService: LocationTrackerService,
     private userCheckInService: UserCheckInService,
-    private dropDownService: DropdownService
+    private dropDownService: DropdownService,
+    private datePipe: DateFormatPipe
   ) {}
 
   ngOnInit(): void {
     this.loadUsers();
     this.loadDropdownData();
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'leaflet/marker-icon-2x.png',
+      iconUrl: 'leaflet/marker-icon.png',
+      shadowUrl: 'leaflet/marker-shadow.png',
+    });
+    this.visitMarkers = new Map<number, L.Marker>(); // Add this in your component
   }
 
   ngAfterViewInit(): void {
@@ -115,21 +125,22 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private loadUsers(): void {
+  clearFilter() {
+    this.selectedVisitType = null; // Reset the selected filter
+    this.isFilterDropdownOpen = false; // Close the dropdown
+    this.LoadMap();
+  }
+
+  private async loadUsers(): Promise<void> {
     this.userService.getAllUser().subscribe({
-      next: (response) => {
+      next: async (response) => {
         this.userList = response;
         this.filteredUsers = [...this.userList];
         if (this.userList.length > 0) {
           this.selectedUser = this.userList[0];
           console.log(this.selectedUser);
 
-          this.loadVisits();
-          this.loadLocationTracker();
-          this.loadUserCheckIns();
-          if (this.map) {
-            this.showEmployeeRoute(this.selectedUser);
-          }
+          await this.LoadMap();
         }
       },
       error: (error) => {
@@ -138,58 +149,68 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  loadLocationTracker(): void {
+  async loadLocationTracker(): Promise<void> {
     this.isLoading = true;
+    this.locationTrackers = [];
+
     const params: any = {
       page: 0,
       pageSize: 0,
       ...(this.selectedUser?.id ? { userId: this.selectedUser?.id } : {}),
       ...(this.selectedDate ? { LcationDate: this.selectedDate } : {}),
     };
-    this.locationTrackerService
-      .getAllLocationTrackersWithFilter(params)
-      .subscribe({
-        next: (response) => {
-          this.locationTrackers = Array.isArray(response.data.data)
-            ? response.data.data
-            : [];
-          console.log(this.locationTrackers);
-          this.isLoading = false;
-        },
-        error: () => {
-          this.isLoading = false;
-          this.locationTrackers = [];
-        },
-      });
+
+    try {
+      const response = await firstValueFrom(
+        this.locationTrackerService.getAllLocationTrackersWithFilter(params)
+      );
+
+      this.locationTrackers = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
+
+      console.log(this.locationTrackers);
+    } catch (error) {
+      console.error('Error loading location trackers:', error);
+      this.locationTrackers = [];
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  loadUserCheckIns(): void {
+  async loadUserCheckIns(): Promise<void> {
+    this.userCheckIns = [];
     this.isLoading = true;
+
     const params: any = {
       page: 0,
       pageSize: 0,
       ...(this.selectedUser?.id ? { userId: this.selectedUser?.id } : {}),
       ...(this.selectedDate ? { CheckInDate: this.selectedDate } : {}),
-      //  ...(this.selectedDate ? { CheckOutDate: this.selectedDate } : {}),
+      // ...(this.selectedDate ? { CheckOutDate: this.selectedDate } : {}),
     };
-    this.userCheckInService.getAllUserCheckInsWithFilter(params).subscribe({
-      next: (response) => {
-        this.userCheckIns = Array.isArray(response.data.data)
-          ? response.data.data
-          : [];
-        console.log(this.userCheckIns);
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-        this.userCheckIns = [];
-      },
-    });
+
+    try {
+      const response = await firstValueFrom(
+        this.userCheckInService.getAllUserCheckInsWithFilter(params)
+      );
+
+      this.userCheckIns = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
+      console.log(this.userCheckIns);
+    } catch (error) {
+      console.error('Error loading user check-ins:', error);
+      this.userCheckIns = [];
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  loadVisits(): void {
+  async loadVisits(): Promise<void> {
     this.visits = [];
     this.isLoading = true;
+
     const selected = new Date(this.selectedDate);
     const params: any = {
       page: this.currentPage.toString(),
@@ -201,21 +222,20 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
       ...(this.selectedDate ? { VisitDate: selected.toISOString() } : {}),
     };
 
-    this.customerVisitService.getAllCustomerVisitsWithFilter(params).subscribe({
-      next: (response) => {
-        this.visits = Array.isArray(response.data.data)
-          ? response.data.data
-          : [];
-        console.log(this.visits);
-        this.totalRecords = response.data.totalRecords;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-        this.totalRecords = 0;
-        this.visits = [];
-      },
-    });
+    try {
+      const response = await firstValueFrom(
+        this.customerVisitService.getAllCustomerVisitsWithFilter(params)
+      );
+
+      this.visits = Array.isArray(response.data.data) ? response.data.data : [];
+      this.totalRecords = response.data.totalRecords;
+    } catch (error) {
+      this.totalRecords = 0;
+      this.visits = [];
+      console.error('Error loading visits:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   toggleDropdown(): void {
@@ -226,32 +246,35 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
   }
 
-  selectEmployee(user: User): void {
+  async selectEmployee(user: User): Promise<void> {
     this.selectedUser = user;
     this.isDropdownOpen = false;
-    this.loadVisits();
-    this.loadLocationTracker();
-    this.loadUserCheckIns();
-    this.showEmployeeRoute(user);
+    await this.LoadMap();
   }
 
-  selectDate() {
-    this.showEmployeeRoute(this.selectedUser!);
-    this.loadVisits();
-    this.loadLocationTracker();
-    this.loadUserCheckIns();
+  async selectDate() {
+    await this.LoadMap();
   }
 
-  applyFilter(visitType: CustomerVisitTypeBasicInfo): void {
+  async applyFilter(visitType: CustomerVisitTypeBasicInfo): Promise<void> {
     this.selectedVisitType = visitType;
-    this.loadVisits();
-    this.loadLocationTracker();
-    this.loadUserCheckIns();
     this.isFilterDropdownOpen = false;
+    await this.LoadMap();
   }
 
+  async LoadMap() {
+    const bounds = L.latLngBounds([]);
+    this.visits = [];
+    this.locationTrackers = [];
+    this.userCheckIns = [];
+    await this.loadVisits();
+    await this.loadLocationTracker();
+    await this.loadUserCheckIns();
+    this.showEmployeeRoute(this.selectedUser!);
+  }
   private showEmployeeRoute(employee: User): void {
     // Clear existing markers and polylines
+
     this.markers.forEach((marker) => this.map.removeLayer(marker));
     this.polylines.forEach((polyline) => this.map.removeLayer(polyline));
     this.markers = [];
@@ -260,19 +283,6 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     // Add markers for check-ins
     this.userCheckIns.forEach((checkIn, index) => {
       // Add check-in marker
-      const checkInMarker = L.marker([
-        checkIn.checkInLatitude,
-        checkIn.checkInLongitude,
-      ]).addTo(this.map);
-      this.markers.push(checkInMarker);
-      checkInMarker.bindPopup(
-        `<div class="font-medium">Check-In</div>
-          <div class="text-sm text-gray-600">${checkIn.route}</div>
-          <div class="text-xs text-gray-500 mt-1">${checkIn.checkInDateTime}</div>
-          <div class="text-xs mt-1"><span class="font-medium">KM Reading:</span> ${checkIn.checkInKmReading}</div>
-          <div class="text-xs mt-1"><span class="font-medium">Travelled By:</span> ${checkIn.travelledBy}</div>
-        `
-      );
 
       // Add check-out marker if available
       if (checkIn.checkOutLatitude && checkIn.checkOutLongitude) {
@@ -280,11 +290,28 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
           checkIn.checkOutLatitude,
           checkIn.checkOutLongitude,
         ]).addTo(this.map);
+        const checkInMarker = L.marker([
+          checkIn.checkInLatitude,
+          checkIn.checkInLongitude,
+        ]).addTo(this.map);
+        this.markers.push(checkInMarker);
+        var chekindate =
+          this.datePipe.transform(checkIn.checkInDateTime, 'DEFAULT') || '';
+        checkInMarker.bindPopup(
+          `<h6><b>Check-In</b></h6>
+          <div class="text-sm text-gray-600">${checkIn.route}</div>
+          <div class="text-xs text-gray-500 mt-1">${chekindate}</div>
+          <div class="text-xs mt-1"><span class="font-medium">KM Reading:</span> ${checkIn.checkInKmReading}</div>
+          <div class="text-xs mt-1"><span class="font-medium">Travelled By:</span> ${checkIn.travelledBy}</div>
+        `
+        );
         this.markers.push(checkOutMarker);
+        var checkOutDateTime =
+          this.datePipe.transform(checkIn.checkOutDateTime, 'DEFAULT') || '';
         checkOutMarker.bindPopup(
-          `<div class="font-medium">Check-Out</div>
+          `<h6><b>Check-Out</b></h6>
             <div class="text-sm text-gray-600">${checkIn.route}</div>
-            <div class="text-xs text-gray-500 mt-1">${checkIn.checkOutDateTime}</div>
+            <div class="text-xs text-gray-500 mt-1">${checkOutDateTime}</div>
             <div class="text-xs mt-1"><span class="font-medium">KM Reading:</span> ${checkIn.checkOutKmReading}</div>
             <div class="text-xs mt-1"><span class="font-medium">Travelled By:</span> ${checkIn.travelledBy}</div>
           `
@@ -311,34 +338,26 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Add markers for visits
     this.visits.forEach((visit, index) => {
-      const marker = L.marker([visit.latitude, visit.longitude]).addTo(
-        this.map
-      );
+      const icon = this.getCustomIcon(visit.customerVisitType.name);
+      const marker = L.marker([visit.latitude, visit.longitude], {
+        icon,
+      }).addTo(this.map);
       this.markers.push(marker);
-      marker
-        .bindPopup(
-          `<div class="font-medium">${visit.user.name}</div>
+      this.visitMarkers!.set(visit.id, marker); // 🔑 store by visit ID
+      var visitDate = this.datePipe.transform(visit.visitDate, 'DEFAULT') || '';
+      marker.bindPopup(
+        `<h6><b>Visit</b></h6>
+        <div class="font-medium">${visit.customer.name}</div>
           <div class="text-sm text-gray-600">${visit.customer.addressLine1},
           ${visit.customer!.city!.name!},
           ${visit.customer!.state!.name!} -
           ${visit.customer.pincode}</div>
-          <div class="text-xs text-gray-500 mt-1">${visit.visitDate} 
+          <div class="text-xs text-gray-500 mt-1">${visitDate} 
           </div>
           <div class="text-xs mt-1"><span class="font-medium">Purpose:</span> ${
             visit.reason
           }</div>
         `
-        )
-        .openPopup();
-
-      marker.setIcon(
-        L.divIcon({
-          className: '',
-          html: `<div class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500 text-white text-xs font-bold shadow-md">${
-            index + 1
-          }</div>`,
-          iconSize: [24, 24],
-        })
       );
     });
 
@@ -347,16 +366,31 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
       (item) => [item.latitude, item.longitude]
     );
 
-    console.log('empTravelRoute : ' + empTravelRoute);
     if (empTravelRoute.length > 1) {
       const polyline = L.polyline(empTravelRoute, {
         color: '#3b82f6',
         weight: 4,
-        dashArray: '5, 5',
+        //  dashArray: '5, 5',
         opacity: 0.8,
       }).addTo(this.map);
       this.polylines.push(polyline);
     }
+    // 3. Show time at each point with invisible circle markers
+    this.locationTrackers.forEach((item) => {
+      const time = this.datePipe.transform(item.timestamp, 'TIME_ONLY') || '';
+      const pointMarker = L.circleMarker([item.latitude, item.longitude], {
+        radius: 6,
+        color: 'transparent', // hide stroke
+        fillColor: 'transparent', // hide fill
+        fillOpacity: 0,
+      }).addTo(this.map);
+
+      pointMarker.bindTooltip(`Time: ${time}`, {
+        direction: 'top',
+        offset: [0, -10],
+        opacity: 0.9,
+      });
+    });
 
     // Fit map to show all markers and routes
     const allPoints = [
@@ -370,6 +404,51 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
         padding: [50, 50],
         maxZoom: 15,
       });
+    }
+  }
+
+  openVisitPopup(visitId: number) {
+    const marker = this.visitMarkers!.get(visitId);
+    if (marker) {
+      this.map.setView(marker.getLatLng(), 14); // 👈 optional: zoom to it
+      marker.openPopup();
+    }
+  }
+
+  // Function to generate different icons based on visit reason
+  getCustomIcon(reason: string): L.Icon {
+    switch (reason.toLowerCase()) {
+      case 'sale':
+        return L.icon({
+          iconUrl: 'leaflet/sales-icon.png', // Replace with your icon image URL
+          iconSize: [32, 32], // Icon size (width, height)
+          iconAnchor: [16, 32], // Anchor point of the icon
+          popupAnchor: [0, -32], // Where the popup appears
+        });
+
+      case 'marketing':
+        return L.icon({
+          iconUrl: 'leaflet/service-icon.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32],
+        });
+
+      case 'order':
+        return L.icon({
+          iconUrl: 'leaflet/order-icon.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32],
+        });
+
+      default:
+        return L.icon({
+          iconUrl: 'leaflet/default.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32],
+        });
     }
   }
 
