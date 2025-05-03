@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/track-sphere-web",
+    "public": "dist/track-sphere-web/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
