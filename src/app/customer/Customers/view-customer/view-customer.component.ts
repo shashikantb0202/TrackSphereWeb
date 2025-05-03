@@ -3,7 +3,6 @@ import { Customer } from '../../../Models/customer.model';
 import { CustomerService } from '../../../Services/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../environment';
 
 @Component({
   selector: 'app-view-customer',

@@ -5,7 +5,7 @@ import {
   LocationTracker,
   LocationTrackerResponse,
 } from '../Models/location.tracker.model';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { ApiFilterResponse } from '../Models/base.entity.model';
 import { BaseUrl } from '../shared/constants';
 

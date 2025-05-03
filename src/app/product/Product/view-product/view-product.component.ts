@@ -3,8 +3,8 @@ import { Product } from '../../../Models/product.model';
 import { ProductService } from '../../../Services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { environment } from '../../../../environment';
 import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-view-product',

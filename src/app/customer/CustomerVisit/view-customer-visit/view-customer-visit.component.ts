@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CustomerVisit } from '../../../Models/customer.visit.model';
 import { CustomerVisitService } from '../../../Services/customer.visit.service';
-import { environment } from '../../../../environment';
 import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-view-customer-visit',

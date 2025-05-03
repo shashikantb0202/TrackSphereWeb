@@ -6,7 +6,7 @@ import {
   SubModule,
   UserPermission,
 } from '../Models/user-permission.model';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 import { BaseUrl, STORAGE_KEYS } from '../shared/constants';
 
 @Injectable({
