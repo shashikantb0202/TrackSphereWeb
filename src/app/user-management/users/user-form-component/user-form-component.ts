@@ -92,7 +92,6 @@ export class UserFormComponent implements OnInit {
         stateId: [null, Validators.required],
         cityId: [null, Validators.required],
         roleId: [null, Validators.required],
-        status: [null, Validators.required],
       },
       { validator: this.passwordMatchValidator }
     );

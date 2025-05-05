@@ -1,387 +1,396 @@
 <div class="container mb-2">
-    <h2>{{ isEditMode ? 'Edit User' : 'Add User' }}</h2>
+  <h2>{{ isEditMode ? 'Edit User' : 'Add User' }}</h2>
 
-    <div *ngIf="isLoading" class="loader-overlay">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-<div *ngIf="!isLoading" >
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
-
-        <!-- ================= BASIC INFORMATION ================= -->
-        <div class="card mb-4">
-            <div class="card-header bg-secondary text-white">
-                Basic Information
+  </div>
+  <div *ngIf="!isLoading">
+    <form
+      [formGroup]="userForm"
+      (ngSubmit)="onSubmit()"
+      #f="ngForm"
+      autocomplete="off"
+      novalidate
+    >
+      <!-- ================= BASIC INFORMATION ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Basic Information</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- FIRST NAME -->
+            <div class="col-md-4">
+              <label for="name" class="form-label">First Name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="Enter First Name"
+                formControlName="name"
+                [class.is-valid]="isSubmitted && userForm.get('name')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('name')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">First name is required.</div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- FIRST NAME -->
-                    <div class="col-md-4">
-                        <label for="name" class="form-label">First Name</label>
-                        <input 
-                            id="name"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter First Name"
-                            formControlName="name"
-                            [class.is-valid]="isSubmitted && userForm.get('name')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('name')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">First name is required.</div>
-                    </div>
-        
-                    <!-- LAST NAME -->
-                    <div class="col-md-4">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input 
-                            id="lastName"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Last Name"
-                            formControlName="lastName"
-                            [class.is-valid]="isSubmitted && userForm.get('lastName')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('lastName')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">Last name is required.</div>
-                    </div>
-        
-                    <!-- EMAIL -->
-                    <div class="col-md-4">
-                        <label for="email" class="form-label">Email</label>
-                        <input 
-                            id="email"
-                            type="email" 
-                            class="form-control"
-                            placeholder="Enter Email"
-                            formControlName="email"
-                            [class.is-valid]="isSubmitted && userForm.get('email')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('email')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">Please enter a valid email.</div>
-                    </div>
-        
-                    <!-- WORK EMAIL -->
-                    <div class="col-md-4">
-                        <label for="workemail" class="form-label">Work Email</label>
-                        <input 
-                            id="workemail"
-                            type="email" 
-                            class="form-control"
-                            placeholder="Enter Work Email"
-                            formControlName="workemail"
-                            [class.is-valid]="isSubmitted && userForm.get('workemail')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('workemail')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">Please enter a valid work email.</div>
-                    </div>
-        
-                    <!-- USERNAME -->
-                    <div class="col-md-4">
-                        <label for="username" class="form-label">Username</label>
-                        <input 
-                            id="username"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Username"
-                            formControlName="username"
-                            [class.is-valid]="isSubmitted && userForm.get('username')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('username')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">Username is required (minimum 3 characters).</div>
-                    </div>
-         <!-- CONTACT NUMBER -->
-         <div class="col-md-4">
-            <label for="contactNo" class="form-label">Contact Number</label>
-            <input 
+
+            <!-- LAST NAME -->
+            <div class="col-md-4">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                class="form-control"
+                placeholder="Enter Last Name"
+                formControlName="lastName"
+                [class.is-valid]="isSubmitted && userForm.get('lastName')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('lastName')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Last name is required.</div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="col-md-4">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                placeholder="Enter Email"
+                formControlName="email"
+                [class.is-valid]="isSubmitted && userForm.get('email')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('email')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+
+            <!-- WORK EMAIL -->
+            <div class="col-md-4">
+              <label for="workemail" class="form-label">Work Email</label>
+              <input
+                id="workemail"
+                type="email"
+                class="form-control"
+                placeholder="Enter Work Email"
+                formControlName="workemail"
+                [class.is-valid]="isSubmitted && userForm.get('workemail')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('workemail')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">
+                Please enter a valid work email.
+              </div>
+            </div>
+
+            <!-- USERNAME -->
+            <div class="col-md-4">
+              <label for="username" class="form-label">Username</label>
+              <input
+                id="username"
+                type="text"
+                class="form-control"
+                placeholder="Enter Username"
+                formControlName="username"
+                [class.is-valid]="isSubmitted && userForm.get('username')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('username')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">
+                Username is required (minimum 3 characters).
+              </div>
+            </div>
+            <!-- CONTACT NUMBER -->
+            <div class="col-md-4">
+              <label for="contactNo" class="form-label">Contact Number</label>
+              <input
                 id="contactNo"
-                type="text" 
+                type="text"
                 class="form-control"
                 placeholder="Enter Contact No"
                 formControlName="contactNo"
                 [class.is-valid]="isSubmitted && userForm.get('contactNo')?.valid"
                 [class.is-invalid]="isSubmitted && userForm.get('contactNo')?.invalid"
                 required
-            />
-            <div class="invalid-feedback">Contact No must be 10 digits.</div>
-        </div>
-                    <!-- PASSWORD (Visible only in Add Mode) -->
-                    <div class="col-md-4" *ngIf="!isEditMode">
-                        <label for="password" class="form-label">Password</label>
-                        <input 
-                            id="password"
-                            type="password" 
-                            class="form-control"
-                            placeholder="Enter Password"
-                            formControlName="password"
-                            [class.is-valid]="isSubmitted && userForm.get('password')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('password')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Password must be at least 8 characters with uppercase, lowercase, number, and special character.
-                        </div>
-                    </div>
-        
-                    <!-- RE-ENTER PASSWORD (Visible only in Add Mode) -->
-                    <div class="col-md-4" *ngIf="!isEditMode">
-                        <label for="confirmPassword" class="form-label">Re-enter Password</label>
-                        <input 
-                            id="confirmPassword"
-                            type="password" 
-                            class="form-control"
-                            placeholder="Re-enter Password"
-                            formControlName="confirmPassword"
-                            [class.is-valid]="isSubmitted && userForm.get('confirmPassword')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('confirmPassword')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">Passwords must match.</div>
-                    </div>
-        
-                   
-                </div>
+              />
+              <div class="invalid-feedback">Contact No must be 10 digits.</div>
             </div>
-        </div>
-        
+            <!-- PASSWORD (Visible only in Add Mode) -->
+            <div class="col-md-4" *ngIf="!isEditMode">
+              <label for="password" class="form-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                placeholder="Enter Password"
+                formControlName="password"
+                [class.is-valid]="isSubmitted && userForm.get('password')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('password')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">
+                Password must be at least 8 characters with uppercase,
+                lowercase, number, and special character.
+              </div>
+            </div>
 
-        <!-- ================= WORK INFORMATION ================= -->
-        <div class="card mb-4">
-            <div class="card-header bg-secondary text-white">
-                Work Information
+            <!-- RE-ENTER PASSWORD (Visible only in Add Mode) -->
+            <div class="col-md-4" *ngIf="!isEditMode">
+              <label for="confirmPassword" class="form-label"
+                >Re-enter Password</label
+              >
+              <input
+                id="confirmPassword"
+                type="password"
+                class="form-control"
+                placeholder="Re-enter Password"
+                formControlName="confirmPassword"
+                [class.is-valid]="isSubmitted && userForm.get('confirmPassword')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('confirmPassword')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Passwords must match.</div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- DESIGNATION -->
-                    <div class="col-md-4">
-                        <label for="designationId" class="form-label">Designation</label>
-                        <select 
-                            id="designationId" 
-                            class="form-select"
-                            formControlName="designationId"
-                            [class.is-valid]="isSubmitted && userForm.get('designationId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('designationId')?.invalid"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select Designation</option>
-                            <option *ngFor="let des of designations" [value]="des.id">{{ des.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a designation.
-                        </div>
-                    </div>
-            
-                    <!-- DEPARTMENT -->
-                    <div class="col-md-4">
-                        <label for="departmentId" class="form-label">Department</label>
-                        <select 
-                            id="departmentId" 
-                            class="form-select"
-                            formControlName="departmentId"
-                            [class.is-valid]="isSubmitted && userForm.get('departmentId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('departmentId')?.invalid"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select Department</option>
-                            <option *ngFor="let dep of departments" [value]="dep.id">{{ dep.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a department.
-                        </div>
-                    </div>
-            
-                    <!-- ROLE -->
-                    <div class="col-md-4">
-                        <label for="roleId" class="form-label">Role</label>
-                        <select 
-                            id="roleId" 
-                            class="form-select"
-                            formControlName="roleId"
-                            [class.is-valid]="isSubmitted && userForm.get('roleId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('roleId')?.invalid"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select Role</option>
-                            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a role.
-                        </div>
-                    </div>
-            
-                    <!-- EMPLOYEE CODE -->
-                    <div class="col-md-4">
-                        <label for="empCode" class="form-label">Employee Code</label>
-                        <input 
-                            id="empCode"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Employee Code"
-                            formControlName="empCode"
-                            [class.is-valid]="isSubmitted && userForm.get('empCode')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('empCode')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Employee Code is required.
-                        </div>
-                    </div>
+          </div>
+        </div>
+      </div>
 
-                    <div class="col-md-4" *ngIf="isEditMode">
-                        <label for="status" class="form-label">Status</label>
-                        <select 
-                            id="status"
-                            class="form-select"
-                            formControlName="status"
-                            [class.is-valid]="isSubmitted && userForm.get('status')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('status')?.invalid"
-                            required
-                        >
-                        <option value="" selected>Select status</option>
-                        <option  *ngFor="let status of statusList" [value]="status">{{ status }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a status.
-                        </div>
-                    </div>
-                </div>
+      <!-- ================= WORK INFORMATION ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Work Information</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- DESIGNATION -->
+            <div class="col-md-4">
+              <label for="designationId" class="form-label">Designation</label>
+              <select
+                id="designationId"
+                class="form-select"
+                formControlName="designationId"
+                [class.is-valid]="isSubmitted && userForm.get('designationId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('designationId')?.invalid"
+                required
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Designation
+                </option>
+                <option *ngFor="let des of designations" [value]="des.id">
+                  {{ des.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a designation.</div>
             </div>
-            
-        </div>
 
-        <!-- ================= ADDRESS DETAILS ================= -->
-        <div class="card mb-4">
-            <div class="card-header bg-secondary text-white">
-                Address Details
+            <!-- DEPARTMENT -->
+            <div class="col-md-4">
+              <label for="departmentId" class="form-label">Department</label>
+              <select
+                id="departmentId"
+                class="form-select"
+                formControlName="departmentId"
+                [class.is-valid]="isSubmitted && userForm.get('departmentId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('departmentId')?.invalid"
+                required
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Department
+                </option>
+                <option *ngFor="let dep of departments" [value]="dep.id">
+                  {{ dep.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a department.</div>
             </div>
-            <div class="card-body">
-                <div class="row">
-        
-                    <!-- ADDRESS LINE 1 -->
-                    <div class="col-md-4">
-                        <label for="addressLine1" class="form-label">Address Line 1</label>
-                        <input 
-                            id="addressLine1"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Address Line 1"
-                            formControlName="addressLine1"
-                            [class.is-valid]="isSubmitted && userForm.get('addressLine1')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('addressLine1')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Address Line 1 is required.
-                        </div>
-                    </div>
-        
-                    <!-- ADDRESS LINE 2 -->
-                    <div class="col-md-4">
-                        <label for="addressLine2" class="form-label">Address Line 2</label>
-                        <input 
-                            id="addressLine2"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Address Line 2"
-                            formControlName="addressLine2"
-                        />
-                    </div>
-        
-                    <!-- LANDMARK -->
-                    <div class="col-md-4">
-                        <label for="landmark" class="form-label">Landmark</label>
-                        <input 
-                            id="landmark"
-                            type="text" 
-                            class="form-control"
-                            placeholder="Enter Landmark"
-                            formControlName="landmark"
-                            [class.is-valid]="isSubmitted && userForm.get('landmark')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('landmark')?.invalid"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Landmark is required.
-                        </div>
-                    </div>
-        
-                    <!-- COUNTRY -->
-                    <div class="col-md-4">
-                        <label for="countryId" class="form-label">Country</label>
-                        <select 
-                            id="countryId" 
-                            class="form-select"
-                            formControlName="countryId"
-                            [class.is-valid]="isSubmitted && userForm.get('countryId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('countryId')?.invalid"
-                            (change)="onCountryChange()"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select Country</option>
-                            <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a country.
-                        </div>
-                    </div>
-        
-                    <!-- STATE -->
-                    <div class="col-md-4">
-                        <label for="stateId" class="form-label">State</label>
-                        <select 
-                            id="stateId" 
-                            class="form-select"
-                            formControlName="stateId"
-                            [class.is-valid]="isSubmitted && userForm.get('stateId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('stateId')?.invalid"
-                            (change)="onStateChange()"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select State</option>
-                            <option *ngFor="let state of states" [value]="state.id">{{ state.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a state.
-                        </div>
-                    </div>
-        
-                    <!-- CITY -->
-                    <div class="col-md-4">
-                        <label for="cityId" class="form-label">City</label>
-                        <select 
-                            id="cityId"
-                            class="form-select"
-                            formControlName="cityId"
-                            [class.is-valid]="isSubmitted && userForm.get('cityId')?.valid"
-                            [class.is-invalid]="isSubmitted && userForm.get('cityId')?.invalid"
-                            required
-                        >
-                            <option [ngValue]="null" disabled selected>Select City</option>
-                            <option *ngFor="let city of cities" [value]="city.id">{{ city.name }}</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a city.
-                        </div>
-                    </div>
-                </div>
+
+            <!-- ROLE -->
+            <div class="col-md-4">
+              <label for="roleId" class="form-label">Role</label>
+              <select
+                id="roleId"
+                class="form-select"
+                formControlName="roleId"
+                [class.is-valid]="isSubmitted && userForm.get('roleId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('roleId')?.invalid"
+                required
+              >
+                <option [ngValue]="null" disabled selected>Select Role</option>
+                <option *ngFor="let role of roles" [value]="role.id">
+                  {{ role.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a role.</div>
             </div>
+
+            <!-- EMPLOYEE CODE -->
+            <div class="col-md-4">
+              <label for="empCode" class="form-label">Employee Code</label>
+              <input
+                id="empCode"
+                type="text"
+                class="form-control"
+                placeholder="Enter Employee Code"
+                formControlName="empCode"
+                [class.is-valid]="isSubmitted && userForm.get('empCode')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('empCode')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Employee Code is required.</div>
+            </div>
+
+            <div class="col-md-4" *ngIf="isEditMode">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                [class.is-valid]="isSubmitted && userForm.get('status')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('status')?.invalid"
+                required
+              >
+                <option value="" selected>Select status</option>
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a status.</div>
+            </div>
+          </div>
         </div>
-        
-   
-        <!-- ================= ACTION BUTTONS ================= -->
-        <div class="mt-3">
-            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-                {{ isEditMode ? 'Update User' : 'Add User' }}
-            </button>
-            <button type="button" class="btn btn-secondary ms-2" [disabled]="isLoading" (click)="router.navigate(['main/user-management/user-list'])">
-                Cancel
-            </button>
+      </div>
+
+      <!-- ================= ADDRESS DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Address Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- ADDRESS LINE 1 -->
+            <div class="col-md-4">
+              <label for="addressLine1" class="form-label"
+                >Address Line 1</label
+              >
+              <input
+                id="addressLine1"
+                type="text"
+                class="form-control"
+                placeholder="Enter Address Line 1"
+                formControlName="addressLine1"
+                [class.is-valid]="isSubmitted && userForm.get('addressLine1')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('addressLine1')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Address Line 1 is required.</div>
+            </div>
+
+            <!-- ADDRESS LINE 2 -->
+            <div class="col-md-4">
+              <label for="addressLine2" class="form-label"
+                >Address Line 2</label
+              >
+              <input
+                id="addressLine2"
+                type="text"
+                class="form-control"
+                placeholder="Enter Address Line 2"
+                formControlName="addressLine2"
+              />
+            </div>
+
+            <!-- LANDMARK -->
+            <div class="col-md-4">
+              <label for="landmark" class="form-label">Landmark</label>
+              <input
+                id="landmark"
+                type="text"
+                class="form-control"
+                placeholder="Enter Landmark"
+                formControlName="landmark"
+                [class.is-valid]="isSubmitted && userForm.get('landmark')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('landmark')?.invalid"
+                required
+              />
+              <div class="invalid-feedback">Landmark is required.</div>
+            </div>
+
+            <!-- COUNTRY -->
+            <div class="col-md-4">
+              <label for="countryId" class="form-label">Country</label>
+              <select
+                id="countryId"
+                class="form-select"
+                formControlName="countryId"
+                [class.is-valid]="isSubmitted && userForm.get('countryId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('countryId')?.invalid"
+                (change)="onCountryChange()"
+                required
+              >
+                <option [ngValue]="null" disabled selected>
+                  Select Country
+                </option>
+                <option *ngFor="let country of countries" [value]="country.id">
+                  {{ country.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a country.</div>
+            </div>
+
+            <!-- STATE -->
+            <div class="col-md-4">
+              <label for="stateId" class="form-label">State</label>
+              <select
+                id="stateId"
+                class="form-select"
+                formControlName="stateId"
+                [class.is-valid]="isSubmitted && userForm.get('stateId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('stateId')?.invalid"
+                (change)="onStateChange()"
+                required
+              >
+                <option [ngValue]="null" disabled selected>Select State</option>
+                <option *ngFor="let state of states" [value]="state.id">
+                  {{ state.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a state.</div>
+            </div>
+
+            <!-- CITY -->
+            <div class="col-md-4">
+              <label for="cityId" class="form-label">City</label>
+              <select
+                id="cityId"
+                class="form-select"
+                formControlName="cityId"
+                [class.is-valid]="isSubmitted && userForm.get('cityId')?.valid"
+                [class.is-invalid]="isSubmitted && userForm.get('cityId')?.invalid"
+                required
+              >
+                <option [ngValue]="null" disabled selected>Select City</option>
+                <option *ngFor="let city of cities" [value]="city.id">
+                  {{ city.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select a city.</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? 'Update User' : 'Add User' }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="router.navigate(['main/user-management/user-list'])"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
-    </div>
+  </div>
 </div>
