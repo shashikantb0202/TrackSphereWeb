@@ -1,0 +1,114 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">Leave Balances</h3>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Filter by Year -->
+    <div class="col-md-3">
+      <label for="year" class="form-label">📅 Filter by Year</label>
+      <select
+        id="year"
+        class="form-control"
+        [(ngModel)]="selectedYear"
+        (change)="onYearChange()"
+      >
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+
+    <!-- Filter by Employee -->
+    <div class="col-md-3">
+      <label for="user" class="form-label">👤 Filter by Employee</label>
+      <select
+        id="user"
+        class="form-control"
+        [(ngModel)]="selectedUserId"
+        (change)="onUserChange()"
+      >
+        <option [ngValue]="null">All Employees</option>
+        <option *ngFor="let user of userList" [value]="user.id">
+          {{ user.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Leave Type -->
+    <div class="col-md-3">
+      <label for="leaveType" class="form-label">📋 Filter by Leave Type</label>
+      <select
+        id="leaveType"
+        class="form-control"
+        [(ngModel)]="selectedLeaveTypeId"
+        (change)="onLeaveTypeChange()"
+      >
+        <option [ngValue]="null">All Leave Types</option>
+        <option *ngFor="let leaveType of leaveTypeList" [value]="leaveType.id">
+          {{ leaveType.leaveName }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for Leave Balance List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="leaveBalances"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <ngx-datatable-column
+      name="Employee Name"
+      prop="user.name"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Year"
+      prop="year"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Leave Type"
+      prop="leaveType.leaveName"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Total Leaves"
+      prop="totalLeaves"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Used Leaves"
+      prop="usedLeaves"
+      [sortable]="true"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="Remaining Leaves"
+      prop="remainingLeaves"
+      [sortable]="true"
+    ></ngx-datatable-column>
+  </ngx-datatable>
+
+  <!-- No Records Message -->
+  <div
+    *ngIf="!isLoading && leaveBalances.length === 0"
+    class="text-center my-4"
+  >
+    <p class="text-muted">No leave balances found.</p>
+  </div>
+</div>

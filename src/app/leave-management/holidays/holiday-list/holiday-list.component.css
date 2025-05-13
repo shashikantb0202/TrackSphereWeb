@@ -1,0 +1,80 @@
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.gap-3 {
+  gap: 1rem;
+}
+
+.form-select {
+  width: auto;
+  min-width: 120px;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  margin-right: 0.25rem;
+}
+
+.btn-sm:last-child {
+  margin-right: 0;
+}
+
+.table-responsive {
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.ngx-datatable {
+  box-shadow: none !important;
+}
+
+.ngx-datatable .datatable-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.ngx-datatable .datatable-body-row {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.ngx-datatable .datatable-body-row:hover {
+  background-color: #f8f9fa;
+}
+
+.ngx-datatable .datatable-body-cell {
+  padding: 0.75rem;
+}
+
+.ngx-datatable .datatable-header-cell {
+  padding: 0.75rem;
+  font-weight: 600;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-close {
+  filter: brightness(0) invert(1);
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}

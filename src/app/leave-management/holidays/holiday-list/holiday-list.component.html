@@ -1,0 +1,278 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between mb-15">
+    <h3 class="mb-0">Holidays</h3>
+    <div class="d-flex align-items-center gap-3">
+      <select
+        class="form-select"
+        [(ngModel)]="selectedYear"
+        (change)="onYearChange()"
+      >
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+      <button class="btn btn-success" (click)="openHolidayModal()">
+        Add Holiday
+      </button>
+    </div>
+  </div>
+
+  <!-- Loader for List Data -->
+  <div *ngIf="isLoading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="table-responsive shadow-sm">
+    <ngx-datatable
+      class="bootstrap"
+      [rows]="filteredHolidays"
+      [columnMode]="'force'"
+      [headerHeight]="40"
+      [rowHeight]="10"
+      [footerHeight]="40"
+      [rowHeight]="'auto'"
+      [limit]="pageSize"
+      [count]="totalRecords"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      (sort)="onSort($event)"
+      (page)="onPage($event)"
+    >
+      <!-- ID Column -->
+      <ngx-datatable-column
+        name="ID"
+        prop="id"
+        width="70"
+      ></ngx-datatable-column>
+
+      <!-- Name Column -->
+      <ngx-datatable-column
+        name="Name"
+        width="100"
+        [cellTemplate]="NameTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #NameTemplate let-row="row" ngx-datatable-cell>
+        <input
+          *ngIf="editHolidayId === row.id"
+          type="text"
+          required="true"
+          class="form-control"
+          [(ngModel)]="editableHoliday.name"
+        />
+        <span *ngIf="editHolidayId !== row.id">{{ row.name }}</span>
+      </ng-template>
+
+      <!-- Date Column -->
+      <ngx-datatable-column
+        name="Date"
+        width="150"
+        [cellTemplate]="DateTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #DateTemplate let-row="row" ngx-datatable-cell>
+        <input
+          *ngIf="editHolidayId === row.id"
+          type="date"
+          class="form-control"
+          [(ngModel)]="editableHoliday.date"
+        />
+        <span *ngIf="editHolidayId !== row.id">{{
+          row.date | dateFormat : "DEFAULT"
+        }}</span>
+      </ng-template>
+
+      <!-- Description Column -->
+      <ngx-datatable-column
+        name="Description"
+        width="180"
+        [cellTemplate]="DescriptionTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #DescriptionTemplate let-row="row" ngx-datatable-cell>
+        <input
+          *ngIf="editHolidayId === row.id"
+          type="text"
+          class="form-control"
+          [(ngModel)]="editableHoliday.description"
+        />
+        <span *ngIf="editHolidayId !== row.id">{{ row.description }}</span>
+      </ng-template>
+
+      <!-- Created By Column -->
+      <ngx-datatable-column
+        name="Created By"
+        prop="createdBy.name"
+        width="120"
+      ></ngx-datatable-column>
+
+      <!-- Created On Column -->
+      <ngx-datatable-column
+        name="Created On"
+        width="150"
+        [cellTemplate]="createdOnTemplate"
+      >
+      </ngx-datatable-column>
+      <ng-template #createdOnTemplate let-row="row" ngx-datatable-cell>
+        {{ row.createdOn | dateFormat : "DEFAULT" }}
+      </ng-template>
+
+      <!-- Actions Column -->
+      <ngx-datatable-column
+        name="Actions"
+        width="130"
+        [cellTemplate]="actionTemplate"
+      >
+      </ngx-datatable-column>
+
+      <ng-template #actionTemplate let-row="row">
+        <div *ngIf="editHolidayId === row.id">
+          <button
+            class="btn btn-success btn-sm"
+            (click)="saveHoliday()"
+            title="Save Holiday"
+          >
+            <i class="bi bi-check-lg"></i>
+          </button>
+          <button
+            class="btn btn-secondary btn-sm"
+            (click)="cancelEdit()"
+            title="Cancel"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div *ngIf="editHolidayId !== row.id">
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="editHoliday(row)"
+            title="Edit Holiday"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteHoliday(row.id)"
+            title="Delete Holiday"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </ng-template>
+    </ngx-datatable>
+  </div>
+
+  <!-- Add Holiday Modal -->
+  <div
+    class="modal fade"
+    id="holidayModal"
+    tabindex="-1"
+    aria-labelledby="holidayModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="holidayModalLabel">Add New Holiday</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form
+            [formGroup]="holidayForm"
+            (ngSubmit)="saveNewHoliday()"
+            novalidate
+          >
+            <!-- Name Field -->
+            <div class="input-group has-validation mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Holiday Name"
+                formControlName="name"
+                [class.is-valid]="isSubmitted && holidayForm.get('name')?.valid"
+                [class.is-invalid]="
+                  isSubmitted && holidayForm.get('name')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Holiday name is required (minimum 3 characters).
+              </div>
+            </div>
+
+            <!-- Date Field -->
+            <div class="input-group has-validation mb-3">
+              <input
+                type="date"
+                class="form-control"
+                formControlName="date"
+                [class.is-valid]="isSubmitted && holidayForm.get('date')?.valid"
+                [class.is-invalid]="
+                  isSubmitted && holidayForm.get('date')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Date is required.</div>
+            </div>
+
+            <!-- Year Field -->
+            <div class="input-group has-validation mb-3">
+              <select
+                class="form-select"
+                formControlName="year"
+                [class.is-valid]="isSubmitted && holidayForm.get('year')?.valid"
+                [class.is-invalid]="
+                  isSubmitted && holidayForm.get('year')?.invalid
+                "
+                required
+              >
+                <option *ngFor="let year of years" [value]="year">
+                  {{ year }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Year is required.</div>
+            </div>
+
+            <!-- Description Field -->
+            <div class="input-group has-validation mb-3">
+              <textarea
+                class="form-control"
+                placeholder="Enter Description"
+                formControlName="description"
+                [class.is-valid]="
+                  isSubmitted && holidayForm.get('description')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && holidayForm.get('description')?.invalid
+                "
+                required
+              ></textarea>
+              <div class="invalid-feedback">Description is required.</div>
+            </div>
+
+            <!-- Save Button with Loader -->
+            <div class="d-flex justify-content-end">
+              <button
+                type="submit"
+                class="btn btn-success"
+                [disabled]="isSaving"
+              >
+                <span
+                  *ngIf="isSaving"
+                  class="spinner-border spinner-border-sm me-2"
+                ></span>
+                Save Holiday
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

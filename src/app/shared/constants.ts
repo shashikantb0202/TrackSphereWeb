@@ -72,4 +72,13 @@ export const BaseUrl = {
     UserPermissiongroup: '/api/UserPermission/permissiongroup',
     BulkUpdateUserPermissions: '/api/UserPermission/groupupdate',
   },
+  Holiday: {
+    Holiday: '/api/holiday',
+  },
+  LeaveBalance: {
+    LeaveBalance: '/api/leaveBalance',
+  },
+  LeaveType: {
+    LeaveType: '/api/leaveType',
+  },
 };
