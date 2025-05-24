@@ -91,17 +91,29 @@
       name="Total Leaves"
       prop="totalLeaves"
       [sortable]="true"
-    ></ngx-datatable-column>
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span class="text-primary">{{ row.totalLeaves }}</span>
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column
       name="Used Leaves"
       prop="usedLeaves"
       [sortable]="true"
-    ></ngx-datatable-column>
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span class="text-danger">{{ row.usedLeaves }}</span>
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column
       name="Remaining Leaves"
       prop="remainingLeaves"
       [sortable]="true"
-    ></ngx-datatable-column>
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span class="text-success">{{ row.remainingLeaves }}</span>
+      </ng-template>
+    </ngx-datatable-column>
   </ngx-datatable>
 
   <!-- No Records Message -->

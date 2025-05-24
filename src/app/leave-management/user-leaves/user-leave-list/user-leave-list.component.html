@@ -1,0 +1,180 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">User Leaves</h3>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Filter by Year -->
+    <div class="col-md-3">
+      <label for="year" class="form-label">📅 Filter by Year</label>
+      <select
+        id="year"
+        class="form-control"
+        [(ngModel)]="selectedYear"
+        (change)="onYearChange()"
+      >
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+
+    <!-- Filter by Employee -->
+    <div class="col-md-3">
+      <label for="user" class="form-label">👤 Filter by Employee</label>
+      <select
+        id="user"
+        class="form-control"
+        [(ngModel)]="selectedUserId"
+        (change)="onUserChange()"
+      >
+        <option [ngValue]="null">All Employees</option>
+        <option *ngFor="let user of userList" [value]="user.id">
+          {{ user.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Leave Type -->
+    <div class="col-md-3">
+      <label for="leaveType" class="form-label">📋 Filter by Leave Type</label>
+      <select
+        id="leaveType"
+        class="form-control"
+        [(ngModel)]="selectedLeaveTypeId"
+        (change)="onLeaveTypeChange()"
+      >
+        <option [ngValue]="null">All Leave Types</option>
+        <option *ngFor="let leaveType of leaveTypeList" [value]="leaveType.id">
+          {{ leaveType.leaveName }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Status -->
+    <div class="col-md-3">
+      <label for="status" class="form-label">📊 Filter by Status</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="selectedStatus"
+        (change)="onStatusChange()"
+      >
+        <option [ngValue]="null">All Status</option>
+        <option *ngFor="let status of statusOptions" [value]="status">
+          {{ getStatusName(status) }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for User Leave List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="userLeaves"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <!-- Employee Name Column -->
+    <ngx-datatable-column
+      name="Employee Name"
+      prop="user.name"
+      [sortable]="true"
+    >
+    </ngx-datatable-column>
+
+    <!-- Leave Type Column -->
+    <ngx-datatable-column
+      name="Leave Type"
+      prop="leaveType.leaveName"
+      [sortable]="true"
+    >
+    </ngx-datatable-column>
+
+    <!-- Start Date Column -->
+    <ngx-datatable-column name="Start Date" prop="startDate" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.startDate | dateFormat : "SHORT_DATE" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- End Date Column -->
+    <ngx-datatable-column name="End Date" prop="endDate" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.endDate | dateFormat : "SHORT_DATE" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Status Column -->
+    <ngx-datatable-column name="Status" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <ng-container *ngIf="editingRow !== row.id; else editStatus">
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            style="font-size: 10px"
+            [class.bg-success]="row.leaveStatus === LeaveStatus.Approved"
+            [class.bg-danger]="row.leaveStatus === LeaveStatus.Rejected"
+            [class.bg-secondary]="row.leaveStatus === LeaveStatus.Cancelled"
+            [class.bg-warning]="row.leaveStatus === LeaveStatus.Pending"
+          >
+            {{ getStatusName(row.leaveStatus) }}
+          </span>
+        </ng-container>
+        <ng-template #editStatus>
+          <select
+            class="form-control form-control-sm"
+            [(ngModel)]="editedLeave.leaveStatus"
+          >
+            <option [ngValue]="null" disabled selected>Select Status</option>
+            <option *ngFor="let status of statusOptions" [value]="status">
+              {{ getStatusName(status) }}
+            </option>
+          </select>
+        </ng-template>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Reason Column -->
+    <ngx-datatable-column name="Reason" prop="reason" [sortable]="true">
+    </ngx-datatable-column>
+
+    <!-- Actions Column -->
+    <ngx-datatable-column name="Actions" [sortable]="false">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <div class="btn-group">
+          <ng-container *ngIf="editingRow !== row.id; else editActions">
+            <button class="btn btn-sm btn-primary" (click)="startEditing(row)">
+              Edit Status
+            </button>
+          </ng-container>
+          <ng-template #editActions>
+            <button class="btn btn-sm btn-success me-2" (click)="saveEdit(row)">
+              Save
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEditing()">
+              Cancel
+            </button>
+          </ng-template>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+
+  <!-- No Records Message -->
+  <div *ngIf="!isLoading && userLeaves.length === 0" class="text-center my-4">
+    <p class="text-muted">No leave records found.</p>
+  </div>
+</div>

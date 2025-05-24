@@ -78,7 +78,7 @@
           [(ngModel)]="editableHoliday.date"
         />
         <span *ngIf="editHolidayId !== row.id">{{
-          row.date | dateFormat : "DEFAULT"
+          row.date | dateFormat : "SHORT_DATE"
         }}</span>
       </ng-template>
 

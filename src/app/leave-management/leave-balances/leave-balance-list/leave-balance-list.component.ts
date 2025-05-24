@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-leave-balance-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxDatatableModule, DateFormatPipe],
+  imports: [CommonModule, FormsModule, NgxDatatableModule],
   providers: [DatePipe],
   templateUrl: './leave-balance-list.component.html',
   styleUrl: './leave-balance-list.component.css',
@@ -85,7 +85,7 @@ export class LeaveBalanceListComponent implements OnInit {
       userId: this.selectedUserId?.toString() || '',
       leaveTypeId: this.selectedLeaveTypeId?.toString() || '',
       pageSize: this.pageSize.toString(),
-      pageNumber: (this.pageNumber + 1).toString(),
+      page: (this.pageNumber + 1).toString(),
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };

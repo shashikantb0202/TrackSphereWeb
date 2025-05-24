@@ -81,4 +81,7 @@ export const BaseUrl = {
   LeaveType: {
     LeaveType: '/api/leaveType',
   },
+  UserLeave: {
+    UserLeave: '/api/userLeave',
+  },
 };
