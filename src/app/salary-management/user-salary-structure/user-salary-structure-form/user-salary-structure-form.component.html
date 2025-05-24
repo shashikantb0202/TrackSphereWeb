@@ -1,0 +1,199 @@
+<div class="container mb-2">
+  <h4>{{ isEditMode ? "Edit Salary Structure" : "Add Salary Structure" }}</h4>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <form [formGroup]="salaryStructureForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= SALARY STRUCTURE DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+          Salary Structure Details
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- EMPLOYEE -->
+            <div class="col-md-4">
+              <label for="userId" class="form-label">Employee</label>
+              <select
+                id="userId"
+                class="form-select"
+                formControlName="userId"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('userId')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('userId')?.invalid
+                "
+                required
+              >
+                <option [ngValue]="''" disabled selected>
+                  Select Employee
+                </option>
+                <option *ngFor="let user of users" [value]="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select an employee.</div>
+            </div>
+
+            <!-- EFFECTIVE FROM -->
+            <div class="col-md-4">
+              <label for="effectiveFrom" class="form-label"
+                >Effective From</label
+              >
+              <input
+                id="effectiveFrom"
+                type="date"
+                class="form-control"
+                formControlName="effectiveFrom"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('effectiveFrom')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted &&
+                  salaryStructureForm.get('effectiveFrom')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">Effective date is required.</div>
+            </div>
+
+            <!-- BASIC SALARY -->
+            <div class="col-md-4">
+              <label for="basicSalary" class="form-label">Basic Salary</label>
+              <input
+                id="basicSalary"
+                type="number"
+                class="form-control"
+                placeholder="Enter Basic Salary"
+                formControlName="basicSalary"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('basicSalary')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('basicSalary')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Basic salary is required and must be greater than 0.
+              </div>
+            </div>
+
+            <!-- HRA -->
+            <div class="col-md-4">
+              <label for="hra" class="form-label">HRA</label>
+              <input
+                id="hra"
+                type="number"
+                class="form-control"
+                placeholder="Enter HRA"
+                formControlName="hra"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('hra')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('hra')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                HRA is required and must be greater than or equal to 0.
+              </div>
+            </div>
+
+            <!-- ALLOWANCES -->
+            <div class="col-md-4">
+              <label for="allowances" class="form-label">Allowances</label>
+              <input
+                id="allowances"
+                type="number"
+                class="form-control"
+                placeholder="Enter Allowances"
+                formControlName="allowances"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('allowances')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('allowances')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Allowances is required and must be greater than or equal to 0.
+              </div>
+            </div>
+
+            <!-- DEDUCTIONS -->
+            <div class="col-md-4">
+              <label for="deductions" class="form-label">Deductions</label>
+              <input
+                id="deductions"
+                type="number"
+                class="form-control"
+                placeholder="Enter Deductions"
+                formControlName="deductions"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('deductions')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('deductions')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                Deductions is required and must be greater than or equal to 0.
+              </div>
+            </div>
+
+            <!-- NET SALARY (Read-only) -->
+            <div class="col-md-4">
+              <label for="netSalary" class="form-label">Net Salary</label>
+              <input
+                id="netSalary"
+                type="number"
+                class="form-control"
+                formControlName="netSalary"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('netSalary')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('netSalary')?.invalid
+                "
+                [attr.disabled]="true"
+                readonly
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="salaryStructureForm.get('netSalary')?.errors?.['min']"
+              >
+                Net salary cannot be negative.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isEditMode ? "Update Salary Structure" : "Add Salary Structure" }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="isLoading"
+          (click)="navigateToList()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

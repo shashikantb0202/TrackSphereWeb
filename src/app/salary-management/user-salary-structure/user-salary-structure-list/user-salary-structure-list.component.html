@@ -1,0 +1,141 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
+    <h3 class="mb-0">Salary Structures</h3>
+    <button class="btn btn-success" (click)="navigateToAddSalaryStructure()">
+      Add Salary Structure
+    </button>
+  </div>
+
+  <div class="row mb-4 mt-2">
+    <!-- Filter by Employee -->
+    <div class="col-md-3">
+      <label for="user" class="form-label">👤 Filter by Employee</label>
+      <select
+        id="user"
+        class="form-control"
+        [(ngModel)]="selectedUserId"
+        (change)="onUserChange()"
+      >
+        <option [ngValue]="null">All Employees</option>
+        <option *ngFor="let user of userList" [value]="user.id">
+          {{ user.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Ngx-Datatable for Salary Structure List -->
+  <ngx-datatable
+    class="bootstrap"
+    [rows]="salaryStructures"
+    [columnMode]="'force'"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    [rowHeight]="'auto'"
+    [limit]="pageSize"
+    [count]="totalRecords"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    (page)="onPage($event)"
+  >
+    <!-- Employee Name Column -->
+    <ngx-datatable-column
+      name="Employee Name"
+      prop="user.name"
+      [sortable]="true"
+    >
+    </ngx-datatable-column>
+
+    <!-- Basic Salary Column -->
+    <ngx-datatable-column
+      name="Basic Salary"
+      prop="basicSalary"
+      [sortable]="true"
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.basicSalary | currency : "INR" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- HRA Column -->
+    <ngx-datatable-column name="HRA" prop="hra" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.hra | currency : "INR" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Allowances Column -->
+    <ngx-datatable-column name="Allowances" prop="allowances" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.allowances | currency : "INR" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Deductions Column -->
+    <ngx-datatable-column name="Deductions" prop="deductions" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.deductions | currency : "INR" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Net Salary Column -->
+    <ngx-datatable-column name="Net Salary" prop="netSalary" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.netSalary | currency : "INR" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Effective From Column -->
+    <ngx-datatable-column
+      name="Effective From"
+      prop="effectiveFrom"
+      [sortable]="true"
+    >
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.effectiveFrom | dateFormat : "SHORT_DATE" }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Actions Column -->
+    <ngx-datatable-column
+      name="Actions"
+      width="150"
+      [sortable]="false"
+      [cellTemplate]="actionTemplate"
+    >
+    </ngx-datatable-column>
+
+    <ng-template #actionTemplate let-row="row">
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-primary btn-sm"
+          [routerLink]="[
+            '/main/salary-management/salary-structures/edit',
+            row.id
+          ]"
+          title="Edit Salary Structure"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          [routerLink]="[
+            '/main/salary-management/salary-structures/view',
+            row.id
+          ]"
+          title="View Salary Structure"
+        >
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable>
+</div>

@@ -84,4 +84,8 @@ export const BaseUrl = {
   UserLeave: {
     UserLeave: '/api/userLeave',
   },
+  Salary: {
+    SalaryStructure: '/api/salary/structures',
+    MonthlySalary: '/api/salary/monthly',
+  },
 };

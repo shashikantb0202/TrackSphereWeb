@@ -9,6 +9,7 @@ import { customerRoutes } from '../customer/customer.routes';
 import { orderRoutes } from '../order/order.route';
 import { locationTrackerRoutes } from '../location-tracker/location-tracker.routes';
 import { leaveManagementRoutes } from '../leave-management/leave-management.routes';
+import { salaryManagementRoutes } from '../salary-management/salary-management.routes';
 
 export const mainRoutes: Routes = [
   {
@@ -23,6 +24,7 @@ export const mainRoutes: Routes = [
       ...orderRoutes,
       ...locationTrackerRoutes,
       ...leaveManagementRoutes,
+      ...salaryManagementRoutes,
       { path: 'unauthorized', component: UnauthorizedComponent },
     ],
   },
