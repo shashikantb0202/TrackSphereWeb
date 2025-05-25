@@ -3,6 +3,9 @@ import { UserSalaryStructureListComponent } from './user-salary-structure/user-s
 import { UserSalaryStructureFormComponent } from './user-salary-structure/user-salary-structure-form/user-salary-structure-form.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { ViewSalaryStructureComponent } from './user-salary-structure/view-salary-structure/view-salary-structure.component';
+import { UserMonthlySalaryListComponent } from './user-monthly-salary/user-monthly-salary-list/user-monthly-salary-list.component';
+import { UserMonthlySalaryFormComponent } from './user-monthly-salary/user-monthly-salary-form/user-monthly-salary-form.component';
+import { UserMonthlySalaryViewComponent } from './user-monthly-salary/user-monthly-salary-view/user-monthly-salary-view.component';
 
 export const salaryManagementRoutes: Routes = [
   {
@@ -43,12 +46,60 @@ export const salaryManagementRoutes: Routes = [
   },
   {
     path: 'salary-management/salary-structures/view/:id',
-    component: ViewSalaryStructureComponent, // TODO: Replace with MonthlySalaryListComponent
+    component: ViewSalaryStructureComponent,
     canActivate: [AuthGuard],
     data: {
       requiredPermission: {
         module: 'Salary',
         subModule: 'SalaryStructures',
+        permission: 'View',
+      },
+    },
+  },
+  {
+    path: 'salary-management/monthly-salaries',
+    component: UserMonthlySalaryListComponent,
+    canActivate: [AuthGuard],
+    data: {
+      requiredPermission: {
+        module: 'Salary',
+        subModule: 'MonthlySalaries',
+        permission: 'View',
+      },
+    },
+  },
+  {
+    path: 'salary-management/monthly-salaries/add',
+    component: UserMonthlySalaryFormComponent,
+    canActivate: [AuthGuard],
+    data: {
+      requiredPermission: {
+        module: 'Salary',
+        subModule: 'MonthlySalaries',
+        permission: 'Add',
+      },
+    },
+  },
+  {
+    path: 'salary-management/monthly-salaries/edit/:id',
+    component: UserMonthlySalaryFormComponent,
+    canActivate: [AuthGuard],
+    data: {
+      requiredPermission: {
+        module: 'Salary',
+        subModule: 'MonthlySalaries',
+        permission: 'Update',
+      },
+    },
+  },
+  {
+    path: 'salary-management/monthly-salaries/view/:id',
+    component: UserMonthlySalaryViewComponent,
+    canActivate: [AuthGuard],
+    data: {
+      requiredPermission: {
+        module: 'Salary',
+        subModule: 'MonthlySalaries',
         permission: 'View',
       },
     },

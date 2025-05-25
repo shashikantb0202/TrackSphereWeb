@@ -1,8 +1,8 @@
 <div>
   <div class="d-flex align-items-center justify-content-between gap-2 mb-15">
-    <h3 class="mb-0">Salary Structures</h3>
-    <button class="btn btn-success" (click)="navigateToAddSalaryStructure()">
-      Add Salary Structure
+    <h3 class="mb-0">Monthly Salaries</h3>
+    <button class="btn btn-success" (click)="navigateToAddMonthlySalary()">
+      Add Monthly Salary
     </button>
   </div>
 
@@ -22,6 +22,53 @@
         </option>
       </select>
     </div>
+
+    <!-- Filter by Year -->
+    <div class="col-md-2">
+      <label for="year" class="form-label">📅 Year</label>
+      <select
+        id="year"
+        class="form-control"
+        [(ngModel)]="selectedYear"
+        (change)="onYearChange()"
+      >
+        <option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Month -->
+    <div class="col-md-2">
+      <label for="month" class="form-label">📅 Month</label>
+      <select
+        id="month"
+        class="form-control"
+        [(ngModel)]="selectedMonth"
+        (change)="onMonthChange()"
+      >
+        <option [ngValue]="0">All Month</option>
+        <option *ngFor="let month of months" [value]="month.value">
+          {{ month.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Filter by Status -->
+    <div class="col-md-2">
+      <label for="status" class="form-label">📊 Status</label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="selectedStatus"
+        (change)="onStatusChange()"
+      >
+        <option [ngValue]="null">All Status</option>
+        <option *ngFor="let status of salaryStatuses" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
   </div>
 
   <!-- Loading Spinner -->
@@ -31,10 +78,10 @@
     </div>
   </div>
 
-  <!-- Ngx-Datatable for Salary Structure List -->
+  <!-- Ngx-Datatable for Monthly Salary List -->
   <ngx-datatable
     class="bootstrap"
-    [rows]="salaryStructures"
+    [rows]="monthlySalaries"
     [columnMode]="'force'"
     [headerHeight]="40"
     [footerHeight]="40"
@@ -52,6 +99,13 @@
       prop="user.name"
       [sortable]="true"
     >
+    </ngx-datatable-column>
+
+    <!-- Month Column -->
+    <ngx-datatable-column name="Month" prop="salaryMonth" [sortable]="true">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.year }}/{{ row.salaryMonth }}
+      </ng-template>
     </ngx-datatable-column>
 
     <!-- Basic Salary Column -->
@@ -80,34 +134,40 @@
     </ngx-datatable-column>
 
     <!-- Deductions Column -->
-    <ngx-datatable-column name="Deductions" prop="deductions" [sortable]="true">
+    <ngx-datatable-column
+      name="totalDeductions"
+      prop="totalDeductions"
+      [sortable]="true"
+    >
       <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.deductions | currency : "INR" }}
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- PF Percent Column -->
-    <ngx-datatable-column name="PF Percent" prop="pfPercent" [sortable]="true">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.pfPercent }}%
+        {{ row.totalDeductions | currency : "INR" }}
       </ng-template>
     </ngx-datatable-column>
 
     <!-- Net Salary Column -->
     <ngx-datatable-column name="Net Salary" prop="netSalary" [sortable]="true">
       <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.netSalary | currency : "INR" }}
+        <b> {{ row.netSalary | currency : "INR" }}</b>
       </ng-template>
     </ngx-datatable-column>
 
-    <!-- Effective From Column -->
+    <!-- Status Column -->
     <ngx-datatable-column
-      name="Effective From"
-      prop="effectiveFrom"
+      name="salaryStatus"
+      prop="salaryStatus"
       [sortable]="true"
     >
       <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.effectiveFrom | dateFormat : "SHORT_DATE" }}
+        <span
+          class="badge"
+          [class.bg-success]="row.salaryStatus === 'Paid'"
+          [class.bg-warning]="row.salaryStatus === 'Pending'"
+          [class.bg-info]="row.salaryStatus === 'Processing'"
+          [class.bg-danger]="row.salaryStatus === 'Failed'"
+          [class.bg-secondary]="row.salaryStatus === 'Cancelled'"
+        >
+          {{ row.salaryStatus }}
+        </span>
       </ng-template>
     </ngx-datatable-column>
 
@@ -125,20 +185,20 @@
         <button
           class="btn btn-primary btn-sm"
           [routerLink]="[
-            '/main/salary-management/salary-structures/edit',
+            '/main/salary-management/monthly-salaries/edit',
             row.id
           ]"
-          title="Edit Salary Structure"
+          title="Edit Monthly Salary"
         >
           <i class="bi bi-pencil-square"></i>
         </button>
         <button
           class="btn btn-info btn-sm"
           [routerLink]="[
-            '/main/salary-management/salary-structures/view',
+            '/main/salary-management/monthly-salaries/view',
             row.id
           ]"
-          title="View Salary Structure"
+          title="View Monthly Salary"
         >
           <i class="bi bi-eye"></i>
         </button>

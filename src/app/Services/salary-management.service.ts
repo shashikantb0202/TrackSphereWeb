@@ -5,6 +5,8 @@ import { BaseUrl } from '../shared/constants';
 import { ApiFilterResponse } from '../Models/base.entity.model';
 import { SalaryStructure } from '../Models/salary-structure.model';
 import { MonthlySalary } from '../Models/monthly-salary.model';
+import { ApiResponse } from '../Models/api-response.model';
+import { SalaryStructureResponse } from '../Models/salary-structure-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +48,16 @@ export class SalaryManagementService {
     );
   }
 
+  updateMonthlySalary(
+    id: number,
+    monthlySalary: Partial<MonthlySalary>
+  ): Observable<{ data: MonthlySalary }> {
+    return this.http.put<{ data: MonthlySalary }>(
+      `${BaseUrl.Salary.MonthlySalary}/${id}`,
+      monthlySalary
+    );
+  }
+
   getAllMonthlySalariesWithFilter(
     params: any
   ): Observable<{ response: ApiFilterResponse<MonthlySalary> }> {
@@ -55,10 +67,8 @@ export class SalaryManagementService {
     );
   }
 
-  getMonthlySalaryById(
-    id: number
-  ): Observable<{ response: ApiFilterResponse<MonthlySalary> }> {
-    return this.http.get<{ response: ApiFilterResponse<MonthlySalary> }>(
+  getMonthlySalaryById(id: number): Observable<{ data: MonthlySalary }> {
+    return this.http.get<{ data: MonthlySalary }>(
       `${BaseUrl.Salary.MonthlySalary}/${id}`
     );
   }
@@ -78,6 +88,14 @@ export class SalaryManagementService {
     return this.http.put<{ response: ApiFilterResponse<MonthlySalary> }>(
       `${BaseUrl.Salary.MonthlySalary}/ProcessPayment/${id}`,
       {}
+    );
+  }
+
+  getSalaryStructureByUserId(
+    userId: number
+  ): Observable<{ data: SalaryStructureResponse }> {
+    return this.http.get<{ data: SalaryStructureResponse }>(
+      `${BaseUrl.Salary.SalaryStructure}/user/${userId}`
     );
   }
 }

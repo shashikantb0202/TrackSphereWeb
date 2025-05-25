@@ -1,0 +1,390 @@
+<div class="container mb-2">
+  <h4>{{ isEditMode ? "Edit Monthly Salary" : "Add Monthly Salary" }}</h4>
+
+  <!-- Loader -->
+  <div *ngIf="loading" class="loader-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading">
+    <form [formGroup]="monthlySalaryForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ================= MONTHLY SALARY DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+          Monthly Salary Details
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- EMPLOYEE -->
+            <div class="col-md-4">
+              <label for="userId" class="form-label">Employee</label>
+              <select
+                id="userId"
+                class="form-select"
+                formControlName="userId"
+                [class.is-valid]="monthlySalaryForm.get('userId')?.valid"
+                [class.is-invalid]="monthlySalaryForm.get('userId')?.invalid"
+                [disabled]="isEditMode"
+                required
+              >
+                <option [ngValue]="''" disabled selected>
+                  Select Employee
+                </option>
+                <option *ngFor="let user of users" [value]="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Please select an employee.</div>
+            </div>
+
+            <!-- YEAR -->
+            <div class="col-md-4">
+              <label for="year" class="form-label">Year</label>
+              <select
+                id="year"
+                class="form-select"
+                formControlName="year"
+                [class.is-valid]="monthlySalaryForm.get('year')?.valid"
+                [class.is-invalid]="monthlySalaryForm.get('year')?.invalid"
+                required
+              >
+                <option *ngFor="let year of years" [value]="year">
+                  {{ year }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Year is required.</div>
+            </div>
+
+            <!-- MONTH -->
+            <div class="col-md-4">
+              <label for="salaryMonth" class="form-label">Month</label>
+              <select
+                id="salaryMonth"
+                class="form-select"
+                formControlName="salaryMonth"
+                [class.is-valid]="monthlySalaryForm.get('salaryMonth')?.valid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('salaryMonth')?.invalid
+                "
+                required
+              >
+                <option *ngFor="let month of months" [value]="month">
+                  {{ Month[month] }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Month is required.</div>
+            </div>
+
+            <!-- BASIC SALARY -->
+            <div class="col-md-4">
+              <label for="basicSalary" class="form-label">Basic Salary</label>
+              <input
+                id="basicSalary"
+                type="number"
+                class="form-control"
+                placeholder="Enter Basic Salary"
+                formControlName="basicSalary"
+                [class.is-valid]="monthlySalaryForm.get('basicSalary')?.valid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('basicSalary')?.invalid
+                "
+                min="0"
+                step="0.01"
+                required
+              />
+              <div class="invalid-feedback">
+                Basic salary is required and must be greater than 0.
+              </div>
+            </div>
+
+            <!-- HRA -->
+            <div class="col-md-4">
+              <label for="hra" class="form-label">HRA</label>
+              <input
+                id="hra"
+                type="number"
+                class="form-control"
+                placeholder="Enter HRA"
+                formControlName="hra"
+                [class.is-valid]="monthlySalaryForm.get('hra')?.valid"
+                [class.is-invalid]="monthlySalaryForm.get('hra')?.invalid"
+                min="0"
+                step="0.01"
+                required
+              />
+              <div class="invalid-feedback">
+                HRA is required and must be greater than or equal to 0.
+              </div>
+            </div>
+
+            <!-- ALLOWANCES -->
+            <div class="col-md-4">
+              <label for="allowances" class="form-label">Allowances</label>
+              <input
+                id="allowances"
+                type="number"
+                class="form-control"
+                placeholder="Enter Allowances"
+                formControlName="allowances"
+                [class.is-valid]="monthlySalaryForm.get('allowances')?.valid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('allowances')?.invalid
+                "
+                min="0"
+                step="0.01"
+                required
+              />
+              <div class="invalid-feedback">
+                Allowances is required and must be greater than or equal to 0.
+              </div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-4">
+              <label for="status" class="form-label">Status</label>
+              <select
+                id="status"
+                class="form-select"
+                formControlName="status"
+                [class.is-valid]="monthlySalaryForm.get('status')?.valid"
+                [class.is-invalid]="monthlySalaryForm.get('status')?.invalid"
+                required
+              >
+                <option *ngFor="let status of salaryStatuses" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Status is required.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= DEDUCTIONS ================= -->
+      <div class="card mb-4">
+        <div
+          class="card-header bg-secondary text-white d-flex justify-content-between align-items-center"
+        >
+          <span>Deductions</span>
+          <button
+            type="button"
+            class="btn btn-light btn-sm"
+            (click)="addDeduction()"
+          >
+            Add Deduction
+          </button>
+        </div>
+        <div class="card-body">
+          <div formArrayName="deductions">
+            <div
+              *ngFor="let deduction of deductionsArray.controls; let i = index"
+              [formGroupName]="i"
+              class="row mb-3"
+            >
+              <div class="col-md-3">
+                <label [for]="'deductionType' + i" class="form-label"
+                  >Deduction Type</label
+                >
+                <select
+                  [id]="'deductionType' + i"
+                  class="form-select"
+                  formControlName="deductionType"
+                  [class.is-valid]="deduction.get('deductionType')?.valid"
+                  [class.is-invalid]="deduction.get('deductionType')?.invalid"
+                  required
+                >
+                  <option value="">Select Type</option>
+                  <option *ngFor="let type of deductionTypes" [value]="type">
+                    {{ DeductionType[type] }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">Deduction type is required.</div>
+              </div>
+
+              <div class="col-md-3">
+                <label [for]="'amount' + i" class="form-label">Amount</label>
+                <input
+                  [id]="'amount' + i"
+                  type="number"
+                  class="form-control"
+                  placeholder="Enter Amount"
+                  formControlName="amount"
+                  [class.is-valid]="deduction.get('amount')?.valid"
+                  [class.is-invalid]="deduction.get('amount')?.invalid"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Amount is required and must be greater than or equal to 0.
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label [for]="'description' + i" class="form-label"
+                  >Description</label
+                >
+                <input
+                  [id]="'description' + i"
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Description"
+                  formControlName="description"
+                />
+              </div>
+
+              <div class="col-md-2 d-flex align-items-end">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="removeDeduction(i)"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Deductions -->
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <label for="totalDeductions" class="form-label"
+                >Total Deductions</label
+              >
+              <input
+                id="totalDeductions"
+                type="number"
+                class="form-control"
+                formControlName="totalDeductions"
+                readonly
+              />
+            </div>
+
+            <!-- Net Salary -->
+            <div class="col-md-4">
+              <label for="netSalary" class="form-label">Net Salary</label>
+              <input
+                id="netSalary"
+                type="number"
+                class="form-control"
+                formControlName="netSalary"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAYMENT DETAILS ================= -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Payment Details</div>
+        <div class="card-body">
+          <div class="row">
+            <!-- PAYMENT METHOD -->
+            <div class="col-md-4">
+              <label for="paymentMethod" class="form-label"
+                >Payment Method</label
+              >
+              <select
+                id="paymentMethod"
+                class="form-select"
+                formControlName="paymentMethod"
+              >
+                <option [ngValue]="null">Select Payment Method</option>
+                <option *ngFor="let method of paymentMethods" [value]="method">
+                  {{ method }}
+                </option>
+              </select>
+            </div>
+
+            <!-- PAYMENT DATE -->
+            <div class="col-md-4">
+              <label for="paymentDate" class="form-label">Payment Date</label>
+              <input
+                id="paymentDate"
+                type="date"
+                class="form-control"
+                formControlName="paymentDate"
+              />
+            </div>
+
+            <!-- TRANSACTION REFERENCE -->
+            <div class="col-md-4">
+              <label for="transactionReference" class="form-label"
+                >Transaction Reference</label
+              >
+              <input
+                id="transactionReference"
+                type="text"
+                class="form-control"
+                placeholder="Enter Transaction Reference"
+                formControlName="transactionReference"
+              />
+            </div>
+
+            <!-- PAYMENT REMARKS -->
+            <div class="col-md-4">
+              <label for="paymentRemarks" class="form-label"
+                >Payment Remarks</label
+              >
+              <textarea
+                id="paymentRemarks"
+                class="form-control"
+                placeholder="Enter Payment Remarks"
+                formControlName="paymentRemarks"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <!-- CHEQUE NUMBER -->
+            <div class="col-md-4">
+              <label for="chequeNumber" class="form-label">Cheque Number</label>
+              <input
+                id="chequeNumber"
+                type="text"
+                class="form-control"
+                placeholder="Enter Cheque Number"
+                formControlName="chequeNumber"
+              />
+            </div>
+
+            <!-- UPI REFERENCE -->
+            <div class="col-md-4">
+              <label for="upiReference" class="form-label">UPI Reference</label>
+              <input
+                id="upiReference"
+                type="text"
+                class="form-control"
+                placeholder="Enter UPI Reference"
+                formControlName="upiReference"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTION BUTTONS ================= -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          {{
+            submitting
+              ? "Saving..."
+              : isEditMode
+              ? "Update Monthly Salary"
+              : "Add Monthly Salary"
+          }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          [disabled]="submitting"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

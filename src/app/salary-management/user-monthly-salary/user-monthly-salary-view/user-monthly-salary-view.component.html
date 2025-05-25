@@ -1,0 +1,163 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">
+      Monthly Salary Details
+    </div>
+
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && monthlySalary" class="card-body">
+      <!-- Basic Information Section -->
+      <div class="section mb-4">
+        <h5 class="section-title mb-3">Basic Information</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <strong>Employee Name:</strong>
+            {{ monthlySalary.user.name }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Period:</strong>
+            {{ monthlySalary.year }}/{{ monthlySalary.salaryMonth }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Status:</strong>
+            <span
+              class="badge p-0 px-2 py-1 fs-7 small-badge"
+              [class]="getStatusBadgeClass(monthlySalary.salaryStatus)"
+            >
+              {{ monthlySalary.salaryStatus }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Salary Components Section -->
+      <div class="section mb-4">
+        <h5 class="section-title mb-3">Salary Components</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <strong>Basic Salary:</strong>
+            {{ monthlySalary.basicSalary | currency : "INR" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>HRA:</strong>
+            {{ monthlySalary.hra | currency : "INR" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Allowances:</strong>
+            {{ monthlySalary.allowances | currency : "INR" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Total Deductions:</strong>
+            {{ monthlySalary.totalDeductions | currency : "INR" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Net Salary:</strong>
+            {{ monthlySalary.netSalary | currency : "INR" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Information Section -->
+      <div class="section mb-4">
+        <h5 class="section-title mb-3">Payment Information</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <strong>Payment Method:</strong>
+            {{ monthlySalary.paymentMethod || "Not specified" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Payment Date:</strong>
+            {{
+              monthlySalary.paymentDate
+                ? (monthlySalary.paymentDate | date : "dd-MMM-yyyy HH:mm:ss")
+                : "Not paid"
+            }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Transaction Reference:</strong>
+            {{ monthlySalary.transactionReference || "Not available" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Payment Remarks:</strong>
+            {{ monthlySalary.paymentRemarks || "No remarks" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Cheque Number:</strong>
+            {{ monthlySalary.chequeNumber || "Not applicable" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>UPI Reference:</strong>
+            {{ monthlySalary.upiReference || "Not applicable" }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Deductions Section -->
+      <div
+        class="section mb-4"
+        *ngIf="monthlySalary.deductions && monthlySalary.deductions.length > 0"
+      >
+        <h5 class="section-title mb-3">Deductions</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let deduction of monthlySalary.deductions">
+                <td>{{ deduction.deductionType }}</td>
+                <td>{{ deduction.amount | currency : "INR" }}</td>
+                <td>{{ deduction.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Audit Information Section -->
+      <div class="section">
+        <h5 class="section-title mb-3">Audit Information</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <strong>Created By:</strong>
+            {{ monthlySalary.createdBy?.name || "N/A" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Created On:</strong>
+            {{ monthlySalary.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Updated By:</strong>
+            {{ monthlySalary.updatedBy?.name || "N/A" }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <strong>Updated On:</strong>
+            {{ monthlySalary.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button
+        class="btn btn-primary"
+        (click)="navigateToEdit()"
+        *ngIf="monthlySalary"
+      >
+        Edit Salary
+      </button>
+      <button class="btn btn-secondary ms-2" (click)="navigateBack()">
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

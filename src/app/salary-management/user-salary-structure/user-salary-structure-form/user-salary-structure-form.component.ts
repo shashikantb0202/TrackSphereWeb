@@ -32,6 +32,7 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   users: UserBasicInfo[] = [];
   salaryStructureId: number | null = null;
+  pfAmount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -43,22 +44,23 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
   ) {
     this.salaryStructureForm = this.fb.group({
       userId: ['', Validators.required],
-      basicSalary: ['', [Validators.required, Validators.min(0)]],
-      hra: ['', [Validators.required, Validators.min(0)]],
-      allowances: ['', [Validators.required, Validators.min(0)]],
-      deductions: ['', [Validators.required, Validators.min(0)]],
-      effectiveFrom: ['', Validators.required],
-      netSalary: [0, [Validators.required, Validators.min(1)]],
+      basicSalary: [0, [Validators.required, Validators.min(0)]],
+      hra: [0, [Validators.required, Validators.min(0)]],
+      allowances: [0, [Validators.required, Validators.min(0)]],
+      pfPercent: [
+        0,
+        [Validators.required, Validators.min(0), Validators.max(100)],
+      ],
+      deductions: [0, [Validators.required, Validators.min(0)]],
+      netSalary: [0, [Validators.required, Validators.min(0)]],
+      effectiveFrom: [new Date(), Validators.required],
     });
 
     // Subscribe to value changes to update net salary
     this.salaryStructureForm.valueChanges
       .pipe(takeUntil(this.destroy$), debounceTime(100), distinctUntilChanged())
       .subscribe(() => {
-        const netSalary = this.calculateNetSalary();
-        this.salaryStructureForm
-          .get('netSalary')
-          ?.setValue(netSalary, { emitEvent: false });
+        this.updateCalculations();
       });
   }
 
@@ -110,6 +112,7 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
             basicSalary: salaryStructure.basicSalary,
             hra: salaryStructure.hra,
             allowances: salaryStructure.allowances,
+            pfPercent: salaryStructure.pfPercent,
             deductions: salaryStructure.deductions,
             effectiveFrom: formattedDate,
           });
@@ -123,12 +126,24 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  calculateNetSalary(): number {
+  calculatePFAmount(): number {
+    const basicSalary = this.salaryStructureForm.get('basicSalary')?.value || 0;
+    const pfPercent = this.salaryStructureForm.get('pfPercent')?.value || 0;
+    return (basicSalary * pfPercent) / 100;
+  }
+
+  updateCalculations(): void {
     const basicSalary = this.salaryStructureForm.get('basicSalary')?.value || 0;
     const hra = this.salaryStructureForm.get('hra')?.value || 0;
     const allowances = this.salaryStructureForm.get('allowances')?.value || 0;
     const deductions = this.salaryStructureForm.get('deductions')?.value || 0;
-    const netSalary = basicSalary + hra + allowances - deductions;
+
+    // Calculate PF amount
+    this.pfAmount = this.calculatePFAmount();
+
+    // Calculate net salary including PF deduction
+    const netSalary =
+      basicSalary + hra + allowances - deductions - this.pfAmount;
 
     // Update form validation
     if (netSalary < 0) {
@@ -137,7 +152,10 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
       this.salaryStructureForm.get('netSalary')?.setErrors(null);
     }
 
-    return netSalary;
+    // Update net salary in form
+    this.salaryStructureForm
+      .get('netSalary')
+      ?.setValue(netSalary, { emitEvent: false });
   }
 
   onSubmit(): void {
@@ -148,12 +166,12 @@ export class UserSalaryStructureFormComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const formData = {
       ...this.salaryStructureForm.getRawValue(),
-      netSalary: this.calculateNetSalary(),
+      netSalary: this.salaryStructureForm.get('netSalary')?.value,
     };
 
     if (this.isEditMode) {
       const updatedData = getDirtyValues(this.salaryStructureForm);
-      updatedData.netSalary = this.calculateNetSalary();
+      updatedData.netSalary = this.salaryStructureForm.get('netSalary')?.value;
 
       if (Object.keys(updatedData).length === 0) {
         this.isLoading = false;

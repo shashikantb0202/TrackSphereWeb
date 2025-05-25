@@ -10,6 +10,7 @@ export interface SalaryStructure extends BaseEntity {
   hra: number;
   allowances: number;
   deductions: number;
+  pfPercent: number;
   netSalary: number;
   effectiveFrom: Date;
   isDeleted: boolean;

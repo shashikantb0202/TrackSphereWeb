@@ -87,5 +87,6 @@ export const BaseUrl = {
   Salary: {
     SalaryStructure: '/api/salary/structures',
     MonthlySalary: '/api/salary/monthly',
+    MonthlySalaryById: '/api/salary/monthly/{id}',
   },
 };

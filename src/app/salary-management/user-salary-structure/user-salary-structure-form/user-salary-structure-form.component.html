@@ -130,6 +130,31 @@
               </div>
             </div>
 
+            <!-- PF PERCENT -->
+            <div class="col-md-4">
+              <label for="pfPercent" class="form-label">PF Percent</label>
+              <input
+                id="pfPercent"
+                type="number"
+                class="form-control"
+                placeholder="Enter PF Percent"
+                formControlName="pfPercent"
+                [class.is-valid]="
+                  isSubmitted && salaryStructureForm.get('pfPercent')?.valid
+                "
+                [class.is-invalid]="
+                  isSubmitted && salaryStructureForm.get('pfPercent')?.invalid
+                "
+                required
+              />
+              <div class="invalid-feedback">
+                PF Percent is required and must be between 0 and 100.
+              </div>
+              <small class="text-muted" *ngIf="pfAmount > 0">
+                PF Amount: {{ pfAmount | currency : "INR" }}
+              </small>
+            </div>
+
             <!-- DEDUCTIONS -->
             <div class="col-md-4">
               <label for="deductions" class="form-label">Deductions</label>

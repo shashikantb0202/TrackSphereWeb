@@ -38,7 +38,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
   filteredUsers: User[] = [];
 
   userList: User[] = [];
-  selectedDate: string = new Date().toISOString().split('T')[0];
+  selectedDate: string = this.getCurrentISTDate();
   searchTerm: string = '';
   map: any = null;
   markers: any[] = [];
@@ -462,5 +462,13 @@ export class ViewLocationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filteredUsers = this.userList.filter((user) =>
       user.name.toLowerCase().includes(searchLower)
     );
+  }
+
+  private getCurrentISTDate(): string {
+    debugger;
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+    const istDate = new Date(now.getTime() + istOffset);
+    return istDate.toISOString().split('T')[0];
   }
 }
