@@ -88,5 +88,6 @@ export const BaseUrl = {
     SalaryStructure: '/api/salary/structures',
     MonthlySalary: '/api/salary/monthly',
     MonthlySalaryById: '/api/salary/monthly/{id}',
+    DownloadSalarySlip: '/api/salary/DownloadSalarySlip',
   },
 };

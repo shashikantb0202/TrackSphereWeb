@@ -9,6 +9,7 @@ import { UserBasicInfo } from '../../../Models/user.model';
 import { MonthlySalary } from '../../../Models/monthly-salary.model';
 import { MonthEnum } from '../../../enums/month.enum';
 import { SalaryStatus } from '../../../enums/salary-status.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-monthly-salary-list',
@@ -46,7 +47,8 @@ export class UserMonthlySalaryListComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private salaryManagementService: SalaryManagementService
+    private salaryManagementService: SalaryManagementService,
+    private toastr: ToastrService
   ) {
     // Initialize years array
     const currentYear = new Date().getFullYear();
@@ -141,5 +143,29 @@ export class UserMonthlySalaryListComponent implements OnInit {
 
   navigateToAddMonthlySalary(): void {
     this.router.navigate(['/main/salary-management/monthly-salaries/add']);
+  }
+
+  downloadSalarySlip(salaryId: number): void {
+    this.salaryManagementService.downloadSalarySlip(salaryId).subscribe({
+      next: (response: any) => {
+        // Create a blob from the PDF Stream
+        const file = new Blob([response], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+
+        // Create a link element and trigger download
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = `Salary_Slip_${salaryId}.pdf`;
+        link.click();
+
+        // Clean up
+        URL.revokeObjectURL(fileURL);
+        this.toastr.success('Salary slip downloaded successfully');
+      },
+      error: (error) => {
+        console.error('Error downloading salary slip:', error);
+        this.toastr.error('Failed to download salary slip');
+      },
+    });
   }
 }

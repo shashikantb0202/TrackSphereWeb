@@ -1,5 +1,7 @@
 <div class="container mb-2">
-  <h3>{{ isEditMode ? "Edit Monthly Salary" : "Add Monthly Salary" }}</h3>
+  <h5 class="mb-3">
+    {{ isEditMode ? "Edit Monthly Salary" : "Add Monthly Salary" }}
+  </h5>
 
   <!-- Loader -->
   <div *ngIf="loading" class="loader-overlay">
@@ -11,18 +13,18 @@
   <div *ngIf="!loading">
     <form [formGroup]="monthlySalaryForm" (ngSubmit)="onSubmit()" novalidate>
       <!-- ================= MONTHLY SALARY DETAILS ================= -->
-      <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
-          Monthly Salary Details
+      <div class="card mb-3">
+        <div class="card-header bg-secondary text-white py-2">
+          <h6 class="mb-0">Monthly Salary Details</h6>
         </div>
-        <div class="card-body">
-          <div class="row">
+        <div class="card-body p-3">
+          <div class="row g-2">
             <!-- EMPLOYEE -->
             <div class="col-md-4">
-              <label for="userId" class="form-label">Employee</label>
+              <label for="userId" class="form-label small">Employee</label>
               <select
                 id="userId"
-                class="form-select"
+                class="form-select form-select-sm"
                 formControlName="userId"
                 [class.is-invalid]="
                   monthlySalaryForm.get('userId')?.invalid &&
@@ -38,15 +40,17 @@
                   {{ user.name }}
                 </option>
               </select>
-              <div class="invalid-feedback">Please select an employee.</div>
+              <div class="invalid-feedback small">
+                Please select an employee.
+              </div>
             </div>
 
             <!-- YEAR -->
             <div class="col-md-4">
-              <label for="year" class="form-label">Year</label>
+              <label for="year" class="form-label small">Year</label>
               <select
                 id="year"
-                class="form-select"
+                class="form-select form-select-sm"
                 formControlName="year"
                 [class.is-invalid]="
                   monthlySalaryForm.get('year')?.invalid &&
@@ -58,15 +62,15 @@
                   {{ year }}
                 </option>
               </select>
-              <div class="invalid-feedback">Year is required.</div>
+              <div class="invalid-feedback small">Year is required.</div>
             </div>
 
             <!-- MONTH -->
             <div class="col-md-4">
-              <label for="salaryMonth" class="form-label">Month</label>
+              <label for="salaryMonth" class="form-label small">Month</label>
               <select
                 id="salaryMonth"
-                class="form-select"
+                class="form-select form-select-sm"
                 formControlName="salaryMonth"
                 [class.is-invalid]="
                   monthlySalaryForm.get('salaryMonth')?.invalid &&
@@ -79,16 +83,18 @@
                   {{ Month[month] }}
                 </option>
               </select>
-              <div class="invalid-feedback">Month is required.</div>
+              <div class="invalid-feedback small">Month is required.</div>
             </div>
 
             <!-- BASIC SALARY -->
             <div class="col-md-4">
-              <label for="basicSalary" class="form-label">Basic Salary</label>
+              <label for="basicSalary" class="form-label small"
+                >Basic Salary</label
+              >
               <input
                 id="basicSalary"
                 type="number"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter Basic Salary"
                 formControlName="basicSalary"
                 [class.is-invalid]="
@@ -99,18 +105,18 @@
                 step="0.01"
                 required
               />
-              <div class="invalid-feedback">
+              <div class="invalid-feedback small">
                 Basic salary is required and must be greater than 0.
               </div>
             </div>
 
             <!-- HRA -->
             <div class="col-md-4">
-              <label for="hra" class="form-label">HRA</label>
+              <label for="hra" class="form-label small">HRA</label>
               <input
                 id="hra"
                 type="number"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter HRA"
                 formControlName="hra"
                 [class.is-invalid]="
@@ -121,18 +127,20 @@
                 step="0.01"
                 required
               />
-              <div class="invalid-feedback">
+              <div class="invalid-feedback small">
                 HRA is required and must be greater than or equal to 0.
               </div>
             </div>
 
             <!-- ALLOWANCES -->
             <div class="col-md-4">
-              <label for="allowances" class="form-label">Allowances</label>
+              <label for="allowances" class="form-label small"
+                >Allowances</label
+              >
               <input
                 id="allowances"
                 type="number"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter Allowances"
                 formControlName="allowances"
                 [class.is-invalid]="
@@ -143,17 +151,17 @@
                 step="0.01"
                 required
               />
-              <div class="invalid-feedback">
+              <div class="invalid-feedback small">
                 Allowances is required and must be greater than or equal to 0.
               </div>
             </div>
 
             <!-- STATUS -->
             <div class="col-md-4">
-              <label for="status" class="form-label">Status</label>
+              <label for="status" class="form-label small">Status</label>
               <select
                 id="status"
-                class="form-select"
+                class="form-select form-select-sm"
                 formControlName="status"
                 [class.is-invalid]="
                   monthlySalaryForm.get('status')?.invalid &&
@@ -165,17 +173,17 @@
                   {{ status }}
                 </option>
               </select>
-              <div class="invalid-feedback">Status is required.</div>
+              <div class="invalid-feedback small">Status is required.</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- ================= DEDUCTIONS ================= -->
-      <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
+      <div class="card mb-3">
+        <div class="card-header bg-secondary text-white py-2">
           <div class="d-flex justify-content-between align-items-center">
-            <div>Deductions</div>
+            <h6 class="mb-0">Deductions</h6>
             <button
               type="button"
               class="btn btn-sm btn-light"
@@ -185,20 +193,20 @@
             </button>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
           <div formArrayName="deductions">
             <div
               *ngFor="let deduction of deductionsArray.controls; let i = index"
               [formGroupName]="i"
-              class="row mb-3"
+              class="row g-2 mb-2"
             >
               <div class="col-md-3">
-                <label [for]="'deductionType' + i" class="form-label"
+                <label [for]="'deductionType' + i" class="form-label small"
                   >Deduction Type</label
                 >
                 <select
                   [id]="'deductionType' + i"
-                  class="form-select"
+                  class="form-select form-select-sm"
                   formControlName="deductionType"
                   [class.is-invalid]="
                     deduction.get('deductionType')?.invalid &&
@@ -212,7 +220,7 @@
                   </option>
                 </select>
                 <div
-                  class="invalid-feedback"
+                  class="invalid-feedback small"
                   *ngIf="
                     deduction.get('deductionType')?.invalid &&
                     (deduction.get('deductionType')?.touched || isSubmitted)
@@ -223,11 +231,13 @@
               </div>
 
               <div class="col-md-3">
-                <label [for]="'amount' + i" class="form-label">Amount</label>
+                <label [for]="'amount' + i" class="form-label small"
+                  >Amount</label
+                >
                 <input
                   [id]="'amount' + i"
                   type="number"
-                  class="form-control"
+                  class="form-control form-control-sm"
                   placeholder="Enter Amount"
                   formControlName="amount"
                   [class.is-invalid]="
@@ -239,7 +249,7 @@
                   required
                 />
                 <div
-                  class="invalid-feedback"
+                  class="invalid-feedback small"
                   *ngIf="
                     deduction.get('amount')?.invalid &&
                     (deduction.get('amount')?.touched || isSubmitted)
@@ -250,13 +260,13 @@
               </div>
 
               <div class="col-md-4">
-                <label [for]="'description' + i" class="form-label"
+                <label [for]="'description' + i" class="form-label small"
                   >Description</label
                 >
                 <input
                   [id]="'description' + i"
                   type="text"
-                  class="form-control"
+                  class="form-control form-control-sm"
                   placeholder="Enter Description"
                   formControlName="description"
                 />
@@ -265,7 +275,7 @@
               <div class="col-md-2 d-flex align-items-end">
                 <button
                   type="button"
-                  class="btn btn-danger"
+                  class="btn btn-danger btn-sm"
                   (click)="removeDeduction(i)"
                 >
                   <i class="bi bi-trash"></i>
@@ -275,26 +285,26 @@
           </div>
 
           <!-- Total Deductions and Net Salary -->
-          <div class="row mt-3">
+          <div class="row g-2 mt-2">
             <div class="col-md-4">
-              <label for="totalDeductions" class="form-label"
+              <label for="totalDeductions" class="form-label small"
                 >Total Deductions</label
               >
               <input
                 id="totalDeductions"
                 type="number"
-                class="form-control"
+                class="form-control form-control-sm"
                 formControlName="totalDeductions"
                 readonly
               />
             </div>
 
             <div class="col-md-4">
-              <label for="netSalary" class="form-label">Net Salary</label>
+              <label for="netSalary" class="form-label small">Net Salary</label>
               <input
                 id="netSalary"
                 type="number"
-                class="form-control"
+                class="form-control form-control-sm"
                 formControlName="netSalary"
                 readonly
               />
@@ -304,18 +314,20 @@
       </div>
 
       <!-- ================= PAYMENT DETAILS ================= -->
-      <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">Payment Details</div>
-        <div class="card-body">
-          <div class="row">
+      <div class="card mb-3">
+        <div class="card-header bg-secondary text-white py-2">
+          <h6 class="mb-0">Payment Details</h6>
+        </div>
+        <div class="card-body p-3">
+          <div class="row g-2">
             <!-- PAYMENT METHOD -->
             <div class="col-md-4">
-              <label for="paymentMethod" class="form-label"
+              <label for="paymentMethod" class="form-label small"
                 >Payment Method</label
               >
               <select
                 id="paymentMethod"
-                class="form-select"
+                class="form-select form-select-sm"
                 formControlName="paymentMethod"
                 [class.is-invalid]="
                   monthlySalaryForm.get('paymentMethod')?.invalid &&
@@ -327,36 +339,40 @@
                   {{ method }}
                 </option>
               </select>
-              <div class="invalid-feedback">
+              <div class="invalid-feedback small">
                 Please select a payment method.
               </div>
             </div>
 
             <!-- PAYMENT DATE -->
             <div class="col-md-4">
-              <label for="paymentDate" class="form-label">Payment Date</label>
+              <label for="paymentDate" class="form-label small"
+                >Payment Date</label
+              >
               <input
                 id="paymentDate"
                 type="date"
-                class="form-control"
+                class="form-control form-control-sm"
                 formControlName="paymentDate"
                 [class.is-invalid]="
                   monthlySalaryForm.get('paymentDate')?.invalid &&
                   monthlySalaryForm.get('paymentDate')?.touched
                 "
               />
-              <div class="invalid-feedback">Please select a payment date.</div>
+              <div class="invalid-feedback small">
+                Please select a payment date.
+              </div>
             </div>
 
             <!-- TRANSACTION REFERENCE -->
             <div class="col-md-4">
-              <label for="transactionReference" class="form-label"
+              <label for="transactionReference" class="form-label small"
                 >Transaction Reference</label
               >
               <input
                 id="transactionReference"
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter Transaction Reference"
                 formControlName="transactionReference"
               />
@@ -364,25 +380,27 @@
 
             <!-- PAYMENT REMARKS -->
             <div class="col-md-4">
-              <label for="paymentRemarks" class="form-label"
+              <label for="paymentRemarks" class="form-label small"
                 >Payment Remarks</label
               >
               <textarea
                 id="paymentRemarks"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter Payment Remarks"
                 formControlName="paymentRemarks"
-                rows="3"
+                rows="2"
               ></textarea>
             </div>
 
             <!-- CHEQUE NUMBER -->
             <div class="col-md-4">
-              <label for="chequeNumber" class="form-label">Cheque Number</label>
+              <label for="chequeNumber" class="form-label small"
+                >Cheque Number</label
+              >
               <input
                 id="chequeNumber"
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter Cheque Number"
                 formControlName="chequeNumber"
               />
@@ -390,11 +408,13 @@
 
             <!-- UPI REFERENCE -->
             <div class="col-md-4">
-              <label for="upiReference" class="form-label">UPI Reference</label>
+              <label for="upiReference" class="form-label small"
+                >UPI Reference</label
+              >
               <input
                 id="upiReference"
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 placeholder="Enter UPI Reference"
                 formControlName="upiReference"
               />
@@ -405,7 +425,11 @@
 
       <!-- ================= ACTION BUTTONS ================= -->
       <div class="action-buttons">
-        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+        <button
+          type="submit"
+          class="btn btn-primary btn-sm"
+          [disabled]="submitting"
+        >
           <i
             class="bi"
             [ngClass]="
@@ -426,7 +450,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-secondary btn-sm"
           [disabled]="submitting"
           (click)="onCancel()"
         >

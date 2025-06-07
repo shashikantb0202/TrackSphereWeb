@@ -1,7 +1,7 @@
-<div class="container mt-4">
+<div class="container mt-3">
   <div class="card">
-    <div class="card-header bg-secondary text-white">
-      Monthly Salary Details
+    <div class="card-header bg-secondary text-white py-2">
+      <h6 class="mb-0">Monthly Salary Details</h6>
     </div>
 
     <div *ngIf="isLoading" class="loader-overlay">
@@ -10,113 +10,142 @@
       </div>
     </div>
 
-    <div *ngIf="!isLoading && monthlySalary" class="card-body">
+    <div *ngIf="!isLoading && monthlySalary" class="card-body p-3">
       <!-- Basic Information Section -->
-      <div class="section mb-4">
-        <h5 class="section-title mb-3">Basic Information</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <strong>Employee Name:</strong>
-            {{ monthlySalary.user.name }}
-          </div>
-          <div class="col-md-6 mb-3">
-            <strong>Period:</strong>
-            {{ monthlySalary.year }}/{{ monthlySalary.salaryMonth }}
-          </div>
-          <div class="col-md-6 mb-3">
-            <strong>Status:</strong>
-            <span
-              class="badge p-0 px-2 py-1 fs-7 small-badge"
-              [class]="getStatusBadgeClass(monthlySalary.salaryStatus)"
+      <div class="section mb-3">
+        <h6 class="section-title mb-2 fw-bold">Basic Information</h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <small
+              ><strong>Employee Name:</strong>
+              {{ monthlySalary.user.name }}</small
             >
-              {{ monthlySalary.salaryStatus }}
-            </span>
+          </div>
+          <div class="col-md-6">
+            <small
+              ><strong>Period:</strong> {{ monthlySalary.year }}/{{
+                monthlySalary.salaryMonth
+              }}</small
+            >
+          </div>
+          <div class="col-md-6">
+            <small
+              ><strong>Status:</strong>
+              <span
+                class="badge p-0 px-2 py-1 fs-7 small-badge"
+                [class]="getStatusBadgeClass(monthlySalary.salaryStatus)"
+              >
+                {{ monthlySalary.salaryStatus }}
+              </span>
+            </small>
           </div>
         </div>
       </div>
 
       <!-- Salary Components Section -->
-      <div class="section mb-4">
-        <h5 class="section-title mb-3">Salary Components</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <strong>Basic Salary:</strong>
-            {{ monthlySalary.basicSalary | currency : "INR" }}
+      <div class="section mb-3">
+        <h6 class="section-title mb-2 fw-bold">Salary Components</h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <small
+              ><strong>Basic Salary:</strong>
+              {{ monthlySalary.basicSalary | currency : "INR" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>HRA:</strong>
-            {{ monthlySalary.hra | currency : "INR" }}
+          <div class="col-md-6">
+            <small
+              ><strong>HRA:</strong>
+              {{ monthlySalary.hra | currency : "INR" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Allowances:</strong>
-            {{ monthlySalary.allowances | currency : "INR" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Allowances:</strong>
+              {{ monthlySalary.allowances | currency : "INR" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Total Deductions:</strong>
-            {{ monthlySalary.totalDeductions | currency : "INR" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Total Deductions:</strong>
+              {{ monthlySalary.totalDeductions | currency : "INR" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Net Salary:</strong>
-            {{ monthlySalary.netSalary | currency : "INR" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Net Salary:</strong>
+              {{ monthlySalary.netSalary | currency : "INR" }}</small
+            >
           </div>
         </div>
       </div>
 
       <!-- Payment Information Section -->
-      <div class="section mb-4">
-        <h5 class="section-title mb-3">Payment Information</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <strong>Payment Method:</strong>
-            {{ monthlySalary.paymentMethod || "Not specified" }}
+      <div class="section mb-3">
+        <h6 class="section-title mb-2 fw-bold">Payment Information</h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <small
+              ><strong>Payment Method:</strong>
+              {{ monthlySalary.paymentMethod || "Not specified" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Payment Date:</strong>
-            {{
-              monthlySalary.paymentDate
-                ? (monthlySalary.paymentDate | date : "dd-MMM-yyyy HH:mm:ss")
-                : "Not paid"
-            }}
+          <div class="col-md-6">
+            <small
+              ><strong>Payment Date:</strong>
+              {{
+                monthlySalary.paymentDate
+                  ? (monthlySalary.paymentDate | date : "dd-MMM-yyyy HH:mm:ss")
+                  : "Not paid"
+              }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Transaction Reference:</strong>
-            {{ monthlySalary.transactionReference || "Not available" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Transaction Reference:</strong>
+              {{ monthlySalary.transactionReference || "Not available" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Payment Remarks:</strong>
-            {{ monthlySalary.paymentRemarks || "No remarks" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Payment Remarks:</strong>
+              {{ monthlySalary.paymentRemarks || "No remarks" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Cheque Number:</strong>
-            {{ monthlySalary.chequeNumber || "Not applicable" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Cheque Number:</strong>
+              {{ monthlySalary.chequeNumber || "Not applicable" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>UPI Reference:</strong>
-            {{ monthlySalary.upiReference || "Not applicable" }}
+          <div class="col-md-6">
+            <small
+              ><strong>UPI Reference:</strong>
+              {{ monthlySalary.upiReference || "Not applicable" }}</small
+            >
           </div>
         </div>
       </div>
 
       <!-- Deductions Section -->
       <div
-        class="section mb-4"
+        class="section mb-3"
         *ngIf="monthlySalary.deductions && monthlySalary.deductions.length > 0"
       >
-        <h5 class="section-title mb-3">Deductions</h5>
+        <h6 class="section-title mb-2 fw-bold">Deductions</h6>
         <div class="table-responsive">
-          <table class="table table-bordered table-hover">
+          <table class="table table-bordered table-hover table-sm">
             <thead class="table-light">
               <tr>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Description</th>
+                <th class="py-1">Type</th>
+                <th class="py-1">Amount</th>
+                <th class="py-1">Description</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let deduction of monthlySalary.deductions">
-                <td>{{ deduction.deductionType }}</td>
-                <td>{{ deduction.amount | currency : "INR" }}</td>
-                <td>{{ deduction.description }}</td>
+                <td class="py-1">{{ deduction.deductionType }}</td>
+                <td class="py-1">{{ deduction.amount | currency : "INR" }}</td>
+                <td class="py-1">{{ deduction.description }}</td>
               </tr>
             </tbody>
           </table>
@@ -125,37 +154,49 @@
 
       <!-- Audit Information Section -->
       <div class="section">
-        <h5 class="section-title mb-3">Audit Information</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <strong>Created By:</strong>
-            {{ monthlySalary.createdBy?.name || "N/A" }}
+        <h6 class="section-title mb-2 fw-bold">Audit Information</h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <small
+              ><strong>Created By:</strong>
+              {{ monthlySalary.createdBy?.name || "N/A" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Created On:</strong>
-            {{ monthlySalary.createdOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Created On:</strong>
+              {{
+                monthlySalary.createdOn | date : "dd-MMM-yyyy HH:mm:ss"
+              }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Updated By:</strong>
-            {{ monthlySalary.updatedBy?.name || "N/A" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Updated By:</strong>
+              {{ monthlySalary.updatedBy?.name || "N/A" }}</small
+            >
           </div>
-          <div class="col-md-6 mb-3">
-            <strong>Updated On:</strong>
-            {{ monthlySalary.updatedOn | date : "dd-MMM-yyyy HH:mm:ss" }}
+          <div class="col-md-6">
+            <small
+              ><strong>Updated On:</strong>
+              {{
+                monthlySalary.updatedOn | date : "dd-MMM-yyyy HH:mm:ss"
+              }}</small
+            >
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card-footer text-end">
+    <div class="card-footer text-end py-2">
       <button
-        class="btn btn-primary"
+        class="btn btn-primary btn-sm"
         (click)="navigateToEdit()"
         *ngIf="monthlySalary"
       >
         Edit Salary
       </button>
-      <button class="btn btn-secondary ms-2" (click)="navigateBack()">
+      <button class="btn btn-secondary btn-sm ms-2" (click)="navigateBack()">
         Back to List
       </button>
     </div>

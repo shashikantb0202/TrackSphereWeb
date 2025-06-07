@@ -327,7 +327,10 @@ export class UserMonthlySalaryFormComponent implements OnInit {
           .subscribe({
             next: () => {
               this.toastr.success('Monthly salary updated successfully');
-              this.router.navigate(['main/salary-management/monthly-salaries']);
+              this.router.navigate([
+                'main/salary-management/monthly-salaries/view',
+                this.salaryId,
+              ]);
             },
             error: (error) => {
               this.toastr.error('Error updating monthly salary');
@@ -336,9 +339,12 @@ export class UserMonthlySalaryFormComponent implements OnInit {
           });
       } else {
         this.salaryService.createMonthlySalary(formData).subscribe({
-          next: () => {
+          next: (response) => {
             this.toastr.success('Monthly salary created successfully');
-            this.router.navigate(['main/salary-management/monthly-salaries']);
+            this.router.navigate([
+              'main/salary-management/monthly-salaries/view',
+              response.data.id,
+            ]);
           },
           error: (error) => {
             this.toastr.error('Error creating monthly salary');

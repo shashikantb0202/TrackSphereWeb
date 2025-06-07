@@ -73,13 +73,8 @@ export class SalaryManagementService {
     );
   }
 
-  createMonthlySalary(
-    monthlySalary: Partial<MonthlySalary>
-  ): Observable<{ response: ApiFilterResponse<MonthlySalary> }> {
-    return this.http.post<{ response: ApiFilterResponse<MonthlySalary> }>(
-      BaseUrl.Salary.MonthlySalary,
-      monthlySalary
-    );
+  createMonthlySalary(monthlySalary: Partial<MonthlySalary>): Observable<any> {
+    return this.http.post(BaseUrl.Salary.MonthlySalary, monthlySalary);
   }
 
   processSalaryPayment(
@@ -97,5 +92,11 @@ export class SalaryManagementService {
     return this.http.get<{ data: SalaryStructureResponse }>(
       `${BaseUrl.Salary.SalaryStructure}/user/${userId}`
     );
+  }
+
+  downloadSalarySlip(salaryId: number): Observable<Blob> {
+    return this.http.get(`${BaseUrl.Salary.DownloadSalarySlip}/${salaryId}`, {
+      responseType: 'blob',
+    });
   }
 }

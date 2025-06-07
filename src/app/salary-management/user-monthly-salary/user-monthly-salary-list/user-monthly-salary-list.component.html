@@ -79,130 +79,164 @@
   </div>
 
   <!-- Ngx-Datatable for Monthly Salary List -->
-  <ngx-datatable
-    class="bootstrap"
-    [rows]="monthlySalaries"
-    [columnMode]="'force'"
-    [headerHeight]="40"
-    [footerHeight]="40"
-    [rowHeight]="'auto'"
-    [limit]="pageSize"
-    [count]="totalRecords"
-    [externalPaging]="true"
-    [externalSorting]="true"
-    (sort)="onSort($event)"
-    (page)="onPage($event)"
-  >
-    <!-- Employee Name Column -->
-    <ngx-datatable-column
-      name="Employee Name"
-      prop="user.name"
-      [sortable]="true"
+  <div class="table-responsive">
+    <ngx-datatable
+      class="bootstrap"
+      [rows]="monthlySalaries"
+      [columnMode]="'force'"
+      [headerHeight]="40"
+      [footerHeight]="40"
+      [rowHeight]="'auto'"
+      [limit]="pageSize"
+      [count]="totalRecords"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      [scrollbarH]="true"
+      (sort)="onSort($event)"
+      (page)="onPage($event)"
     >
-    </ngx-datatable-column>
+      <!-- Employee Name Column -->
+      <ngx-datatable-column
+        name="Employee Name"
+        prop="user.name"
+        [sortable]="true"
+        [width]="150"
+      >
+      </ngx-datatable-column>
 
-    <!-- Month Column -->
-    <ngx-datatable-column name="Month" prop="salaryMonth" [sortable]="true">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.year }}/{{ row.salaryMonth }}
+      <!-- Month Column -->
+      <ngx-datatable-column
+        name="Month"
+        prop="salaryMonth"
+        [sortable]="true"
+        [width]="100"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.year }}/{{ row.salaryMonth }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Basic Salary Column -->
+      <ngx-datatable-column
+        name="Basic Salary"
+        prop="basicSalary"
+        [sortable]="true"
+        [width]="120"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.basicSalary | currency : "INR" }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- HRA Column -->
+      <ngx-datatable-column
+        name="HRA"
+        prop="hra"
+        [sortable]="true"
+        [width]="120"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.hra | currency : "INR" }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Allowances Column -->
+      <ngx-datatable-column
+        name="Allowances"
+        prop="allowances"
+        [sortable]="true"
+        [width]="120"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.allowances | currency : "INR" }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Deductions Column -->
+      <ngx-datatable-column
+        name="Total Deductions"
+        prop="totalDeductions"
+        [sortable]="true"
+        [width]="120"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.totalDeductions | currency : "INR" }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Net Salary Column -->
+      <ngx-datatable-column
+        name="Net Salary"
+        prop="netSalary"
+        [sortable]="true"
+        [width]="120"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <b> {{ row.netSalary | currency : "INR" }}</b>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Status Column -->
+      <ngx-datatable-column
+        name="Status"
+        prop="salaryStatus"
+        [sortable]="true"
+        [width]="100"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <span
+            class="badge"
+            [class.bg-success]="row.salaryStatus === 'Paid'"
+            [class.bg-warning]="row.salaryStatus === 'Pending'"
+            [class.bg-info]="row.salaryStatus === 'Processing'"
+            [class.bg-danger]="row.salaryStatus === 'Failed'"
+            [class.bg-secondary]="row.salaryStatus === 'Cancelled'"
+          >
+            {{ row.salaryStatus }}
+          </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Actions Column -->
+      <ngx-datatable-column
+        name="Actions"
+        [width]="120"
+        [sortable]="false"
+        [cellTemplate]="actionTemplate"
+      >
+      </ngx-datatable-column>
+
+      <ng-template #actionTemplate let-row="row">
+        <div class="d-flex gap-2">
+          <button
+            class="btn btn-primary btn-sm"
+            [routerLink]="[
+              '/main/salary-management/monthly-salaries/edit',
+              row.id
+            ]"
+            title="Edit Monthly Salary"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button
+            class="btn btn-info btn-sm"
+            [routerLink]="[
+              '/main/salary-management/monthly-salaries/view',
+              row.id
+            ]"
+            title="View Monthly Salary"
+          >
+            <i class="bi bi-eye"></i>
+          </button>
+          <button
+            class="btn btn-success btn-sm"
+            (click)="downloadSalarySlip(row.id)"
+            title="Download Salary Slip"
+          >
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
       </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Basic Salary Column -->
-    <ngx-datatable-column
-      name="Basic Salary"
-      prop="basicSalary"
-      [sortable]="true"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.basicSalary | currency : "INR" }}
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- HRA Column -->
-    <ngx-datatable-column name="HRA" prop="hra" [sortable]="true">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.hra | currency : "INR" }}
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Allowances Column -->
-    <ngx-datatable-column name="Allowances" prop="allowances" [sortable]="true">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.allowances | currency : "INR" }}
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Deductions Column -->
-    <ngx-datatable-column
-      name="totalDeductions"
-      prop="totalDeductions"
-      [sortable]="true"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {{ row.totalDeductions | currency : "INR" }}
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Net Salary Column -->
-    <ngx-datatable-column name="Net Salary" prop="netSalary" [sortable]="true">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <b> {{ row.netSalary | currency : "INR" }}</b>
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Status Column -->
-    <ngx-datatable-column
-      name="salaryStatus"
-      prop="salaryStatus"
-      [sortable]="true"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <span
-          class="badge"
-          [class.bg-success]="row.salaryStatus === 'Paid'"
-          [class.bg-warning]="row.salaryStatus === 'Pending'"
-          [class.bg-info]="row.salaryStatus === 'Processing'"
-          [class.bg-danger]="row.salaryStatus === 'Failed'"
-          [class.bg-secondary]="row.salaryStatus === 'Cancelled'"
-        >
-          {{ row.salaryStatus }}
-        </span>
-      </ng-template>
-    </ngx-datatable-column>
-
-    <!-- Actions Column -->
-    <ngx-datatable-column
-      name="Actions"
-      width="150"
-      [sortable]="false"
-      [cellTemplate]="actionTemplate"
-    >
-    </ngx-datatable-column>
-
-    <ng-template #actionTemplate let-row="row">
-      <div class="d-flex gap-2">
-        <button
-          class="btn btn-primary btn-sm"
-          [routerLink]="[
-            '/main/salary-management/monthly-salaries/edit',
-            row.id
-          ]"
-          title="Edit Monthly Salary"
-        >
-          <i class="bi bi-pencil-square"></i>
-        </button>
-        <button
-          class="btn btn-info btn-sm"
-          [routerLink]="[
-            '/main/salary-management/monthly-salaries/view',
-            row.id
-          ]"
-          title="View Monthly Salary"
-        >
-          <i class="bi bi-eye"></i>
-        </button>
-      </div>
-    </ng-template>
-  </ngx-datatable>
+    </ngx-datatable>
+  </div>
 </div>
