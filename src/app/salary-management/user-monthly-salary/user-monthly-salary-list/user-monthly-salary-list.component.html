@@ -47,7 +47,7 @@
         [(ngModel)]="selectedMonth"
         (change)="onMonthChange()"
       >
-        <option [ngValue]="0">All Month</option>
+        <option [ngValue]="''">All Month</option>
         <option *ngFor="let month of months" [value]="month.value">
           {{ month.label }}
         </option>

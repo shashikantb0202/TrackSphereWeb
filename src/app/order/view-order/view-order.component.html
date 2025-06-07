@@ -1,1 +1,203 @@
-<p>view-order works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-secondary text-white">Order Details</div>
+
+    <div *ngIf="isLoading" class="loader-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card-body">
+      <div class="row">
+        <!-- ORDER ID -->
+        <div class="col-md-6 mb-3">
+          <strong>Order ID:</strong>
+          {{ order.id }}
+        </div>
+
+        <!-- CUSTOMER -->
+        <div class="col-md-6 mb-3">
+          <strong>Customer:</strong>
+          {{ order.customer?.name }}
+        </div>
+
+        <!-- USER -->
+        <div class="col-md-6 mb-3">
+          <strong>User:</strong>
+          {{ order.user?.name }}
+        </div>
+
+        <!-- ORDER DATE -->
+        <div class="col-md-6 mb-3">
+          <strong>Order Date:</strong>
+          {{ order.orderDate | dateFormat : "DEFAULT" }}
+        </div>
+
+        <!-- ORDER STATUS -->
+        <div class="col-md-6 mb-3">
+          <strong>Order Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            [class.bg-success]="order.orderStatus === 'Completed'"
+            [class.bg-warning]="order.orderStatus === 'Pending'"
+            [class.bg-danger]="order.orderStatus === 'Cancelled'"
+            [class.bg-secondary]="
+              order.orderStatus !== 'Completed' &&
+              order.orderStatus !== 'Pending' &&
+              order.orderStatus !== 'Cancelled'
+            "
+          >
+            {{ order.orderStatus }}
+          </span>
+        </div>
+
+        <!-- PAYMENT STATUS -->
+        <div class="col-md-6 mb-3">
+          <strong>Payment Status:</strong>
+          <span
+            class="badge p-0 px-2 py-1 fs-7 small-badge"
+            [class.bg-success]="order.paymentStatus === 'Completed'"
+            [class.bg-warning]="order.paymentStatus === 'Pending'"
+            [class.bg-danger]="order.paymentStatus === 'Failed'"
+            [class.bg-secondary]="
+              order.paymentStatus !== 'Completed' &&
+              order.paymentStatus !== 'Pending' &&
+              order.paymentStatus !== 'Failed'
+            "
+          >
+            {{ order.paymentStatus }}
+          </span>
+        </div>
+
+        <!-- TOTAL AMOUNT -->
+        <div class="col-md-6 mb-3">
+          <strong>Total Amount:</strong>
+          {{ order.totalAmount | currency : "INR" }}
+        </div>
+      </div>
+
+      <!-- Order Items Section -->
+      <div class="mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0">Order Items</h6>
+          <span class="badge bg-primary"
+            >Total Items: {{ order.orderItems?.length }}</span
+          >
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body p-2">
+                <h6 class="card-subtitle mb-1 text-muted small">Total Items</h6>
+                <h5 class="card-title mb-0">{{ order.orderItems?.length }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body p-2">
+                <h6 class="card-subtitle mb-1 text-muted small">
+                  Total Quantity
+                </h6>
+                <h5 class="card-title mb-0">{{ getTotalQuantity() }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body p-2">
+                <h6 class="card-subtitle mb-1 text-muted small">Subtotal</h6>
+                <h5 class="card-title mb-0">
+                  {{ getSubtotal() | currency : "INR" }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light">
+              <div class="card-body p-2">
+                <h6 class="card-subtitle mb-1 text-muted small">
+                  Total Amount
+                </h6>
+                <h5 class="card-title mb-0">
+                  {{ order.totalAmount | currency : "INR" }}
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Order Items Table -->
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th class="text-center" style="width: 40px">#</th>
+                <th>Product</th>
+                <th>Packaging</th>
+                <th class="text-center" style="width: 80px">Quantity</th>
+                <th class="text-end" style="width: 120px">Rate/Unit</th>
+                <th class="text-end" style="width: 120px">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.orderItems; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>{{ item.productPackaging?.product?.name }}</td>
+                <td>{{ item.productPackaging?.productPackName }}</td>
+                <td class="text-center">
+                  <span class="badge bg-info">{{ item.productQty }}</span>
+                </td>
+                <td class="text-end">
+                  {{ item.ratePerUnit | currency : "INR" }}
+                </td>
+                <td class="text-end fw-bold">
+                  {{ item.productQty * item.ratePerUnit | currency : "INR" }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="5" class="text-end fw-bold">Grand Total:</td>
+                <td class="text-end fw-bold">
+                  {{ order.totalAmount | currency : "INR" }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Audit Information -->
+      <div class="mt-4 pt-3 border-top">
+        <div class="row">
+          <div class="col-md-6">
+            <small class="text-muted">Created By:</small>
+            <div>{{ order.createdBy?.name || "N/A" }}</div>
+            <small class="text-muted">Created On:</small>
+            <div>{{ order.createdOn | dateFormat : "DEFAULT" }}</div>
+          </div>
+          <div class="col-md-6">
+            <small class="text-muted">Updated By:</small>
+            <div>{{ order.updatedBy?.name || "N/A" }}</div>
+            <small class="text-muted">Updated On:</small>
+            <div>{{ order.updatedOn | dateFormat : "DEFAULT" }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-end">
+      <button class="btn btn-primary" (click)="editOrder()">Edit Order</button>
+      <button
+        class="btn btn-secondary ms-2"
+        (click)="router.navigate(['main/order/order-list'])"
+      >
+        Back to List
+      </button>
+    </div>
+  </div>
+</div>

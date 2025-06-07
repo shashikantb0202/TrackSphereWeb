@@ -34,14 +34,15 @@ export class UserMonthlySalaryFormComponent implements OnInit {
   salaryId: number | null = null;
   loading = false;
   submitting = false;
+  isSubmitted = false;
   salaryStatuses = Object.values(SalaryStatus);
   months = Object.values(MonthEnum).filter(
-    (value) => typeof value === 'number'
+    (value) => typeof value === 'string'
   );
   Month = MonthEnum;
   paymentMethods = Object.values(PaymentMethodEnum);
   deductionTypes = Object.values(DeductionTypeEnum).filter(
-    (value) => typeof value === 'number'
+    (value) => typeof value === 'string'
   );
   DeductionType = DeductionTypeEnum;
   currentYear = new Date().getFullYear();
@@ -61,8 +62,8 @@ export class UserMonthlySalaryFormComponent implements OnInit {
         this.currentYear,
         [Validators.required, Validators.min(2000), Validators.max(2100)],
       ],
-      salaryMonth: [new Date().getMonth() + 1, Validators.required],
-      basicSalary: [0, [Validators.required, Validators.min(0)]],
+      salaryMonth: ['', Validators.required],
+      basicSalary: [0, [Validators.required, Validators.min(1)]],
       hra: [0, [Validators.required, Validators.min(0)]],
       allowances: [0, [Validators.required, Validators.min(0)]],
       deductions: this.fb.array([]),
@@ -92,6 +93,7 @@ export class UserMonthlySalaryFormComponent implements OnInit {
 
   addDeduction() {
     const deductionForm = this.fb.group({
+      id: [0],
       deductionType: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
       description: [''],
@@ -154,6 +156,7 @@ export class UserMonthlySalaryFormComponent implements OnInit {
           salary.data.deductions.forEach((deduction) => {
             this.deductionsArray.push(
               this.fb.group({
+                id: [deduction.id],
                 deductionType: [deduction.deductionType, Validators.required],
                 amount: [
                   deduction.amount,
@@ -168,6 +171,11 @@ export class UserMonthlySalaryFormComponent implements OnInit {
         // Disable user field in edit mode
         this.monthlySalaryForm.get('userId')?.disable();
 
+        // Format payment date if it exists
+        const paymentDate = salary.data.paymentDate
+          ? new Date(salary.data.paymentDate).toISOString().split('T')[0]
+          : null;
+
         this.monthlySalaryForm.patchValue({
           userId: salary.data.user.id,
           year: salary.data.year,
@@ -179,7 +187,7 @@ export class UserMonthlySalaryFormComponent implements OnInit {
           totalDeductions: salary.data.totalDeductions,
           status: salary.data.salaryStatus,
           paymentMethod: salary.data.paymentMethod,
-          paymentDate: salary.data.paymentDate,
+          paymentDate: paymentDate,
           transactionReference: salary.data.transactionReference,
           paymentRemarks: salary.data.paymentRemarks,
           chequeNumber: salary.data.chequeNumber,
@@ -218,6 +226,7 @@ export class UserMonthlySalaryFormComponent implements OnInit {
               (structure.basicSalary * structure.pfPercent) / 100;
             this.deductionsArray.push(
               this.fb.group({
+                id: [0],
                 deductionType: [DeductionTypeEnum.PF, Validators.required],
                 amount: [pfAmount, [Validators.required, Validators.min(0)]],
                 description: ['PF Deduction'],
@@ -229,6 +238,7 @@ export class UserMonthlySalaryFormComponent implements OnInit {
           if (structure.deductions > 0) {
             this.deductionsArray.push(
               this.fb.group({
+                id: [0],
                 deductionType: [DeductionTypeEnum.Other, Validators.required],
                 amount: [
                   structure.deductions,
@@ -298,49 +308,55 @@ export class UserMonthlySalaryFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.monthlySalaryForm.invalid) {
-      this.toastr.error('Please fill all required fields correctly');
-      return;
-    }
+    this.isSubmitted = true;
 
-    this.submitting = true;
-    const formData = this.monthlySalaryForm.value;
+    if (this.monthlySalaryForm.valid) {
+      this.submitting = true;
+      const formData = this.monthlySalaryForm.value;
 
-    if (this.isEditMode && this.salaryId) {
-      const updatedFields: { [key: string]: any } = {};
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== null && formData[key] !== undefined) {
-          updatedFields[key] = formData[key];
-        }
-      });
+      if (this.isEditMode && this.salaryId) {
+        const updatedFields: { [key: string]: any } = {};
+        Object.keys(formData).forEach((key) => {
+          if (formData[key] !== null && formData[key] !== undefined) {
+            updatedFields[key] = formData[key];
+          }
+        });
 
-      this.salaryService
-        .updateMonthlySalary(this.salaryId, updatedFields)
-        .subscribe({
+        this.salaryService
+          .updateMonthlySalary(this.salaryId, updatedFields)
+          .subscribe({
+            next: () => {
+              this.toastr.success('Monthly salary updated successfully');
+              this.router.navigate(['main/salary-management/monthly-salaries']);
+            },
+            error: (error) => {
+              this.toastr.error('Error updating monthly salary');
+              this.submitting = false;
+            },
+          });
+      } else {
+        this.salaryService.createMonthlySalary(formData).subscribe({
           next: () => {
-            this.toastr.success('Monthly salary updated successfully');
+            this.toastr.success('Monthly salary created successfully');
             this.router.navigate(['main/salary-management/monthly-salaries']);
           },
           error: (error) => {
-            this.toastr.error('Error updating monthly salary');
+            this.toastr.error('Error creating monthly salary');
             this.submitting = false;
           },
         });
+      }
     } else {
-      this.salaryService.createMonthlySalary(formData).subscribe({
-        next: () => {
-          this.toastr.success('Monthly salary created successfully');
-          this.router.navigate(['main/salary-management/monthly-salaries']);
-        },
-        error: (error) => {
-          this.toastr.error('Error creating monthly salary');
-          this.submitting = false;
-        },
+      // Mark all fields as touched to trigger validation messages
+      Object.keys(this.monthlySalaryForm.controls).forEach((key) => {
+        const control = this.monthlySalaryForm.get(key);
+        control?.markAsTouched();
       });
     }
   }
 
   onCancel(): void {
+    this.isSubmitted = false;
     this.router.navigate(['main/salary-management/monthly-salaries']);
   }
 }

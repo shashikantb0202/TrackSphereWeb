@@ -1,0 +1,100 @@
+.loader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.small-badge {
+  font-size: 10px;
+  margin-left: 7px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+  font-weight: 500;
+}
+
+.table-responsive {
+  margin-top: 1rem;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+/* Order Items Section Styles */
+.card.bg-light {
+  border: none;
+  transition: transform 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.card.bg-light:hover {
+  transform: translateY(-1px);
+}
+
+.table-sm td,
+.table-sm th {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table th {
+  font-weight: 600;
+  border-bottom: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+}
+
+.table tfoot {
+  border-top: 1px solid #dee2e6;
+}
+
+.table tfoot td {
+  padding: 0.5rem;
+}
+
+.text-muted {
+  font-size: 0.75rem;
+}
+
+.card-subtitle {
+  font-size: 0.75rem;
+}
+
+.card-title {
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.card-body {
+  padding: 0.75rem;
+}

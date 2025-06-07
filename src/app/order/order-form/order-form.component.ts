@@ -71,8 +71,13 @@ export class OrderFormComponent implements OnInit {
       orderStatus: ['', Validators.required],
       paymentStatus: ['', Validators.required],
       userId: [this.currentUserId],
-      totalAmount: ['', [Validators.required, Validators.min(0)]],
+      totalAmount: [{ value: '', disabled: true }],
       orderItems: this.fb.array([]),
+    });
+
+    // Subscribe to order items changes to calculate total
+    this.orderItems.valueChanges.subscribe(() => {
+      this.calculateTotal();
     });
   }
 
@@ -156,6 +161,22 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
+  // Calculate total amount based on order items
+  private calculateTotal(): void {
+    const total = this.orderItems.controls.reduce((sum, control) => {
+      const quantity = control.get('productQty')?.value || 0;
+      const rate = control.get('ratePerUnit')?.value || 0;
+      return sum + quantity * rate;
+    }, 0);
+
+    this.orderForm.patchValue(
+      {
+        totalAmount: total.toFixed(2),
+      },
+      { emitEvent: false }
+    );
+  }
+
   // Add new order item
   addOrderItem(): void {
     this.orderItems.push(
@@ -195,8 +216,9 @@ export class OrderFormComponent implements OnInit {
     }
 
     this.isLoading = true;
+    const formValue = this.orderForm.getRawValue(); // Use getRawValue to include disabled fields
     const orderData = {
-      ...this.orderForm.value,
+      ...formValue,
       userId: this.currentUserId,
       ...(this.isEditMode && this.orderId ? { id: this.orderId } : {}),
     };
@@ -205,7 +227,7 @@ export class OrderFormComponent implements OnInit {
       this.orderService.updateOrder(this.orderId, orderData).subscribe({
         next: (response) => {
           this.toastr.success(response.message);
-          this.navigateToList();
+          this.navigateToView(this.orderId!);
         },
         error: (error: any) => {
           console.error('Error updating order:', error);
@@ -217,7 +239,7 @@ export class OrderFormComponent implements OnInit {
       this.orderService.addOrder(orderData).subscribe({
         next: (response) => {
           this.toastr.success(response.message);
-          this.navigateToList();
+          this.navigateToView(response.data.id);
         },
         error: (error: any) => {
           console.error('Error creating order:', error);
@@ -230,6 +252,10 @@ export class OrderFormComponent implements OnInit {
 
   navigateToList(): void {
     this.router.navigate(['main/order/order-list']);
+  }
+
+  navigateToView(id: number): void {
+    this.router.navigate(['main/order/view-order', id]);
   }
 
   getCurrentUserId(): void {

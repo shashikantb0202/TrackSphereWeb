@@ -1,9 +1,9 @@
 export enum DeductionTypeEnum {
-  PF = 1,
-  ESI = 2,
-  ProfessionalTax = 3,
-  TDS = 4,
-  Loan = 5,
-  Advance = 6,
-  Other = 7,
+  PF = 'PF',
+  ESI = 'ESI',
+  ProfessionalTax = 'ProfessionalTax',
+  TDS = 'TDS',
+  Loan = 'Loan',
+  Advance = 'Advance',
+  Other = 'Other',
 }

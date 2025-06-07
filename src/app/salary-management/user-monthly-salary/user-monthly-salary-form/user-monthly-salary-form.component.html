@@ -1,5 +1,5 @@
 <div class="container mb-2">
-  <h4>{{ isEditMode ? "Edit Monthly Salary" : "Add Monthly Salary" }}</h4>
+  <h3>{{ isEditMode ? "Edit Monthly Salary" : "Add Monthly Salary" }}</h3>
 
   <!-- Loader -->
   <div *ngIf="loading" class="loader-overlay">
@@ -24,8 +24,10 @@
                 id="userId"
                 class="form-select"
                 formControlName="userId"
-                [class.is-valid]="monthlySalaryForm.get('userId')?.valid"
-                [class.is-invalid]="monthlySalaryForm.get('userId')?.invalid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('userId')?.invalid &&
+                  monthlySalaryForm.get('userId')?.touched
+                "
                 [disabled]="isEditMode"
                 required
               >
@@ -46,8 +48,10 @@
                 id="year"
                 class="form-select"
                 formControlName="year"
-                [class.is-valid]="monthlySalaryForm.get('year')?.valid"
-                [class.is-invalid]="monthlySalaryForm.get('year')?.invalid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('year')?.invalid &&
+                  monthlySalaryForm.get('year')?.touched
+                "
                 required
               >
                 <option *ngFor="let year of years" [value]="year">
@@ -64,12 +68,13 @@
                 id="salaryMonth"
                 class="form-select"
                 formControlName="salaryMonth"
-                [class.is-valid]="monthlySalaryForm.get('salaryMonth')?.valid"
                 [class.is-invalid]="
-                  monthlySalaryForm.get('salaryMonth')?.invalid
+                  monthlySalaryForm.get('salaryMonth')?.invalid &&
+                  monthlySalaryForm.get('salaryMonth')?.touched
                 "
                 required
               >
+                <option value="" disabled selected>Select Month</option>
                 <option *ngFor="let month of months" [value]="month">
                   {{ Month[month] }}
                 </option>
@@ -86,9 +91,9 @@
                 class="form-control"
                 placeholder="Enter Basic Salary"
                 formControlName="basicSalary"
-                [class.is-valid]="monthlySalaryForm.get('basicSalary')?.valid"
                 [class.is-invalid]="
-                  monthlySalaryForm.get('basicSalary')?.invalid
+                  monthlySalaryForm.get('basicSalary')?.invalid &&
+                  monthlySalaryForm.get('basicSalary')?.touched
                 "
                 min="0"
                 step="0.01"
@@ -108,8 +113,10 @@
                 class="form-control"
                 placeholder="Enter HRA"
                 formControlName="hra"
-                [class.is-valid]="monthlySalaryForm.get('hra')?.valid"
-                [class.is-invalid]="monthlySalaryForm.get('hra')?.invalid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('hra')?.invalid &&
+                  monthlySalaryForm.get('hra')?.touched
+                "
                 min="0"
                 step="0.01"
                 required
@@ -128,9 +135,9 @@
                 class="form-control"
                 placeholder="Enter Allowances"
                 formControlName="allowances"
-                [class.is-valid]="monthlySalaryForm.get('allowances')?.valid"
                 [class.is-invalid]="
-                  monthlySalaryForm.get('allowances')?.invalid
+                  monthlySalaryForm.get('allowances')?.invalid &&
+                  monthlySalaryForm.get('allowances')?.touched
                 "
                 min="0"
                 step="0.01"
@@ -148,8 +155,10 @@
                 id="status"
                 class="form-select"
                 formControlName="status"
-                [class.is-valid]="monthlySalaryForm.get('status')?.valid"
-                [class.is-invalid]="monthlySalaryForm.get('status')?.invalid"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('status')?.invalid &&
+                  monthlySalaryForm.get('status')?.touched
+                "
                 required
               >
                 <option *ngFor="let status of salaryStatuses" [value]="status">
@@ -164,17 +173,17 @@
 
       <!-- ================= DEDUCTIONS ================= -->
       <div class="card mb-4">
-        <div
-          class="card-header bg-secondary text-white d-flex justify-content-between align-items-center"
-        >
-          <span>Deductions</span>
-          <button
-            type="button"
-            class="btn btn-light btn-sm"
-            (click)="addDeduction()"
-          >
-            Add Deduction
-          </button>
+        <div class="card-header bg-secondary text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>Deductions</div>
+            <button
+              type="button"
+              class="btn btn-sm btn-light"
+              (click)="addDeduction()"
+            >
+              <i class="bi bi-plus-lg"></i> Add Deduction
+            </button>
+          </div>
         </div>
         <div class="card-body">
           <div formArrayName="deductions">
@@ -191,8 +200,10 @@
                   [id]="'deductionType' + i"
                   class="form-select"
                   formControlName="deductionType"
-                  [class.is-valid]="deduction.get('deductionType')?.valid"
-                  [class.is-invalid]="deduction.get('deductionType')?.invalid"
+                  [class.is-invalid]="
+                    deduction.get('deductionType')?.invalid &&
+                    (deduction.get('deductionType')?.touched || isSubmitted)
+                  "
                   required
                 >
                   <option value="">Select Type</option>
@@ -200,7 +211,15 @@
                     {{ DeductionType[type] }}
                   </option>
                 </select>
-                <div class="invalid-feedback">Deduction type is required.</div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    deduction.get('deductionType')?.invalid &&
+                    (deduction.get('deductionType')?.touched || isSubmitted)
+                  "
+                >
+                  Deduction type is required.
+                </div>
               </div>
 
               <div class="col-md-3">
@@ -211,13 +230,21 @@
                   class="form-control"
                   placeholder="Enter Amount"
                   formControlName="amount"
-                  [class.is-valid]="deduction.get('amount')?.valid"
-                  [class.is-invalid]="deduction.get('amount')?.invalid"
+                  [class.is-invalid]="
+                    deduction.get('amount')?.invalid &&
+                    (deduction.get('amount')?.touched || isSubmitted)
+                  "
                   min="0"
                   step="0.01"
                   required
                 />
-                <div class="invalid-feedback">
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    deduction.get('amount')?.invalid &&
+                    (deduction.get('amount')?.touched || isSubmitted)
+                  "
+                >
                   Amount is required and must be greater than or equal to 0.
                 </div>
               </div>
@@ -241,13 +268,13 @@
                   class="btn btn-danger"
                   (click)="removeDeduction(i)"
                 >
-                  Remove
+                  <i class="bi bi-trash"></i>
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Total Deductions -->
+          <!-- Total Deductions and Net Salary -->
           <div class="row mt-3">
             <div class="col-md-4">
               <label for="totalDeductions" class="form-label"
@@ -262,7 +289,6 @@
               />
             </div>
 
-            <!-- Net Salary -->
             <div class="col-md-4">
               <label for="netSalary" class="form-label">Net Salary</label>
               <input
@@ -291,12 +317,19 @@
                 id="paymentMethod"
                 class="form-select"
                 formControlName="paymentMethod"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('paymentMethod')?.invalid &&
+                  monthlySalaryForm.get('paymentMethod')?.touched
+                "
               >
                 <option [ngValue]="null">Select Payment Method</option>
                 <option *ngFor="let method of paymentMethods" [value]="method">
                   {{ method }}
                 </option>
               </select>
+              <div class="invalid-feedback">
+                Please select a payment method.
+              </div>
             </div>
 
             <!-- PAYMENT DATE -->
@@ -307,7 +340,12 @@
                 type="date"
                 class="form-control"
                 formControlName="paymentDate"
+                [class.is-invalid]="
+                  monthlySalaryForm.get('paymentDate')?.invalid &&
+                  monthlySalaryForm.get('paymentDate')?.touched
+                "
               />
+              <div class="invalid-feedback">Please select a payment date.</div>
             </div>
 
             <!-- TRANSACTION REFERENCE -->
@@ -366,8 +404,18 @@
       </div>
 
       <!-- ================= ACTION BUTTONS ================= -->
-      <div class="mt-3">
+      <div class="action-buttons">
         <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          <i
+            class="bi"
+            [ngClass]="
+              submitting
+                ? 'bi-hourglass-split'
+                : isEditMode
+                ? 'bi-pencil-square'
+                : 'bi-save'
+            "
+          ></i>
           {{
             submitting
               ? "Saving..."
@@ -378,7 +426,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-secondary ms-2"
+          class="btn btn-secondary"
           [disabled]="submitting"
           (click)="onCancel()"
         >

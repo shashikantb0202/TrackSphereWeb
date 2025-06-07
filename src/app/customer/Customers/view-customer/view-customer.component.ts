@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { Customer } from '../../../Models/customer.model';
 import { CustomerService } from '../../../Services/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { DateFormatPipe } from '../../../shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-customer',
-  imports: [CommonModule],
+  imports: [CommonModule, DateFormatPipe],
+  providers: [DatePipe, DateFormatPipe],
   templateUrl: './view-customer.component.html',
   styleUrl: './view-customer.component.css',
 })

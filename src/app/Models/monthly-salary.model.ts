@@ -8,6 +8,7 @@ import { DeductionTypeEnum } from '../enums/deduction-type.enum';
 import { MonthEnum } from '../enums/month.enum';
 
 export interface SalaryDeduction {
+  id?: number;
   deductionType: DeductionTypeEnum;
   amount: number;
   description?: string;

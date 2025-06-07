@@ -30,15 +30,15 @@ export class UserMonthlySalaryListComponent implements OnInit {
   // Filter properties
   selectedUserId: number | null = null;
   selectedYear: number = new Date().getFullYear();
-  selectedMonth: number = 0;
+  selectedMonth: string = '';
   selectedStatus: SalaryStatus | null = null;
 
   // Available years (current year and 2 years back)
   years: number[] = [];
   months = Object.entries(MonthEnum)
-    .filter(([key, value]) => typeof value === 'number')
+    .filter(([key, value]) => typeof value === 'string')
     .map(([key, value]) => ({
-      value: value as number,
+      value: value as string,
       label: key,
     }));
   salaryStatuses = Object.values(SalaryStatus);
